@@ -955,3 +955,7 @@ class BrowserConsole extends HTMLElement {
 
 // Register the custom element
 customElements.define('browser-console', BrowserConsole);
+
+// Export for ES modules
+export { BrowserConsole };
+export default BrowserConsole;

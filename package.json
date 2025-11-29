@@ -1,0 +1,50 @@
+{
+  "name": "@profpowell/browser-console",
+  "version": "1.0.0",
+  "description": "A zero-dependency vanilla JavaScript web component that captures and displays browser console output with syntax highlighting and type-aware formatting",
+  "main": "browser-console.js",
+  "module": "browser-console.js",
+  "type": "module",
+  "types": "browser-console.d.ts",
+  "exports": {
+    ".": {
+      "import": "./browser-console.js",
+      "types": "./browser-console.d.ts"
+    }
+  },
+  "files": [
+    "browser-console.js",
+    "browser-console.d.ts",
+    "browser-console.min.js",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "node build.js",
+    "prepublishOnly": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ProfPowell/browser-console.git"
+  },
+  "keywords": [
+    "console",
+    "browser",
+    "web-component",
+    "custom-element",
+    "debug",
+    "logging",
+    "developer-tools",
+    "devtools",
+    "vanilla-js",
+    "no-dependencies"
+  ],
+  "author": "Prof Thomas Powell",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ProfPowell/browser-console/issues"
+  },
+  "homepage": "https://github.com/ProfPowell/browser-console#readme",
+  "devDependencies": {},
+  "sideEffects": true
+}

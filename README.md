@@ -2,6 +2,40 @@
 
 A lightweight, vanilla JavaScript web component for capturing and displaying console logs with syntax highlighting and type-aware formatting.
 
+## Installation
+
+### npm
+
+```bash
+npm install browser-console
+```
+
+```javascript
+// ES Module import
+import 'browser-console';
+
+// Or import the class directly
+import { BrowserConsole } from 'browser-console';
+```
+
+### CDN
+
+```html
+<!-- From unpkg -->
+<script type="module" src="https://unpkg.com/browser-console"></script>
+
+<!-- Or from jsDelivr -->
+<script type="module" src="https://cdn.jsdelivr.net/npm/browser-console"></script>
+```
+
+### Direct Download
+
+Download `browser-console.js` and include it in your project:
+
+```html
+<script type="module" src="browser-console.js"></script>
+```
+
 ## Features
 
 - ✨ **Zero Dependencies** - Pure vanilla JavaScript, no frameworks required
