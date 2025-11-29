@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Browser Console - Vanilla JS Web Component Demo</title>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+			background: #f5f5f5;
+			padding: 20px;
+		}
+
+		.container {
+			max-width: 1400px;
+			margin: 0 auto;
+		}
+
+		header {
+			background: white;
+			padding: 30px;
+			border-radius: 8px;
+			margin-bottom: 20px;
+			box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+		}
+
+		h1 {
+			color: #333;
+			margin-bottom: 10px;
+		}
+
+		.subtitle {
+			color: #666;
+			font-size: 16px;
+		}
+
+		.main-content {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 20px;
+		}
+
+		.panel {
+			background: white;
+			border-radius: 8px;
+			padding: 20px;
+			box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+		}
+
+		.panel h2 {
+			color: #333;
+			margin-bottom: 15px;
+			font-size: 18px;
+		}
+
+		.controls {
+			display: flex;
+			flex-direction: column;
+			gap: 15px;
+		}
+
+		.control-group {
+			display: flex;
+			flex-direction: column;
+			gap: 8px;
+		}
+
+		.control-group label {
+			font-weight: 500;
+			color: #555;
+			font-size: 14px;
+		}
+
+		.button-group {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 8px;
+		}
+
+		button {
+			padding: 10px 16px;
+			background: #0066cc;
+			color: white;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+			font-size: 14px;
+			font-family: inherit;
+			transition: background 0.2s;
+		}
+
+		button:hover {
+			background: #0052a3;
+		}
+
+		button.secondary {
+			background: #6c757d;
+		}
+
+		button.secondary:hover {
+			background: #5a6268;
+		}
+
+		button.danger {
+			background: #dc3545;
+		}
+
+		button.danger:hover {
+			background: #c82333;
+		}
+
+		.console-container {
+			height: 600px;
+			background: #1e1e1e;
+			border-radius: 4px;
+			overflow: hidden;
+		}
+
+		browser-console {
+			height: 100%;
+		}
+
+		.info-box {
+			background: #e7f3ff;
+			border-left: 4px solid #0066cc;
+			padding: 15px;
+			margin-top: 15px;
+			border-radius: 4px;
+		}
+
+		.info-box h3 {
+			color: #0052a3;
+			margin-bottom: 8px;
+			font-size: 14px;
+		}
+
+		.info-box p {
+			color: #333;
+			font-size: 13px;
+			line-height: 1.5;
+		}
+
+		.info-box code {
+			background: rgba(0,0,0,0.1);
+			padding: 2px 6px;
+			border-radius: 3px;
+			font-family: 'Consolas', 'Monaco', monospace;
+		}
+
+		@media (max-width: 1024px) {
+			.main-content {
+				grid-template-columns: 1fr;
+			}
+		}
+	</style>
+</head>
+<body>
+<div class="container">
+	<header>
+		<h1>Browser Console Web Component</h1>
+		<p class="subtitle">A vanilla JavaScript web component for capturing and displaying console logs</p>
+	</header>
+
+	<div class="main-content">
+		<div class="panel">
+			<h2>Test Controls</h2>
+			<div class="controls">
+				<div class="control-group">
+					<label>Basic Logging</label>
+					<div class="button-group">
+						<button onclick="testLog()">console.log()</button>
+						<button onclick="testInfo()">console.info()</button>
+						<button onclick="testWarn()">console.warn()</button>
+						<button onclick="testError()">console.error()</button>
+						<button onclick="testDebug()">console.debug()</button>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label>Data Types</label>
+					<div class="button-group">
+						<button onclick="testString()">String</button>
+						<button onclick="testNumber()">Number</button>
+						<button onclick="testBoolean()">Boolean</button>
+						<button onclick="testNull()">Null/Undefined</button>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label>Complex Objects</label>
+					<div class="button-group">
+						<button onclick="testObject()">Object</button>
+						<button onclick="testArray()">Array</button>
+						<button onclick="testNestedObject()">Nested Object</button>
+						<button onclick="testFunction()">Function</button>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label>Special Types</label>
+					<div class="button-group">
+						<button onclick="testDate()">Date</button>
+						<button onclick="testRegex()">RegExp</button>
+						<button onclick="testElement()">DOM Element</button>
+						<button onclick="testError2()">Error Object</button>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label>Advanced</label>
+					<div class="button-group">
+						<button onclick="testTable()">console.table()</button>
+						<button onclick="testTableSimple()">Simple Table</button>
+						<button onclick="testTimer()">console.time()</button>
+						<button onclick="testMixed()">Mixed Types</button>
+						<button onclick="testLarge()">Large Object</button>
+						<button onclick="testMultiple()">Multiple Logs</button>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label>Actions</label>
+					<div class="button-group">
+						<button class="secondary" onclick="console.clear()">Clear Console</button>
+						<button class="danger" onclick="testAll()">Run All Tests</button>
+					</div>
+				</div>
+			</div>
+
+			<div class="info-box">
+				<h3>Usage</h3>
+				<p>Simply add <code>&lt;browser-console&gt;&lt;/browser-console&gt;</code> to your HTML. The component automatically hooks into console methods and displays all logs with syntax highlighting and type formatting.</p>
+			</div>
+
+			<div class="info-box" style="margin-top: 10px;">
+				<h3>Features</h3>
+				<p>✓ All console methods (log, info, warn, error, debug)<br>
+					✓ <strong>NEW:</strong> Proper console.table() rendering<br>
+					✓ <strong>NEW:</strong> console.time/timeEnd tracking<br>
+					✓ <strong>NEW:</strong> Light & dark themes (use ☀️ button)<br>
+					✓ <strong>NEW:</strong> Expandable objects & arrays<br>
+					✓ Type-aware formatting with syntax highlighting<br>
+					✓ Filter logs by level<br>
+					✓ Zero dependencies - pure vanilla JS</p>
+			</div>
+		</div>
+
+		<div class="panel">
+			<h2>Console Output</h2>
+			<div class="console-container">
+				<browser-console></browser-console>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="browser-console.js"></script>
+<script>
+	// Test functions
+	function testLog() {
+		console.log('This is a standard log message');
+	}
+
+	function testInfo() {
+		console.info('This is an informational message');
+	}
+
+	function testWarn() {
+		console.warn('This is a warning message');
+	}
+
+	function testError() {
+		console.error('This is an error message');
+	}
+
+	function testDebug() {
+		console.debug('This is a debug message');
+	}
+
+	function testString() {
+		console.log('Hello, World!', 'Multiple strings', 'Can be logged');
+	}
+
+	function testNumber() {
+		console.log(42, 3.14159, -100, Infinity, NaN);
+	}
+
+	function testBoolean() {
+		console.log(true, false);
+	}
+
+	function testNull() {
+		console.log(null, undefined);
+	}
+
+	function testObject() {
+		console.log({
+			name: 'John Doe',
+			age: 30,
+			email: 'john@example.com',
+			active: true
+		});
+	}
+
+	function testArray() {
+		console.log([1, 2, 3, 4, 5]);
+		console.log(['apple', 'banana', 'cherry', 'date', 'elderberry']);
+	}
+
+	function testNestedObject() {
+		console.log({
+			user: {
+				name: 'Jane Smith',
+				profile: {
+					age: 28,
+					location: {
+						city: 'San Francisco',
+						country: 'USA'
+					}
+				}
+			},
+			hobbies: ['coding', 'reading', 'gaming']
+		});
+	}
+
+	function testFunction() {
+		console.log(function myFunction() { return 'hello'; });
+		console.log(() => 'arrow function');
+	}
+
+	function testDate() {
+		console.log(new Date());
+		console.log(new Date('2024-01-01'));
+	}
+
+	function testRegex() {
+		console.log(/[a-z]+/gi);
+		console.log(new RegExp('\\d+', 'g'));
+	}
+
+	function testElement() {
+		console.log(document.body);
+		console.log(document.querySelector('h1'));
+	}
+
+	function testError2() {
+		console.error(new Error('Something went wrong!'));
+		console.error(new TypeError('Type error occurred'));
+	}
+
+	function testTable() {
+		const users = [
+			{ id: 1, name: 'Alice', role: 'Admin', email: 'alice@example.com' },
+			{ id: 2, name: 'Bob', role: 'User', email: 'bob@example.com' },
+			{ id: 3, name: 'Charlie', role: 'Moderator', email: 'charlie@example.com' }
+		];
+		console.table(users);
+	}
+
+	function testTableSimple() {
+		console.table(['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry']);
+	}
+
+	function testTimer() {
+		console.time('performance-test');
+		// Simulate some work
+		let sum = 0;
+		for (let i = 0; i < 1000000; i++) {
+			sum += i;
+		}
+		console.timeEnd('performance-test');
+
+		// Another timer
+		console.time('quick-timer');
+		setTimeout(() => {
+			console.timeEnd('quick-timer');
+		}, 250);
+	}
+
+	function testMixed() {
+		console.log('Mixed:', 123, true, { key: 'value' }, [1, 2, 3], null, undefined);
+	}
+
+	function testLarge() {
+		const largeObj = {
+			id: 12345,
+			timestamp: new Date(),
+			data: Array.from({ length: 50 }, (_, i) => ({
+				index: i,
+				value: Math.random(),
+				label: `Item ${i}`
+			})),
+			metadata: {
+				version: '1.0.0',
+				author: 'System',
+				tags: ['test', 'demo', 'example']
+			}
+		};
+		console.log(largeObj);
+	}
+
+	function testMultiple() {
+		for (let i = 0; i < 5; i++) {
+			console.log(`Log entry #${i + 1}`, { iteration: i, timestamp: Date.now() });
+		}
+	}
+
+	function testAll() {
+		console.clear();
+		setTimeout(() => testLog(), 100);
+		setTimeout(() => testInfo(), 200);
+		setTimeout(() => testWarn(), 300);
+		setTimeout(() => testError(), 400);
+		setTimeout(() => testString(), 500);
+		setTimeout(() => testNumber(), 600);
+		setTimeout(() => testObject(), 700);
+		setTimeout(() => testArray(), 800);
+		setTimeout(() => testNestedObject(), 900);
+		setTimeout(() => testMixed(), 1000);
+	}
+
+	// Welcome message
+	console.log('%cBrowser Console Demo', 'font-size: 16px; font-weight: bold; color: #0066cc;');
+	console.log('Click the buttons on the left to test different console methods and data types.');
+	</script>
+</body>
+</html>
