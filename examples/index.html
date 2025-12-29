@@ -183,22 +183,32 @@
 				</div>
 
 				<div class="control-group">
-					<label>Data Types</label>
+					<label>Primitive Types</label>
 					<div class="button-group">
 						<button onclick="testString()">String</button>
 						<button onclick="testNumber()">Number</button>
 						<button onclick="testBoolean()">Boolean</button>
 						<button onclick="testNull()">Null/Undefined</button>
+						<button onclick="testBigInt()">BigInt</button>
 					</div>
 				</div>
 
 				<div class="control-group">
-					<label>Complex Objects</label>
+					<label>Objects &amp; Functions</label>
 					<div class="button-group">
 						<button onclick="testObject()">Object</button>
 						<button onclick="testArray()">Array</button>
 						<button onclick="testNestedObject()">Nested Object</button>
 						<button onclick="testFunction()">Function</button>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label>Collections</label>
+					<div class="button-group">
+						<button onclick="testMap()">Map</button>
+						<button onclick="testSet()">Set</button>
+						<button onclick="testSymbol()">Symbol</button>
 					</div>
 				</div>
 
@@ -213,14 +223,25 @@
 				</div>
 
 				<div class="control-group">
-					<label>Advanced</label>
+					<label>Console Methods</label>
 					<div class="button-group">
-						<button onclick="testTable()">console.table()</button>
-						<button onclick="testTableSimple()">Simple Table</button>
-						<button onclick="testTimer()">console.time()</button>
-						<button onclick="testMixed()">Mixed Types</button>
+						<button onclick="testTable()">table()</button>
+						<button onclick="testTimer()">time()</button>
+						<button onclick="testTimeLog()">timeLog()</button>
+						<button onclick="testGroup()">group()</button>
+						<button onclick="testGroupCollapsed()">groupCollapsed()</button>
+						<button onclick="testTrace()">trace()</button>
+						<button onclick="testCount()">count()</button>
+						<button onclick="testDir()">dir()</button>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label>Stress Tests</label>
+					<div class="button-group">
 						<button onclick="testLarge()">Large Object</button>
 						<button onclick="testMultiple()">Multiple Logs</button>
+						<button onclick="testMixed()">Mixed Types</button>
 					</div>
 				</div>
 
@@ -240,14 +261,14 @@
 
 			<div class="info-box" style="margin-top: 10px;">
 				<h3>Features</h3>
-				<p>✓ All console methods (log, info, warn, error, debug)<br>
-					✓ <strong>NEW:</strong> Proper console.table() rendering<br>
-					✓ <strong>NEW:</strong> console.time/timeEnd tracking<br>
-					✓ <strong>NEW:</strong> Light & dark themes (use ☀️ button)<br>
-					✓ <strong>NEW:</strong> Expandable objects & arrays<br>
-					✓ Type-aware formatting with syntax highlighting<br>
-					✓ Filter logs by level<br>
-					✓ Zero dependencies - pure vanilla JS</p>
+				<p>
+					<strong>Logging:</strong> log, info, warn, error, debug, table, time/timeEnd<br>
+					<strong>NEW:</strong> group/groupEnd, trace, count, dir, timeLog<br>
+					<strong>Types:</strong> Objects, Arrays, Map, Set, Symbol, BigInt, Date, RegExp, Error<br>
+					<strong>UI:</strong> Search/filter, copy to clipboard, light/dark themes<br>
+					<strong>A11y:</strong> Keyboard navigation, ARIA landmarks, screen reader support<br>
+					<strong>Other:</strong> Expandable objects, zero dependencies, pure vanilla JS
+				</p>
 			</div>
 		</div>
 
@@ -260,9 +281,9 @@
 	</div>
 </div>
 
-<script type="module" src="browser-console.js"></script>
+<script type="module" src="../src/browser-console.js"></script>
 <script>
-	// Test functions
+	// Basic Logging
 	function testLog() {
 		console.log('This is a standard log message');
 	}
@@ -283,6 +304,7 @@
 		console.debug('This is a debug message');
 	}
 
+	// Primitive Types
 	function testString() {
 		console.log('Hello, World!', 'Multiple strings', 'Can be logged');
 	}
@@ -299,6 +321,12 @@
 		console.log(null, undefined);
 	}
 
+	function testBigInt() {
+		console.log('BigInt values:', 123n, BigInt(9007199254740991), 0n);
+		console.log('Large BigInt:', 9007199254740991n * 1000n);
+	}
+
+	// Objects & Functions
 	function testObject() {
 		console.log({
 			name: 'John Doe',
@@ -334,6 +362,33 @@
 		console.log(() => 'arrow function');
 	}
 
+	// Collections
+	function testMap() {
+		const map = new Map([
+			['name', 'Alice'],
+			['age', 30],
+			['active', true],
+			[{ key: 'obj' }, 'object key']
+		]);
+		console.log('Map:', map);
+	}
+
+	function testSet() {
+		const set = new Set([1, 2, 3, 'hello', true, { a: 1 }]);
+		console.log('Set:', set);
+	}
+
+	function testSymbol() {
+		const sym = Symbol('mySymbol');
+		console.log('Symbol:', sym);
+		console.log('Object with Symbol key:', {
+			name: 'Test',
+			[Symbol('secret')]: 'hidden value',
+			[Symbol.for('shared')]: 'shared value'
+		});
+	}
+
+	// Special Types
 	function testDate() {
 		console.log(new Date());
 		console.log(new Date('2024-01-01'));
@@ -354,6 +409,7 @@
 		console.error(new TypeError('Type error occurred'));
 	}
 
+	// Console Methods
 	function testTable() {
 		const users = [
 			{ id: 1, name: 'Alice', role: 'Admin', email: 'alice@example.com' },
@@ -363,26 +419,84 @@
 		console.table(users);
 	}
 
-	function testTableSimple() {
-		console.table(['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry']);
-	}
-
 	function testTimer() {
 		console.time('performance-test');
-		// Simulate some work
 		let sum = 0;
 		for (let i = 0; i < 1000000; i++) {
 			sum += i;
 		}
 		console.timeEnd('performance-test');
-
-		// Another timer
-		console.time('quick-timer');
-		setTimeout(() => {
-			console.timeEnd('quick-timer');
-		}, 250);
 	}
 
+	function testTimeLog() {
+		console.time('long-operation');
+		console.log('Starting operation...');
+		setTimeout(() => {
+			console.timeLog('long-operation', 'Still running...');
+			setTimeout(() => {
+				console.timeLog('long-operation', 'Almost done...');
+				setTimeout(() => {
+					console.timeEnd('long-operation');
+				}, 200);
+			}, 200);
+		}, 200);
+	}
+
+	function testGroup() {
+		console.group('User Details');
+		console.log('Name: John Doe');
+		console.log('Email: john@example.com');
+		console.group('Nested Group');
+		console.log('This is nested inside');
+		console.warn('Nested warning');
+		console.groupEnd();
+		console.log('Back to parent group');
+		console.groupEnd();
+		console.log('Outside all groups');
+	}
+
+	function testGroupCollapsed() {
+		console.groupCollapsed('Collapsed Group (click to expand)');
+		console.log('Hidden content 1');
+		console.log('Hidden content 2');
+		console.log('Hidden content 3');
+		console.groupEnd();
+	}
+
+	function testTrace() {
+		function innerFunction() {
+			console.trace('Stack trace from innerFunction');
+		}
+		function outerFunction() {
+			innerFunction();
+		}
+		outerFunction();
+	}
+
+	function testCount() {
+		console.count('button-clicks');
+		console.count('button-clicks');
+		console.count('button-clicks');
+		console.count('other-counter');
+		console.log('Click this button multiple times to see count increase');
+	}
+
+	function testDir() {
+		const obj = {
+			name: 'Directory View',
+			nested: {
+				level1: {
+					level2: {
+						deep: 'value'
+					}
+				}
+			},
+			array: [1, 2, 3]
+		};
+		console.dir(obj);
+	}
+
+	// Stress Tests
 	function testMixed() {
 		console.log('Mixed:', 123, true, { key: 'value' }, [1, 2, 3], null, undefined);
 	}
@@ -417,17 +531,18 @@
 		setTimeout(() => testInfo(), 200);
 		setTimeout(() => testWarn(), 300);
 		setTimeout(() => testError(), 400);
-		setTimeout(() => testString(), 500);
-		setTimeout(() => testNumber(), 600);
-		setTimeout(() => testObject(), 700);
-		setTimeout(() => testArray(), 800);
-		setTimeout(() => testNestedObject(), 900);
-		setTimeout(() => testMixed(), 1000);
+		setTimeout(() => testBigInt(), 500);
+		setTimeout(() => testMap(), 600);
+		setTimeout(() => testSet(), 700);
+		setTimeout(() => testObject(), 800);
+		setTimeout(() => testGroup(), 900);
+		setTimeout(() => testTrace(), 1100);
 	}
 
 	// Welcome message
 	console.log('%cBrowser Console Demo', 'font-size: 16px; font-weight: bold; color: #0066cc;');
 	console.log('Click the buttons on the left to test different console methods and data types.');
-	</script>
+	console.log('Try the search box to filter logs, or the copy button to export.');
+</script>
 </body>
 </html>

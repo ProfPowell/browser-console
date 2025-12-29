@@ -2,26 +2,42 @@
   "name": "@profpowell/browser-console",
   "version": "1.0.0",
   "description": "A zero-dependency vanilla JavaScript web component that captures and displays browser console output with syntax highlighting and type-aware formatting",
-  "main": "browser-console.js",
-  "module": "browser-console.js",
+  "main": "dist/browser-console.js",
+  "module": "dist/browser-console.js",
   "type": "module",
-  "types": "browser-console.d.ts",
+  "types": "dist/browser-console.d.ts",
+  "unpkg": "dist/browser-console.min.js",
+  "customElements": "custom-elements.json",
   "exports": {
     ".": {
-      "import": "./browser-console.js",
-      "types": "./browser-console.d.ts"
+      "import": {
+        "types": "./dist/browser-console.d.ts",
+        "default": "./dist/browser-console.js"
+      }
+    },
+    "./min": {
+      "import": "./dist/browser-console.min.js"
     }
   },
   "files": [
-    "browser-console.js",
-    "browser-console.d.ts",
-    "browser-console.min.js",
+    "dist/",
+    "custom-elements.json",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "CHANGELOG.md"
   ],
   "scripts": {
-    "build": "node build.js",
-    "prepublishOnly": "npm run build"
+    "build": "node scripts/build.js",
+    "analyze": "cem analyze --globs \"src/**/*.js\"",
+    "docs": "node scripts/generate-docs.js",
+    "prepublishOnly": "npm run build && npm run analyze",
+    "test": "node --test test/unit/*.test.js",
+    "test:e2e": "npx playwright test",
+    "test:all": "npm run test && npm run test:e2e",
+    "lint": "npx eslint src/browser-console.js",
+    "lint:fix": "npx eslint src/browser-console.js --fix",
+    "format": "npx prettier --write src/browser-console.js",
+    "format:check": "npx prettier --check src/browser-console.js"
   },
   "repository": {
     "type": "git",
@@ -45,6 +61,10 @@
     "url": "https://github.com/ProfPowell/browser-console/issues"
   },
   "homepage": "https://github.com/ProfPowell/browser-console#readme",
-  "devDependencies": {},
+  "devDependencies": {
+    "@custom-elements-manifest/analyzer": "^0.11.0",
+    "@playwright/test": "^1.57.0",
+    "terser": "^5.44.1"
+  },
   "sideEffects": true
 }
