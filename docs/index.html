@@ -1,8 +1,8 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Browser Console - API Reference</title>
   <style>
     * {
@@ -16,9 +16,6 @@
       background: #f5f5f5;
       line-height: 1.6;
       color: #333;
-    }
-
-    .container {
       max-width: 1200px;
       margin: 0 auto;
       padding: 20px;
@@ -30,9 +27,6 @@
       border-radius: 8px;
       margin-bottom: 20px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-
-    .header-content {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -40,17 +34,17 @@
       gap: 15px;
     }
 
-    h1 {
+    header hgroup h1 {
       color: #333;
       margin-bottom: 10px;
     }
 
-    .subtitle {
+    header hgroup p {
       color: #666;
       font-size: 16px;
     }
 
-    nav a {
+    header nav a {
       display: inline-block;
       padding: 10px 20px;
       background: #0066cc;
@@ -61,11 +55,11 @@
       transition: background 0.2s;
     }
 
-    nav a:hover {
+    header nav a:hover {
       background: #0052a3;
     }
 
-    .panel {
+    main {
       background: white;
       border-radius: 8px;
       padding: 30px;
@@ -159,39 +153,40 @@
       color: #ce9178;
     }
 
-    .toc {
+    nav[aria-label="Table of contents"] {
       background: #f8f9fa;
       padding: 20px;
       border-radius: 6px;
       margin-bottom: 25px;
     }
 
-    .toc h3 {
+    nav[aria-label="Table of contents"] h3 {
       margin-top: 0;
       margin-bottom: 10px;
     }
 
-    .toc ul {
+    nav[aria-label="Table of contents"] ul {
       list-style: none;
       columns: 2;
     }
 
-    .toc li {
+    nav[aria-label="Table of contents"] li {
       margin: 5px 0;
     }
 
-    .toc a {
+    nav[aria-label="Table of contents"] a {
       color: #0066cc;
       text-decoration: none;
     }
 
-    .toc a:hover {
+    nav[aria-label="Table of contents"] a:hover {
       text-decoration: underline;
     }
 
-    .method-signature {
+    pre.method-signature {
       font-family: 'Consolas', 'Monaco', monospace;
       background: #f4f4f4;
+      color: #333;
       padding: 10px 15px;
       border-radius: 4px;
       border-left: 3px solid #0066cc;
@@ -209,54 +204,51 @@
     }
 
     @media (max-width: 768px) {
-      .toc ul {
+      nav[aria-label="Table of contents"] ul {
         columns: 1;
       }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <div class="header-content">
-        <div>
-          <h1>Browser Console API Reference</h1>
-          <p class="subtitle">Complete documentation for the &lt;browser-console&gt; web component</p>
-        </div>
-        <nav>
-          <a href="../examples/">View Live Demo</a>
-        </nav>
-      </div>
-    </header>
+  <header>
+    <hgroup>
+      <h1>Browser Console API Reference</h1>
+      <p>Complete documentation for the &lt;browser-console&gt; web component</p>
+    </hgroup>
+    <nav>
+      <a href="../examples/">View Live Demo</a>
+    </nav>
+  </header>
 
-    <div class="panel">
-      <div class="toc">
-        <h3>Contents</h3>
-        <ul>
-          <li><a href="#installation">Installation</a></li>
-          <li><a href="#usage">Basic Usage</a></li>
-          <li><a href="#attributes">Attributes</a></li>
-          <li><a href="#properties">Properties</a></li>
-          <li><a href="#methods">Methods</a></li>
-          <li><a href="#css-properties">CSS Custom Properties</a></li>
-          <li><a href="#css-parts">CSS Parts</a></li>
-          <li><a href="#events">Events</a></li>
-        </ul>
-      </div>
+  <main>
+    <nav aria-label="Table of contents">
+      <h3>Contents</h3>
+      <ul>
+        <li><a href="#installation">Installation</a></li>
+        <li><a href="#usage">Basic Usage</a></li>
+        <li><a href="#attributes">Attributes</a></li>
+        <li><a href="#properties">Properties</a></li>
+        <li><a href="#methods">Methods</a></li>
+        <li><a href="#css-properties">CSS Custom Properties</a></li>
+        <li><a href="#css-parts">CSS Parts</a></li>
+        <li><a href="#events">Events</a></li>
+      </ul>
+    </nav>
 
-      <section id="installation">
-        <h3>Installation</h3>
-        <p><strong>npm:</strong></p>
-        <pre><code>npm install @profpowell/browser-console</code></pre>
-        <p><strong>CDN:</strong></p>
-        <pre><code>&lt;script type="module" src="https://unpkg.com/@profpowell/browser-console"&gt;&lt;/script&gt;</code></pre>
-      </section>
+    <section id="installation">
+      <h3>Installation</h3>
+      <p><strong>npm:</strong></p>
+      <pre><code>npm install @profpowell/browser-console</code></pre>
+      <p><strong>CDN:</strong></p>
+      <pre><code>&lt;script type="module" src="https://unpkg.com/@profpowell/browser-console"&gt;&lt;/script&gt;</code></pre>
+    </section>
 
-      <section id="usage">
-        <h3>Basic Usage</h3>
-        <pre><code><span class="tag-name">&lt;browser-console</span> <span class="attr-name">theme</span>=<span class="attr-value">"dark"</span> <span class="attr-name">max-logs</span>=<span class="attr-value">"500"</span><span class="tag-name">&gt;&lt;/browser-console&gt;</span></code></pre>
-        <p>The component automatically hooks into console methods and displays all logs with syntax highlighting.</p>
-      </section>
+    <section id="usage">
+      <h3>Basic Usage</h3>
+      <pre><code><span class="tag-name">&lt;browser-console</span> <span class="attr-name">theme</span>=<span class="attr-value">"dark"</span> <span class="attr-name">max-logs</span>=<span class="attr-value">"500"</span><span class="tag-name">&gt;&lt;/browser-console&gt;</span></code></pre>
+      <p>The component automatically hooks into console methods and displays all logs with syntax highlighting.</p>
+    </section>
 
 
       <section id="attributes">
@@ -361,135 +353,135 @@
       <section id="methods">
         <h3>Methods</h3>
         <h4>updateTheme()</h4>
-        <div class="method-signature">updateTheme(): void</div>
+        <pre class="method-signature"><code>updateTheme(): void</code></pre>
         <p>Update theme</p>
 
         <h4>setTheme()</h4>
-        <div class="method-signature">setTheme(theme: unknown): void</div>
+        <pre class="method-signature"><code>setTheme(theme: unknown): void</code></pre>
         <p>Set theme programmatically</p>
 
         <h4>hookConsole()</h4>
-        <div class="method-signature">hookConsole(): void</div>
+        <pre class="method-signature"><code>hookConsole(): void</code></pre>
         <p>Hook into console methods to capture logs</p>
 
         <h4>unhookConsole()</h4>
-        <div class="method-signature">unhookConsole(): void</div>
+        <pre class="method-signature"><code>unhookConsole(): void</code></pre>
         <p>Restore original console methods</p>
 
         <h4>addLog()</h4>
-        <div class="method-signature">addLog(log: unknown): void</div>
+        <pre class="method-signature"><code>addLog(log: unknown): void</code></pre>
         <p>Add a log entry</p>
 
         <h4>appendLog()</h4>
-        <div class="method-signature">appendLog(log: unknown): void</div>
+        <pre class="method-signature"><code>appendLog(log: unknown): void</code></pre>
         <p>Append a single log to the view (Incremental Rendering)</p>
 
         <h4>clearLogs()</h4>
-        <div class="method-signature">clearLogs(): void</div>
+        <pre class="method-signature"><code>clearLogs(): void</code></pre>
         <p>Clear all logs</p>
 
         <h4>formatValuePlainText()</h4>
-        <div class="method-signature">formatValuePlainText(value: *, depth: number): string</div>
+        <pre class="method-signature"><code>formatValuePlainText(value: *, depth: number): string</code></pre>
         <p>Format a value as plain text for clipboard</p>
 
         <h4>formatLogsForClipboard()</h4>
-        <div class="method-signature">formatLogsForClipboard(): string</div>
+        <pre class="method-signature"><code>formatLogsForClipboard(): string</code></pre>
         <p>Format logs for clipboard as plain text</p>
 
         <h4>copyLogs()</h4>
-        <div class="method-signature">copyLogs(): void</div>
+        <pre class="method-signature"><code>copyLogs(): void</code></pre>
         <p>Copy visible logs to clipboard</p>
 
         <h4>setFilter()</h4>
-        <div class="method-signature">setFilter(filter: string|null): void</div>
+        <pre class="method-signature"><code>setFilter(filter: string|null): void</code></pre>
         <p>Set filter for log methods</p>
 
         <h4>setSearchQuery()</h4>
-        <div class="method-signature">setSearchQuery(query: string): void</div>
+        <pre class="method-signature"><code>setSearchQuery(query: string): void</code></pre>
         <p>Set search query for text filtering</p>
 
         <h4>matchesFilters()</h4>
-        <div class="method-signature">matchesFilters(log: Object): boolean</div>
+        <pre class="method-signature"><code>matchesFilters(log: Object): boolean</code></pre>
         <p>Check if a log entry matches current filters</p>
 
         <h4>render()</h4>
-        <div class="method-signature">render(): void</div>
+        <pre class="method-signature"><code>render(): void</code></pre>
         <p>Initial render of the component structure</p>
 
         <h4>getExpansionStates()</h4>
-        <div class="method-signature">getExpansionStates(): Map&lt;string, boolean&gt;</div>
+        <pre class="method-signature"><code>getExpansionStates(): Map&lt;string, boolean&gt;</code></pre>
         <p>Get current expansion states from DOM</p>
 
         <h4>restoreExpansionStates()</h4>
-        <div class="method-signature">restoreExpansionStates(states: Map&lt;string, boolean&gt;): void</div>
+        <pre class="method-signature"><code>restoreExpansionStates(states: Map&lt;string, boolean&gt;): void</code></pre>
         <p>Restore expansion states after render</p>
 
         <h4>renderLogs()</h4>
-        <div class="method-signature">renderLogs(): void</div>
+        <pre class="method-signature"><code>renderLogs(): void</code></pre>
         <p>Render all logs with expansion state preservation</p>
 
         <h4>renderLog()</h4>
-        <div class="method-signature">renderLog(log: unknown, index: unknown): void</div>
+        <pre class="method-signature"><code>renderLog(log: unknown, index: unknown): void</code></pre>
         <p>Render a single log entry</p>
 
         <h4>formatTimestamp()</h4>
-        <div class="method-signature">formatTimestamp(date: unknown): void</div>
+        <pre class="method-signature"><code>formatTimestamp(date: unknown): void</code></pre>
         <p>Format timestamp</p>
 
         <h4>formatLogData()</h4>
-        <div class="method-signature">formatLogData(data: Array, method: string, logIndex: number): string</div>
+        <pre class="method-signature"><code>formatLogData(data: Array, method: string, logIndex: number): string</code></pre>
         <p>Format log data for display</p>
 
         <h4>formatTable()</h4>
-        <div class="method-signature">formatTable(data: unknown): void</div>
+        <pre class="method-signature"><code>formatTable(data: unknown): void</code></pre>
         <p>Format table data</p>
 
         <h4>formatValue()</h4>
-        <div class="method-signature">formatValue(value: *, depth: number, expanded: boolean, visited: WeakSet, path: string): void</div>
+        <pre class="method-signature"><code>formatValue(value: *, depth: number, expanded: boolean, visited: WeakSet, path: string): void</code></pre>
         <p>Format a single value</p>
 
         <h4>formatArray()</h4>
-        <div class="method-signature">formatArray(arr: Array, depth: number, expanded: boolean, visited: WeakSet, path: string): void</div>
+        <pre class="method-signature"><code>formatArray(arr: Array, depth: number, expanded: boolean, visited: WeakSet, path: string): void</code></pre>
         <p>Format an array</p>
 
         <h4>formatObject()</h4>
-        <div class="method-signature">formatObject(obj: Object, depth: number, expanded: boolean, visited: WeakSet, path: string): void</div>
+        <pre class="method-signature"><code>formatObject(obj: Object, depth: number, expanded: boolean, visited: WeakSet, path: string): void</code></pre>
         <p>Format an object</p>
 
         <h4>formatElement()</h4>
-        <div class="method-signature">formatElement(element: unknown): void</div>
+        <pre class="method-signature"><code>formatElement(element: unknown): void</code></pre>
         <p>Format a DOM element</p>
 
         <h4>formatMap()</h4>
-        <div class="method-signature">formatMap(map: Map, depth: number, visited: WeakSet, path: string): void</div>
+        <pre class="method-signature"><code>formatMap(map: Map, depth: number, visited: WeakSet, path: string): void</code></pre>
         <p>Format a Map</p>
 
         <h4>formatSet()</h4>
-        <div class="method-signature">formatSet(set: Set, depth: number, visited: WeakSet, path: string): void</div>
+        <pre class="method-signature"><code>formatSet(set: Set, depth: number, visited: WeakSet, path: string): void</code></pre>
         <p>Format a Set</p>
 
         <h4>getType()</h4>
-        <div class="method-signature">getType(value: *): string</div>
+        <pre class="method-signature"><code>getType(value: *): string</code></pre>
         <p>Get the type of a value</p>
 
         <h4>escapeHtml()</h4>
-        <div class="method-signature">escapeHtml(text: string): string</div>
+        <pre class="method-signature"><code>escapeHtml(text: string): string</code></pre>
         <p>Escape HTML for safe display</p>
 
         <h4>toggleExpand()</h4>
-        <div class="method-signature">toggleExpand(header: HTMLElement): void</div>
+        <pre class="method-signature"><code>toggleExpand(header: HTMLElement): void</code></pre>
         <p>Toggle expand/collapse state of an expandable header</p>
 
         <h4>handleLogClick()</h4>
-        <div class="method-signature">handleLogClick(e: unknown): void</div>
+        <pre class="method-signature"><code>handleLogClick(e: unknown): void</code></pre>
         <p>Handle clicks on log entries (delegated)</p>
 
         <h4>handleLogKeydown()</h4>
-        <div class="method-signature">handleLogKeydown(e: KeyboardEvent): void</div>
+        <pre class="method-signature"><code>handleLogKeydown(e: KeyboardEvent): void</code></pre>
         <p>Handle keyboard events on log entries (delegated)</p>
 
         <h4>getStyles()</h4>
-        <div class="method-signature">getStyles(): void</div>
+        <pre class="method-signature"><code>getStyles(): void</code></pre>
         <p>Get component styles</p>
 
       </section>
@@ -631,11 +623,10 @@
         </table>
       </section>
 
-    </div>
+  </main>
 
-    <footer>
-      <p>Auto-generated from <a href="../custom-elements.json">custom-elements.json</a></p>
-    </footer>
-  </div>
+  <footer>
+    <p>Auto-generated from <a href="../custom-elements.json">custom-elements.json</a></p>
+  </footer>
 </body>
 </html>

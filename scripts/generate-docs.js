@@ -41,11 +41,11 @@ function generateDocs() {
     }
   }
 
-  const html = `<!DOCTYPE html>
+  const html = `<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Browser Console - API Reference</title>
   <style>
     * {
@@ -59,9 +59,6 @@ function generateDocs() {
       background: #f5f5f5;
       line-height: 1.6;
       color: #333;
-    }
-
-    .container {
       max-width: 1200px;
       margin: 0 auto;
       padding: 20px;
@@ -73,9 +70,6 @@ function generateDocs() {
       border-radius: 8px;
       margin-bottom: 20px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-
-    .header-content {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -83,17 +77,17 @@ function generateDocs() {
       gap: 15px;
     }
 
-    h1 {
+    header hgroup h1 {
       color: #333;
       margin-bottom: 10px;
     }
 
-    .subtitle {
+    header hgroup p {
       color: #666;
       font-size: 16px;
     }
 
-    nav a {
+    header nav a {
       display: inline-block;
       padding: 10px 20px;
       background: #0066cc;
@@ -104,11 +98,11 @@ function generateDocs() {
       transition: background 0.2s;
     }
 
-    nav a:hover {
+    header nav a:hover {
       background: #0052a3;
     }
 
-    .panel {
+    main {
       background: white;
       border-radius: 8px;
       padding: 30px;
@@ -202,39 +196,40 @@ function generateDocs() {
       color: #ce9178;
     }
 
-    .toc {
+    nav[aria-label="Table of contents"] {
       background: #f8f9fa;
       padding: 20px;
       border-radius: 6px;
       margin-bottom: 25px;
     }
 
-    .toc h3 {
+    nav[aria-label="Table of contents"] h3 {
       margin-top: 0;
       margin-bottom: 10px;
     }
 
-    .toc ul {
+    nav[aria-label="Table of contents"] ul {
       list-style: none;
       columns: 2;
     }
 
-    .toc li {
+    nav[aria-label="Table of contents"] li {
       margin: 5px 0;
     }
 
-    .toc a {
+    nav[aria-label="Table of contents"] a {
       color: #0066cc;
       text-decoration: none;
     }
 
-    .toc a:hover {
+    nav[aria-label="Table of contents"] a:hover {
       text-decoration: underline;
     }
 
-    .method-signature {
+    pre.method-signature {
       font-family: 'Consolas', 'Monaco', monospace;
       background: #f4f4f4;
+      color: #333;
       padding: 10px 15px;
       border-radius: 4px;
       border-left: 3px solid #0066cc;
@@ -252,62 +247,58 @@ function generateDocs() {
     }
 
     @media (max-width: 768px) {
-      .toc ul {
+      nav[aria-label="Table of contents"] ul {
         columns: 1;
       }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <div class="header-content">
-        <div>
-          <h1>Browser Console API Reference</h1>
-          <p class="subtitle">Complete documentation for the &lt;browser-console&gt; web component</p>
-        </div>
-        <nav>
-          <a href="../examples/">View Live Demo</a>
-        </nav>
-      </div>
-    </header>
+  <header>
+    <hgroup>
+      <h1>Browser Console API Reference</h1>
+      <p>Complete documentation for the &lt;browser-console&gt; web component</p>
+    </hgroup>
+    <nav>
+      <a href="../examples/">View Live Demo</a>
+    </nav>
+  </header>
 
-    <div class="panel">
-      <div class="toc">
-        <h3>Contents</h3>
-        <ul>
-          <li><a href="#installation">Installation</a></li>
-          <li><a href="#usage">Basic Usage</a></li>
-          <li><a href="#attributes">Attributes</a></li>
-          <li><a href="#properties">Properties</a></li>
-          <li><a href="#methods">Methods</a></li>
-          <li><a href="#css-properties">CSS Custom Properties</a></li>
-          <li><a href="#css-parts">CSS Parts</a></li>
-          <li><a href="#events">Events</a></li>
-        </ul>
-      </div>
+  <main>
+    <nav aria-label="Table of contents">
+      <h3>Contents</h3>
+      <ul>
+        <li><a href="#installation">Installation</a></li>
+        <li><a href="#usage">Basic Usage</a></li>
+        <li><a href="#attributes">Attributes</a></li>
+        <li><a href="#properties">Properties</a></li>
+        <li><a href="#methods">Methods</a></li>
+        <li><a href="#css-properties">CSS Custom Properties</a></li>
+        <li><a href="#css-parts">CSS Parts</a></li>
+        <li><a href="#events">Events</a></li>
+      </ul>
+    </nav>
 
-      <section id="installation">
-        <h3>Installation</h3>
-        <p><strong>npm:</strong></p>
-        <pre><code>npm install @profpowell/browser-console</code></pre>
-        <p><strong>CDN:</strong></p>
-        <pre><code>&lt;script type="module" src="https://unpkg.com/@profpowell/browser-console"&gt;&lt;/script&gt;</code></pre>
-      </section>
+    <section id="installation">
+      <h3>Installation</h3>
+      <p><strong>npm:</strong></p>
+      <pre><code>npm install @profpowell/browser-console</code></pre>
+      <p><strong>CDN:</strong></p>
+      <pre><code>&lt;script type="module" src="https://unpkg.com/@profpowell/browser-console"&gt;&lt;/script&gt;</code></pre>
+    </section>
 
-      <section id="usage">
-        <h3>Basic Usage</h3>
-        <pre><code><span class="tag-name">&lt;browser-console</span> <span class="attr-name">theme</span>=<span class="attr-value">"dark"</span> <span class="attr-name">max-logs</span>=<span class="attr-value">"500"</span><span class="tag-name">&gt;&lt;/browser-console&gt;</span></code></pre>
-        <p>The component automatically hooks into console methods and displays all logs with syntax highlighting.</p>
-      </section>
+    <section id="usage">
+      <h3>Basic Usage</h3>
+      <pre><code><span class="tag-name">&lt;browser-console</span> <span class="attr-name">theme</span>=<span class="attr-value">"dark"</span> <span class="attr-name">max-logs</span>=<span class="attr-value">"500"</span><span class="tag-name">&gt;&lt;/browser-console&gt;</span></code></pre>
+      <p>The component automatically hooks into console methods and displays all logs with syntax highlighting.</p>
+    </section>
 
 ${elementContent}
-    </div>
+  </main>
 
-    <footer>
-      <p>Auto-generated from <a href="../custom-elements.json">custom-elements.json</a></p>
-    </footer>
-  </div>
+  <footer>
+    <p>Auto-generated from <a href="../custom-elements.json">custom-elements.json</a></p>
+  </footer>
 </body>
 </html>`;
 
@@ -384,7 +375,7 @@ ${methods.map(method => {
     .join(', ');
   const returnType = method.return?.type?.text || 'void';
   return `        <h4>${escapeHtml(method.name)}()</h4>
-        <div class="method-signature">${escapeHtml(method.name)}(${escapeHtml(params)}): ${escapeHtml(returnType)}</div>
+        <pre class="method-signature"><code>${escapeHtml(method.name)}(${escapeHtml(params)}): ${escapeHtml(returnType)}</code></pre>
         ${method.description ? `<p>${escapeHtml(method.description)}</p>` : ''}
 `;
 }).join('\n')}

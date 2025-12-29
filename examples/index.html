@@ -1,8 +1,8 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 	<title>Browser Console - Vanilla JS Web Component Demo</title>
 	<style>
 		* {
@@ -15,9 +15,6 @@
 			font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 			background: #f5f5f5;
 			padding: 20px;
-		}
-
-		.container {
 			max-width: 1400px;
 			margin: 0 auto;
 		}
@@ -28,59 +25,82 @@
 			border-radius: 8px;
 			margin-bottom: 20px;
 			box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			flex-wrap: wrap;
+			gap: 15px;
 		}
 
-		h1 {
+		header hgroup h1 {
 			color: #333;
 			margin-bottom: 10px;
 		}
 
-		.subtitle {
+		header hgroup p {
 			color: #666;
 			font-size: 16px;
 		}
 
-		.main-content {
+		header nav a {
+			display: inline-block;
+			padding: 10px 20px;
+			background: #0066cc;
+			color: white;
+			text-decoration: none;
+			border-radius: 4px;
+			font-size: 14px;
+			transition: background 0.2s;
+		}
+
+		header nav a:hover {
+			background: #0052a3;
+		}
+
+		main {
 			display: grid;
 			grid-template-columns: 1fr 1fr;
 			gap: 20px;
 		}
 
-		.panel {
+		section {
 			background: white;
 			border-radius: 8px;
 			padding: 20px;
 			box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 		}
 
-		.panel h2 {
+		section h2 {
 			color: #333;
 			margin-bottom: 15px;
 			font-size: 18px;
 		}
 
-		.controls {
+		form {
 			display: flex;
 			flex-direction: column;
 			gap: 15px;
 		}
 
-		.control-group {
+		fieldset {
+			border: none;
 			display: flex;
 			flex-direction: column;
 			gap: 8px;
 		}
 
-		.control-group label {
+		fieldset legend {
 			font-weight: 500;
 			color: #555;
 			font-size: 14px;
+			margin-bottom: 8px;
 		}
 
-		.button-group {
+		fieldset ul {
 			display: flex;
 			flex-wrap: wrap;
 			gap: 8px;
+			list-style: none;
 		}
 
 		button {
@@ -99,23 +119,23 @@
 			background: #0052a3;
 		}
 
-		button.secondary {
+		button[data-variant="secondary"] {
 			background: #6c757d;
 		}
 
-		button.secondary:hover {
+		button[data-variant="secondary"]:hover {
 			background: #5a6268;
 		}
 
-		button.danger {
+		button[data-variant="danger"] {
 			background: #dc3545;
 		}
 
-		button.danger:hover {
+		button[data-variant="danger"]:hover {
 			background: #c82333;
 		}
 
-		.console-container {
+		article.console-output {
 			height: 600px;
 			background: #1e1e1e;
 			border-radius: 4px;
@@ -126,7 +146,7 @@
 			height: 100%;
 		}
 
-		.info-box {
+		aside {
 			background: #e7f3ff;
 			border-left: 4px solid #0066cc;
 			padding: 15px;
@@ -134,440 +154,357 @@
 			border-radius: 4px;
 		}
 
-		.info-box h3 {
+		aside + aside {
+			margin-top: 10px;
+		}
+
+		aside h3 {
 			color: #0052a3;
 			margin-bottom: 8px;
 			font-size: 14px;
 		}
 
-		.info-box p {
+		aside p {
 			color: #333;
 			font-size: 13px;
 			line-height: 1.5;
 		}
 
-		.info-box code {
+		aside code {
 			background: rgba(0,0,0,0.1);
 			padding: 2px 6px;
 			border-radius: 3px;
 			font-family: 'Consolas', 'Monaco', monospace;
 		}
 
-		.header-content {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			flex-wrap: wrap;
-			gap: 15px;
-		}
-
-		header nav a {
-			display: inline-block;
-			padding: 10px 20px;
-			background: #0066cc;
-			color: white;
-			text-decoration: none;
-			border-radius: 4px;
-			font-size: 14px;
-			transition: background 0.2s;
-		}
-
-		header nav a:hover {
-			background: #0052a3;
-		}
-
 		@media (max-width: 1024px) {
-			.main-content {
+			main {
 				grid-template-columns: 1fr;
 			}
 		}
 	</style>
 </head>
 <body>
-<div class="container">
 	<header>
-		<div class="header-content">
-			<div>
-				<h1>Browser Console Web Component</h1>
-				<p class="subtitle">A vanilla JavaScript web component for capturing and displaying console logs</p>
-			</div>
-			<nav>
-				<a href="../docs/">API Reference</a>
-			</nav>
-		</div>
+		<hgroup>
+			<h1>Browser Console Web Component</h1>
+			<p>A vanilla JavaScript web component for capturing and displaying console logs</p>
+		</hgroup>
+		<nav>
+			<a href="../docs/">API Reference</a>
+		</nav>
 	</header>
 
-	<div class="main-content">
-		<div class="panel">
+	<main>
+		<section>
 			<h2>Test Controls</h2>
-			<div class="controls">
-				<div class="control-group">
-					<label>Basic Logging</label>
-					<div class="button-group">
-						<button onclick="testLog()">console.log()</button>
-						<button onclick="testInfo()">console.info()</button>
-						<button onclick="testWarn()">console.warn()</button>
-						<button onclick="testError()">console.error()</button>
-						<button onclick="testDebug()">console.debug()</button>
-					</div>
-				</div>
+			<form id="test-controls">
+				<fieldset>
+					<legend>Basic Logging</legend>
+					<ul>
+						<li><button type="button" data-test="log">console.log()</button></li>
+						<li><button type="button" data-test="info">console.info()</button></li>
+						<li><button type="button" data-test="warn">console.warn()</button></li>
+						<li><button type="button" data-test="error">console.error()</button></li>
+						<li><button type="button" data-test="debug">console.debug()</button></li>
+					</ul>
+				</fieldset>
 
-				<div class="control-group">
-					<label>Primitive Types</label>
-					<div class="button-group">
-						<button onclick="testString()">String</button>
-						<button onclick="testNumber()">Number</button>
-						<button onclick="testBoolean()">Boolean</button>
-						<button onclick="testNull()">Null/Undefined</button>
-						<button onclick="testBigInt()">BigInt</button>
-					</div>
-				</div>
+				<fieldset>
+					<legend>Primitive Types</legend>
+					<ul>
+						<li><button type="button" data-test="string">String</button></li>
+						<li><button type="button" data-test="number">Number</button></li>
+						<li><button type="button" data-test="boolean">Boolean</button></li>
+						<li><button type="button" data-test="null">Null/Undefined</button></li>
+						<li><button type="button" data-test="bigint">BigInt</button></li>
+					</ul>
+				</fieldset>
 
-				<div class="control-group">
-					<label>Objects &amp; Functions</label>
-					<div class="button-group">
-						<button onclick="testObject()">Object</button>
-						<button onclick="testArray()">Array</button>
-						<button onclick="testNestedObject()">Nested Object</button>
-						<button onclick="testFunction()">Function</button>
-					</div>
-				</div>
+				<fieldset>
+					<legend>Objects &amp; Functions</legend>
+					<ul>
+						<li><button type="button" data-test="object">Object</button></li>
+						<li><button type="button" data-test="array">Array</button></li>
+						<li><button type="button" data-test="nested">Nested Object</button></li>
+						<li><button type="button" data-test="function">Function</button></li>
+					</ul>
+				</fieldset>
 
-				<div class="control-group">
-					<label>Collections</label>
-					<div class="button-group">
-						<button onclick="testMap()">Map</button>
-						<button onclick="testSet()">Set</button>
-						<button onclick="testSymbol()">Symbol</button>
-					</div>
-				</div>
+				<fieldset>
+					<legend>Collections</legend>
+					<ul>
+						<li><button type="button" data-test="map">Map</button></li>
+						<li><button type="button" data-test="set">Set</button></li>
+						<li><button type="button" data-test="symbol">Symbol</button></li>
+					</ul>
+				</fieldset>
 
-				<div class="control-group">
-					<label>Special Types</label>
-					<div class="button-group">
-						<button onclick="testDate()">Date</button>
-						<button onclick="testRegex()">RegExp</button>
-						<button onclick="testElement()">DOM Element</button>
-						<button onclick="testError2()">Error Object</button>
-					</div>
-				</div>
+				<fieldset>
+					<legend>Special Types</legend>
+					<ul>
+						<li><button type="button" data-test="date">Date</button></li>
+						<li><button type="button" data-test="regex">RegExp</button></li>
+						<li><button type="button" data-test="element">DOM Element</button></li>
+						<li><button type="button" data-test="errorObj">Error Object</button></li>
+					</ul>
+				</fieldset>
 
-				<div class="control-group">
-					<label>Console Methods</label>
-					<div class="button-group">
-						<button onclick="testTable()">table()</button>
-						<button onclick="testTimer()">time()</button>
-						<button onclick="testTimeLog()">timeLog()</button>
-						<button onclick="testGroup()">group()</button>
-						<button onclick="testGroupCollapsed()">groupCollapsed()</button>
-						<button onclick="testTrace()">trace()</button>
-						<button onclick="testCount()">count()</button>
-						<button onclick="testDir()">dir()</button>
-					</div>
-				</div>
+				<fieldset>
+					<legend>Console Methods</legend>
+					<ul>
+						<li><button type="button" data-test="table">table()</button></li>
+						<li><button type="button" data-test="timer">time()</button></li>
+						<li><button type="button" data-test="timelog">timeLog()</button></li>
+						<li><button type="button" data-test="group">group()</button></li>
+						<li><button type="button" data-test="groupCollapsed">groupCollapsed()</button></li>
+						<li><button type="button" data-test="trace">trace()</button></li>
+						<li><button type="button" data-test="count">count()</button></li>
+						<li><button type="button" data-test="dir">dir()</button></li>
+					</ul>
+				</fieldset>
 
-				<div class="control-group">
-					<label>Stress Tests</label>
-					<div class="button-group">
-						<button onclick="testLarge()">Large Object</button>
-						<button onclick="testMultiple()">Multiple Logs</button>
-						<button onclick="testMixed()">Mixed Types</button>
-					</div>
-				</div>
+				<fieldset>
+					<legend>Stress Tests</legend>
+					<ul>
+						<li><button type="button" data-test="large">Large Object</button></li>
+						<li><button type="button" data-test="multiple">Multiple Logs</button></li>
+						<li><button type="button" data-test="mixed">Mixed Types</button></li>
+					</ul>
+				</fieldset>
 
-				<div class="control-group">
-					<label>Actions</label>
-					<div class="button-group">
-						<button class="secondary" onclick="console.clear()">Clear Console</button>
-						<button class="danger" onclick="testAll()">Run All Tests</button>
-					</div>
-				</div>
-			</div>
+				<fieldset>
+					<legend>Actions</legend>
+					<ul>
+						<li><button type="button" data-test="clear" data-variant="secondary">Clear Console</button></li>
+						<li><button type="button" data-test="all" data-variant="danger">Run All Tests</button></li>
+					</ul>
+				</fieldset>
+			</form>
 
-			<div class="info-box">
+			<aside>
 				<h3>Usage</h3>
 				<p>Simply add <code>&lt;browser-console&gt;&lt;/browser-console&gt;</code> to your HTML. The component automatically hooks into console methods and displays all logs with syntax highlighting and type formatting.</p>
-			</div>
+			</aside>
 
-			<div class="info-box" style="margin-top: 10px;">
+			<aside>
 				<h3>Features</h3>
 				<p>
-					<strong>Logging:</strong> log, info, warn, error, debug, table, time/timeEnd<br>
-					<strong>NEW:</strong> group/groupEnd, trace, count, dir, timeLog<br>
-					<strong>Types:</strong> Objects, Arrays, Map, Set, Symbol, BigInt, Date, RegExp, Error<br>
-					<strong>UI:</strong> Search/filter, copy to clipboard, light/dark themes<br>
-					<strong>A11y:</strong> Keyboard navigation, ARIA landmarks, screen reader support<br>
+					<strong>Logging:</strong> log, info, warn, error, debug, table, time/timeEnd<br/>
+					<strong>NEW:</strong> group/groupEnd, trace, count, dir, timeLog<br/>
+					<strong>Types:</strong> Objects, Arrays, Map, Set, Symbol, BigInt, Date, RegExp, Error<br/>
+					<strong>UI:</strong> Search/filter, copy to clipboard, light/dark themes<br/>
+					<strong>A11y:</strong> Keyboard navigation, ARIA landmarks, screen reader support<br/>
 					<strong>Other:</strong> Expandable objects, zero dependencies, pure vanilla JS
 				</p>
-			</div>
-		</div>
+			</aside>
+		</section>
 
-		<div class="panel">
+		<section>
 			<h2>Console Output</h2>
-			<div class="console-container">
+			<article class="console-output">
 				<browser-console></browser-console>
-			</div>
-		</div>
-	</div>
-</div>
+			</article>
+		</section>
+	</main>
 
 <script type="module" src="../src/browser-console.js"></script>
 <script>
-	// Basic Logging
-	function testLog() {
-		console.log('This is a standard log message');
-	}
+	// Test functions
+	const tests = {
+		log: () => console.log('This is a standard log message'),
+		info: () => console.info('This is an informational message'),
+		warn: () => console.warn('This is a warning message'),
+		error: () => console.error('This is an error message'),
+		debug: () => console.debug('This is a debug message'),
 
-	function testInfo() {
-		console.info('This is an informational message');
-	}
+		string: () => console.log('Hello, World!', 'Multiple strings', 'Can be logged'),
+		number: () => console.log(42, 3.14159, -100, Infinity, NaN),
+		boolean: () => console.log(true, false),
+		null: () => console.log(null, undefined),
+		bigint: () => {
+			console.log('BigInt values:', 123n, BigInt(9007199254740991), 0n);
+			console.log('Large BigInt:', 9007199254740991n * 1000n);
+		},
 
-	function testWarn() {
-		console.warn('This is a warning message');
-	}
-
-	function testError() {
-		console.error('This is an error message');
-	}
-
-	function testDebug() {
-		console.debug('This is a debug message');
-	}
-
-	// Primitive Types
-	function testString() {
-		console.log('Hello, World!', 'Multiple strings', 'Can be logged');
-	}
-
-	function testNumber() {
-		console.log(42, 3.14159, -100, Infinity, NaN);
-	}
-
-	function testBoolean() {
-		console.log(true, false);
-	}
-
-	function testNull() {
-		console.log(null, undefined);
-	}
-
-	function testBigInt() {
-		console.log('BigInt values:', 123n, BigInt(9007199254740991), 0n);
-		console.log('Large BigInt:', 9007199254740991n * 1000n);
-	}
-
-	// Objects & Functions
-	function testObject() {
-		console.log({
+		object: () => console.log({
 			name: 'John Doe',
 			age: 30,
 			email: 'john@example.com',
 			active: true
-		});
-	}
-
-	function testArray() {
-		console.log([1, 2, 3, 4, 5]);
-		console.log(['apple', 'banana', 'cherry', 'date', 'elderberry']);
-	}
-
-	function testNestedObject() {
-		console.log({
+		}),
+		array: () => {
+			console.log([1, 2, 3, 4, 5]);
+			console.log(['apple', 'banana', 'cherry', 'date', 'elderberry']);
+		},
+		nested: () => console.log({
 			user: {
 				name: 'Jane Smith',
 				profile: {
 					age: 28,
-					location: {
-						city: 'San Francisco',
-						country: 'USA'
-					}
+					location: { city: 'San Francisco', country: 'USA' }
 				}
 			},
 			hobbies: ['coding', 'reading', 'gaming']
-		});
-	}
+		}),
+		function: () => {
+			console.log(function myFunction() { return 'hello'; });
+			console.log(() => 'arrow function');
+		},
 
-	function testFunction() {
-		console.log(function myFunction() { return 'hello'; });
-		console.log(() => 'arrow function');
-	}
+		map: () => {
+			const map = new Map([
+				['name', 'Alice'],
+				['age', 30],
+				['active', true],
+				[{ key: 'obj' }, 'object key']
+			]);
+			console.log('Map:', map);
+		},
+		set: () => {
+			const set = new Set([1, 2, 3, 'hello', true, { a: 1 }]);
+			console.log('Set:', set);
+		},
+		symbol: () => {
+			const sym = Symbol('mySymbol');
+			console.log('Symbol:', sym);
+			console.log('Object with Symbol key:', {
+				name: 'Test',
+				[Symbol('secret')]: 'hidden value',
+				[Symbol.for('shared')]: 'shared value'
+			});
+		},
 
-	// Collections
-	function testMap() {
-		const map = new Map([
-			['name', 'Alice'],
-			['age', 30],
-			['active', true],
-			[{ key: 'obj' }, 'object key']
-		]);
-		console.log('Map:', map);
-	}
+		date: () => {
+			console.log(new Date());
+			console.log(new Date('2024-01-01'));
+		},
+		regex: () => {
+			console.log(/[a-z]+/gi);
+			console.log(new RegExp('\\d+', 'g'));
+		},
+		element: () => {
+			console.log(document.body);
+			console.log(document.querySelector('h1'));
+		},
+		errorObj: () => {
+			console.error(new Error('Something went wrong!'));
+			console.error(new TypeError('Type error occurred'));
+		},
 
-	function testSet() {
-		const set = new Set([1, 2, 3, 'hello', true, { a: 1 }]);
-		console.log('Set:', set);
-	}
-
-	function testSymbol() {
-		const sym = Symbol('mySymbol');
-		console.log('Symbol:', sym);
-		console.log('Object with Symbol key:', {
-			name: 'Test',
-			[Symbol('secret')]: 'hidden value',
-			[Symbol.for('shared')]: 'shared value'
-		});
-	}
-
-	// Special Types
-	function testDate() {
-		console.log(new Date());
-		console.log(new Date('2024-01-01'));
-	}
-
-	function testRegex() {
-		console.log(/[a-z]+/gi);
-		console.log(new RegExp('\\d+', 'g'));
-	}
-
-	function testElement() {
-		console.log(document.body);
-		console.log(document.querySelector('h1'));
-	}
-
-	function testError2() {
-		console.error(new Error('Something went wrong!'));
-		console.error(new TypeError('Type error occurred'));
-	}
-
-	// Console Methods
-	function testTable() {
-		const users = [
-			{ id: 1, name: 'Alice', role: 'Admin', email: 'alice@example.com' },
-			{ id: 2, name: 'Bob', role: 'User', email: 'bob@example.com' },
-			{ id: 3, name: 'Charlie', role: 'Moderator', email: 'charlie@example.com' }
-		];
-		console.table(users);
-	}
-
-	function testTimer() {
-		console.time('performance-test');
-		let sum = 0;
-		for (let i = 0; i < 1000000; i++) {
-			sum += i;
-		}
-		console.timeEnd('performance-test');
-	}
-
-	function testTimeLog() {
-		console.time('long-operation');
-		console.log('Starting operation...');
-		setTimeout(() => {
-			console.timeLog('long-operation', 'Still running...');
+		table: () => {
+			const users = [
+				{ id: 1, name: 'Alice', role: 'Admin', email: 'alice@example.com' },
+				{ id: 2, name: 'Bob', role: 'User', email: 'bob@example.com' },
+				{ id: 3, name: 'Charlie', role: 'Moderator', email: 'charlie@example.com' }
+			];
+			console.table(users);
+		},
+		timer: () => {
+			console.time('performance-test');
+			let sum = 0;
+			for (let i = 0; i < 1000000; i++) { sum += i; }
+			console.timeEnd('performance-test');
+		},
+		timelog: () => {
+			console.time('long-operation');
+			console.log('Starting operation...');
 			setTimeout(() => {
-				console.timeLog('long-operation', 'Almost done...');
+				console.timeLog('long-operation', 'Still running...');
 				setTimeout(() => {
-					console.timeEnd('long-operation');
+					console.timeLog('long-operation', 'Almost done...');
+					setTimeout(() => console.timeEnd('long-operation'), 200);
 				}, 200);
 			}, 200);
-		}, 200);
-	}
-
-	function testGroup() {
-		console.group('User Details');
-		console.log('Name: John Doe');
-		console.log('Email: john@example.com');
-		console.group('Nested Group');
-		console.log('This is nested inside');
-		console.warn('Nested warning');
-		console.groupEnd();
-		console.log('Back to parent group');
-		console.groupEnd();
-		console.log('Outside all groups');
-	}
-
-	function testGroupCollapsed() {
-		console.groupCollapsed('Collapsed Group (click to expand)');
-		console.log('Hidden content 1');
-		console.log('Hidden content 2');
-		console.log('Hidden content 3');
-		console.groupEnd();
-	}
-
-	function testTrace() {
-		function innerFunction() {
-			console.trace('Stack trace from innerFunction');
-		}
-		function outerFunction() {
-			innerFunction();
-		}
-		outerFunction();
-	}
-
-	function testCount() {
-		console.count('button-clicks');
-		console.count('button-clicks');
-		console.count('button-clicks');
-		console.count('other-counter');
-		console.log('Click this button multiple times to see count increase');
-	}
-
-	function testDir() {
-		const obj = {
-			name: 'Directory View',
-			nested: {
-				level1: {
-					level2: {
-						deep: 'value'
-					}
-				}
-			},
-			array: [1, 2, 3]
-		};
-		console.dir(obj);
-	}
-
-	// Stress Tests
-	function testMixed() {
-		console.log('Mixed:', 123, true, { key: 'value' }, [1, 2, 3], null, undefined);
-	}
-
-	function testLarge() {
-		const largeObj = {
-			id: 12345,
-			timestamp: new Date(),
-			data: Array.from({ length: 50 }, (_, i) => ({
-				index: i,
-				value: Math.random(),
-				label: `Item ${i}`
-			})),
-			metadata: {
-				version: '1.0.0',
-				author: 'System',
-				tags: ['test', 'demo', 'example']
+		},
+		group: () => {
+			console.group('User Details');
+			console.log('Name: John Doe');
+			console.log('Email: john@example.com');
+			console.group('Nested Group');
+			console.log('This is nested inside');
+			console.warn('Nested warning');
+			console.groupEnd();
+			console.log('Back to parent group');
+			console.groupEnd();
+			console.log('Outside all groups');
+		},
+		groupCollapsed: () => {
+			console.groupCollapsed('Collapsed Group (click to expand)');
+			console.log('Hidden content 1');
+			console.log('Hidden content 2');
+			console.log('Hidden content 3');
+			console.groupEnd();
+		},
+		trace: () => {
+			function innerFunction() {
+				console.trace('Stack trace from innerFunction');
 			}
-		};
-		console.log(largeObj);
-	}
+			function outerFunction() { innerFunction(); }
+			outerFunction();
+		},
+		count: () => {
+			console.count('button-clicks');
+			console.count('button-clicks');
+			console.count('button-clicks');
+			console.count('other-counter');
+			console.log('Click this button multiple times to see count increase');
+		},
+		dir: () => {
+			const obj = {
+				name: 'Directory View',
+				nested: { level1: { level2: { deep: 'value' } } },
+				array: [1, 2, 3]
+			};
+			console.dir(obj);
+		},
 
-	function testMultiple() {
-		for (let i = 0; i < 5; i++) {
-			console.log(`Log entry #${i + 1}`, { iteration: i, timestamp: Date.now() });
+		mixed: () => console.log('Mixed:', 123, true, { key: 'value' }, [1, 2, 3], null, undefined),
+		large: () => {
+			const largeObj = {
+				id: 12345,
+				timestamp: new Date(),
+				data: Array.from({ length: 50 }, (_, i) => ({
+					index: i,
+					value: Math.random(),
+					label: `Item ${i}`
+				})),
+				metadata: { version: '1.0.0', author: 'System', tags: ['test', 'demo', 'example'] }
+			};
+			console.log(largeObj);
+		},
+		multiple: () => {
+			for (let i = 0; i < 5; i++) {
+				console.log(`Log entry #${i + 1}`, { iteration: i, timestamp: Date.now() });
+			}
+		},
+
+		clear: () => console.clear(),
+		all: () => {
+			console.clear();
+			setTimeout(() => tests.log(), 100);
+			setTimeout(() => tests.info(), 200);
+			setTimeout(() => tests.warn(), 300);
+			setTimeout(() => tests.error(), 400);
+			setTimeout(() => tests.bigint(), 500);
+			setTimeout(() => tests.map(), 600);
+			setTimeout(() => tests.set(), 700);
+			setTimeout(() => tests.object(), 800);
+			setTimeout(() => tests.group(), 900);
+			setTimeout(() => tests.trace(), 1100);
 		}
-	}
+	};
 
-	function testAll() {
-		console.clear();
-		setTimeout(() => testLog(), 100);
-		setTimeout(() => testInfo(), 200);
-		setTimeout(() => testWarn(), 300);
-		setTimeout(() => testError(), 400);
-		setTimeout(() => testBigInt(), 500);
-		setTimeout(() => testMap(), 600);
-		setTimeout(() => testSet(), 700);
-		setTimeout(() => testObject(), 800);
-		setTimeout(() => testGroup(), 900);
-		setTimeout(() => testTrace(), 1100);
-	}
+	// Event delegation for test buttons
+	document.getElementById('test-controls').addEventListener('click', (e) => {
+		const button = e.target.closest('button[data-test]');
+		if (button) {
+			const testName = button.dataset.test;
+			if (tests[testName]) {
+				tests[testName]();
+			}
+		}
+	});
 
 	// Welcome message
 	console.log('%cBrowser Console Demo', 'font-size: 16px; font-weight: bold; color: #0066cc;');
