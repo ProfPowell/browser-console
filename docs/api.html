@@ -6,6 +6,7 @@
   <title>API Reference - browser-console</title>
   <meta name="description" content="Complete API documentation for the browser-console web component including attributes, methods, events, and CSS custom properties." />
   <link rel="stylesheet" href="styles.css" />
+  <script type="module" src="https://unpkg.com/@profpowell/code-block"></script>
   <script>
     const savedTheme = localStorage.getItem('docs-theme') || 'light'
     document.documentElement.setAttribute('data-theme', savedTheme)
@@ -82,20 +83,20 @@
     <section id="installation" class="api-section">
       <h2>Installation</h2>
       <h3>npm</h3>
-      <pre><code>npm install @profpowell/browser-console</code></pre>
+      <code-block language="bash">npm install @profpowell/browser-console</code-block>
 
       <h3>CDN</h3>
-      <pre><code>&lt;script type="module" src="https://unpkg.com/@profpowell/browser-console"&gt;&lt;/script&gt;</code></pre>
+      <code-block language="html">&lt;script type="module" src="https://unpkg.com/@profpowell/browser-console"&gt;&lt;/script&gt;</code-block>
 
       <h3>ES Module Import</h3>
-      <pre><code>import '@profpowell/browser-console'
+      <code-block language="javascript">import '@profpowell/browser-console'
 // or
-import { BrowserConsole } from '@profpowell/browser-console'</code></pre>
+import { BrowserConsole } from '@profpowell/browser-console'</code-block>
     </section>
 
     <section id="usage" class="api-section">
       <h2>Basic Usage</h2>
-      <pre><code>&lt;browser-console theme="dark" max-logs="500"&gt;&lt;/browser-console&gt;</code></pre>
+      <code-block language="html">&lt;browser-console theme="dark" max-logs="500"&gt;&lt;/browser-console&gt;</code-block>
       <p>The component automatically hooks into console methods and displays all logs with syntax highlighting.</p>
     </section>
 
@@ -411,19 +412,19 @@ import { BrowserConsole } from '@profpowell/browser-console'</code></pre>
       </table>
 
       <h3>Example</h3>
-      <pre><code>browser-console::part(header) {
+      <code-block language="css">browser-console::part(header) {
   background: #2d2d2d;
   border-bottom: 2px solid #0078d4;
 }
 
 browser-console::part(log-entry) {
   font-size: 13px;
-}</code></pre>
+}</code-block>
     </section>
 
     <section class="api-section">
       <h2>TypeScript Types</h2>
-      <pre><code>interface LogEntry {
+      <code-block language="typescript">interface LogEntry {
   method: 'log' | 'info' | 'warn' | 'error' | 'debug' | 'table' | 'time' | 'clear' | 'count' | 'assert' | 'group' | 'trace' | 'dir'
   data: unknown[]
   timestamp: Date
@@ -440,7 +441,7 @@ interface GroupStackEntry {
 }
 
 type Theme = 'dark' | 'light'
-type Filter = 'log' | 'info' | 'warn' | 'error' | null</code></pre>
+type Filter = 'log' | 'info' | 'warn' | 'error' | null</code-block>
     </section>
   </main>
 

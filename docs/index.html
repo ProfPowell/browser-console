@@ -6,7 +6,7 @@
   <title>browser-console - Console Log Display Web Component</title>
   <meta name="description" content="A zero-dependency vanilla JavaScript web component that captures and displays browser console output with syntax highlighting and type-aware formatting." />
   <link rel="stylesheet" href="styles.css" />
-  <script type="module" src="https://cdn.jsdelivr.net/gh/ProfPowell/browser-console@main/dist/browser-console.js"></script>
+  <script type="module" src="https://unpkg.com/@profpowell/code-block"></script>
   <script>
     // Theme persistence
     const savedTheme = localStorage.getItem('docs-theme') || 'light'
@@ -73,25 +73,25 @@
       <h2>Quick Start</h2>
 
       <h3>Installation</h3>
-      <pre><code>npm install @profpowell/browser-console</code></pre>
+      <code-block language="bash">npm install @profpowell/browser-console</code-block>
 
       <p>Or via CDN:</p>
-      <pre><code>&lt;script type="module" src="https://unpkg.com/@profpowell/browser-console"&gt;&lt;/script&gt;</code></pre>
+      <code-block language="html">&lt;script type="module" src="https://unpkg.com/@profpowell/browser-console"&gt;&lt;/script&gt;</code-block>
 
       <h3>Basic Usage</h3>
-      <pre><code>&lt;browser-console theme="dark" max-logs="500"&gt;&lt;/browser-console&gt;</code></pre>
+      <code-block language="html">&lt;browser-console theme="dark" max-logs="500"&gt;&lt;/browser-console&gt;</code-block>
 
       <p>The component automatically hooks into console methods and displays all logs with syntax highlighting. Just add it to your page and start logging!</p>
 
       <h3>JavaScript API</h3>
-      <pre><code>const bc = document.querySelector('browser-console')
+      <code-block language="javascript">const bc = document.querySelector('browser-console')
 
 // Programmatic control
 bc.setTheme('light')
 bc.setFilter('error')      // Show only errors
 bc.setSearchQuery('user')  // Filter by text
 bc.clearLogs()             // Clear all logs
-bc.copyLogs()              // Copy to clipboard</code></pre>
+bc.copyLogs()              // Copy to clipboard</code-block>
     </section>
 
     <section class="related">

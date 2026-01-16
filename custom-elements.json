@@ -1,0 +1,828 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "src/browser-console.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "BrowserConsole Web Component\nA vanilla JavaScript web component for capturing and displaying console logs\nwith syntax highlighting, type-aware formatting, and accessibility support.",
+          "name": "BrowserConsole",
+          "cssProperties": [
+            {
+              "description": "Primary background color",
+              "name": "--bg-primary",
+              "default": "#1e1e1e"
+            },
+            {
+              "description": "Secondary background color (header)",
+              "name": "--bg-secondary",
+              "default": "#252526"
+            },
+            {
+              "description": "Hover state background",
+              "name": "--bg-hover",
+              "default": "#2a2d2e"
+            },
+            {
+              "description": "Primary text color",
+              "name": "--text-primary",
+              "default": "#d4d4d4"
+            },
+            {
+              "description": "Secondary text color (timestamps)",
+              "name": "--text-secondary",
+              "default": "#808080"
+            },
+            {
+              "description": "Border color",
+              "name": "--border-color",
+              "default": "#3c3c3c"
+            },
+            {
+              "description": "Accent color for active states",
+              "name": "--accent-color",
+              "default": "#0078d4"
+            },
+            {
+              "description": "console.log text color",
+              "name": "--log-color",
+              "default": "#d4d4d4"
+            },
+            {
+              "description": "console.info text color",
+              "name": "--info-color",
+              "default": "#3794ff"
+            },
+            {
+              "description": "console.warn text color",
+              "name": "--warn-color",
+              "default": "#cca700"
+            },
+            {
+              "description": "console.error text color",
+              "name": "--error-color",
+              "default": "#f14c4c"
+            },
+            {
+              "description": "console.debug text color",
+              "name": "--debug-color",
+              "default": "#b5cea8"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The console header containing filters and actions",
+              "name": "header"
+            },
+            {
+              "description": "The scrollable log entries container",
+              "name": "logs"
+            },
+            {
+              "description": "Filter buttons (All, Log, Info, Warn, Error)",
+              "name": "filter-button"
+            },
+            {
+              "description": "Action buttons (theme toggle, copy, clear)",
+              "name": "action-button"
+            },
+            {
+              "description": "Individual log entry row",
+              "name": "log-entry"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "MAX_LOGS_DEFAULT",
+              "type": {
+                "text": "number"
+              },
+              "static": true,
+              "default": "1000",
+              "description": "Default maximum number of logs to retain"
+            },
+            {
+              "kind": "field",
+              "name": "MAX_DEPTH",
+              "type": {
+                "text": "number"
+              },
+              "static": true,
+              "default": "2",
+              "description": "Maximum depth for nested object expansion"
+            },
+            {
+              "kind": "field",
+              "name": "PREVIEW_ITEMS",
+              "type": {
+                "text": "number"
+              },
+              "static": true,
+              "default": "3",
+              "description": "Number of items to show in array/object preview"
+            },
+            {
+              "kind": "field",
+              "name": "FUNCTION_PREVIEW_LENGTH",
+              "type": {
+                "text": "number"
+              },
+              "static": true,
+              "default": "50",
+              "description": "Maximum length for function preview string"
+            },
+            {
+              "kind": "method",
+              "name": "updateTheme",
+              "description": "Update theme"
+            },
+            {
+              "kind": "method",
+              "name": "setTheme",
+              "parameters": [
+                {
+                  "name": "theme"
+                }
+              ],
+              "description": "Set theme programmatically"
+            },
+            {
+              "kind": "method",
+              "name": "hookConsole",
+              "description": "Hook into console methods to capture logs"
+            },
+            {
+              "kind": "method",
+              "name": "unhookConsole",
+              "description": "Restore original console methods"
+            },
+            {
+              "kind": "method",
+              "name": "addLog",
+              "parameters": [
+                {
+                  "name": "log"
+                }
+              ],
+              "description": "Add a log entry"
+            },
+            {
+              "kind": "method",
+              "name": "appendLog",
+              "parameters": [
+                {
+                  "name": "log"
+                }
+              ],
+              "description": "Append a single log to the view (Incremental Rendering)"
+            },
+            {
+              "kind": "method",
+              "name": "clearLogs",
+              "description": "Clear all logs"
+            },
+            {
+              "kind": "method",
+              "name": "formatValuePlainText",
+              "parameters": [
+                {
+                  "name": "value",
+                  "description": "Value to format",
+                  "type": {
+                    "text": "*"
+                  }
+                },
+                {
+                  "name": "depth",
+                  "default": "0",
+                  "description": "Current nesting depth",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ],
+              "description": "Format a value as plain text for clipboard",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "formatLogsForClipboard",
+              "description": "Format logs for clipboard as plain text",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "copyLogs",
+              "description": "Copy visible logs to clipboard"
+            },
+            {
+              "kind": "method",
+              "name": "setFilter",
+              "parameters": [
+                {
+                  "name": "filter",
+                  "description": "Log method to filter by, or null for all",
+                  "type": {
+                    "text": "string|null"
+                  }
+                }
+              ],
+              "description": "Set filter for log methods"
+            },
+            {
+              "kind": "method",
+              "name": "setSearchQuery",
+              "parameters": [
+                {
+                  "name": "query",
+                  "description": "Search text to filter logs by",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Set search query for text filtering"
+            },
+            {
+              "kind": "method",
+              "name": "matchesFilters",
+              "parameters": [
+                {
+                  "name": "log",
+                  "description": "Log entry to check",
+                  "type": {
+                    "text": "Object"
+                  }
+                }
+              ],
+              "description": "Check if a log entry matches current filters",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getExpansionStates",
+              "description": "Get current expansion states from DOM",
+              "return": {
+                "type": {
+                  "text": "Map<string, boolean>"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "restoreExpansionStates",
+              "parameters": [
+                {
+                  "name": "states",
+                  "description": "Previously saved expansion states",
+                  "type": {
+                    "text": "Map<string, boolean>"
+                  }
+                }
+              ],
+              "description": "Restore expansion states after render"
+            },
+            {
+              "kind": "method",
+              "name": "renderLogs",
+              "description": "Render all logs with expansion state preservation"
+            },
+            {
+              "kind": "method",
+              "name": "renderLog",
+              "parameters": [
+                {
+                  "name": "log"
+                },
+                {
+                  "name": "index"
+                }
+              ],
+              "description": "Render a single log entry"
+            },
+            {
+              "kind": "method",
+              "name": "formatTimestamp",
+              "parameters": [
+                {
+                  "name": "date"
+                }
+              ],
+              "description": "Format timestamp"
+            },
+            {
+              "kind": "method",
+              "name": "formatLogData",
+              "parameters": [
+                {
+                  "name": "data",
+                  "description": "Array of values to format",
+                  "type": {
+                    "text": "Array"
+                  }
+                },
+                {
+                  "name": "method",
+                  "description": "Console method name",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "logIndex",
+                  "description": "Index of the log entry for stable IDs",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ],
+              "description": "Format log data for display",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "formatTable",
+              "parameters": [
+                {
+                  "name": "data"
+                }
+              ],
+              "description": "Format table data"
+            },
+            {
+              "kind": "method",
+              "name": "formatValue",
+              "parameters": [
+                {
+                  "name": "value",
+                  "description": "Value to format",
+                  "type": {
+                    "text": "*"
+                  }
+                },
+                {
+                  "name": "depth",
+                  "default": "0",
+                  "description": "Current nesting depth",
+                  "type": {
+                    "text": "number"
+                  }
+                },
+                {
+                  "name": "expanded",
+                  "default": "false",
+                  "description": "Whether to show expanded view",
+                  "type": {
+                    "text": "boolean"
+                  }
+                },
+                {
+                  "name": "visited",
+                  "default": "new WeakSet()",
+                  "description": "Set of visited objects for circular detection",
+                  "type": {
+                    "text": "WeakSet"
+                  }
+                },
+                {
+                  "name": "path",
+                  "default": "'0'",
+                  "description": "Stable path for generating element IDs",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Format a single value"
+            },
+            {
+              "kind": "method",
+              "name": "formatArray",
+              "parameters": [
+                {
+                  "name": "arr",
+                  "description": "Array to format",
+                  "type": {
+                    "text": "Array"
+                  }
+                },
+                {
+                  "name": "depth",
+                  "description": "Current nesting depth",
+                  "type": {
+                    "text": "number"
+                  }
+                },
+                {
+                  "name": "expanded",
+                  "description": "Whether to show expanded view",
+                  "type": {
+                    "text": "boolean"
+                  }
+                },
+                {
+                  "name": "visited",
+                  "description": "Set of visited objects for circular detection",
+                  "type": {
+                    "text": "WeakSet"
+                  }
+                },
+                {
+                  "name": "path",
+                  "description": "Stable path for generating element IDs",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Format an array"
+            },
+            {
+              "kind": "method",
+              "name": "formatObject",
+              "parameters": [
+                {
+                  "name": "obj",
+                  "description": "Object to format",
+                  "type": {
+                    "text": "Object"
+                  }
+                },
+                {
+                  "name": "depth",
+                  "description": "Current nesting depth",
+                  "type": {
+                    "text": "number"
+                  }
+                },
+                {
+                  "name": "expanded",
+                  "description": "Whether to show expanded view",
+                  "type": {
+                    "text": "boolean"
+                  }
+                },
+                {
+                  "name": "visited",
+                  "description": "Set of visited objects for circular detection",
+                  "type": {
+                    "text": "WeakSet"
+                  }
+                },
+                {
+                  "name": "path",
+                  "description": "Stable path for generating element IDs",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Format an object"
+            },
+            {
+              "kind": "method",
+              "name": "formatElement",
+              "parameters": [
+                {
+                  "name": "element"
+                }
+              ],
+              "description": "Format a DOM element"
+            },
+            {
+              "kind": "method",
+              "name": "formatMap",
+              "parameters": [
+                {
+                  "name": "map",
+                  "description": "Map to format",
+                  "type": {
+                    "text": "Map"
+                  }
+                },
+                {
+                  "name": "depth",
+                  "description": "Current nesting depth",
+                  "type": {
+                    "text": "number"
+                  }
+                },
+                {
+                  "name": "visited",
+                  "description": "Set of visited objects for circular detection",
+                  "type": {
+                    "text": "WeakSet"
+                  }
+                },
+                {
+                  "name": "path",
+                  "description": "Stable path for generating element IDs",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Format a Map"
+            },
+            {
+              "kind": "method",
+              "name": "formatSet",
+              "parameters": [
+                {
+                  "name": "set",
+                  "description": "Set to format",
+                  "type": {
+                    "text": "Set"
+                  }
+                },
+                {
+                  "name": "depth",
+                  "description": "Current nesting depth",
+                  "type": {
+                    "text": "number"
+                  }
+                },
+                {
+                  "name": "visited",
+                  "description": "Set of visited objects for circular detection",
+                  "type": {
+                    "text": "WeakSet"
+                  }
+                },
+                {
+                  "name": "path",
+                  "description": "Stable path for generating element IDs",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Format a Set"
+            },
+            {
+              "kind": "method",
+              "name": "getType",
+              "parameters": [
+                {
+                  "name": "value",
+                  "description": "Value to check",
+                  "type": {
+                    "text": "*"
+                  }
+                }
+              ],
+              "description": "Get the type of a value",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "escapeHtml",
+              "parameters": [
+                {
+                  "name": "text",
+                  "description": "Text to escape",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Escape HTML for safe display",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "toggleExpand",
+              "parameters": [
+                {
+                  "name": "header",
+                  "description": "The expandable header element",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ],
+              "description": "Toggle expand/collapse state of an expandable header"
+            },
+            {
+              "kind": "method",
+              "name": "handleLogClick",
+              "parameters": [
+                {
+                  "name": "e"
+                }
+              ],
+              "description": "Handle clicks on log entries (delegated)"
+            },
+            {
+              "kind": "method",
+              "name": "handleLogKeydown",
+              "parameters": [
+                {
+                  "name": "e",
+                  "description": "Keyboard event",
+                  "type": {
+                    "text": "KeyboardEvent"
+                  }
+                }
+              ],
+              "description": "Handle keyboard events on log entries (delegated)"
+            },
+            {
+              "kind": "method",
+              "name": "getStyles",
+              "description": "Get component styles"
+            },
+            {
+              "kind": "field",
+              "name": "logs",
+              "type": {
+                "text": "Array<{method: string, data: unknown[], timestamp: Date}>"
+              },
+              "default": "[]",
+              "description": "Array of captured log entries"
+            },
+            {
+              "kind": "field",
+              "name": "originalConsole",
+              "type": {
+                "text": "Object<string, Function>"
+              },
+              "description": "Original console methods for restoration",
+              "default": "{}"
+            },
+            {
+              "kind": "field",
+              "name": "filter",
+              "type": {
+                "text": "string|null"
+              },
+              "description": "Current log filter (null shows all)",
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "maxLogs",
+              "description": "Maximum number of logs to retain",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "timers",
+              "type": {
+                "text": "Object<string, number>"
+              },
+              "description": "Timer tracking for console.time/timeEnd",
+              "default": "{}"
+            },
+            {
+              "kind": "field",
+              "name": "counters",
+              "type": {
+                "text": "Object<string, number>"
+              },
+              "description": "Counter tracking for console.count",
+              "default": "{}"
+            },
+            {
+              "kind": "field",
+              "name": "theme",
+              "type": {
+                "text": "'dark'|'light'"
+              },
+              "description": "Current theme",
+              "default": "'dark'"
+            },
+            {
+              "kind": "field",
+              "name": "searchQuery",
+              "type": {
+                "text": "string"
+              },
+              "description": "Current search query for filtering logs",
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "groupDepth",
+              "type": {
+                "text": "number"
+              },
+              "description": "Current group nesting depth",
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "groupStack",
+              "type": {
+                "text": "Array<{label: string, collapsed: boolean, id: string}>"
+              },
+              "description": "Stack of open groups",
+              "default": "[]"
+            }
+          ],
+          "events": [
+            {
+              "description": "Dispatched when a new log entry is added",
+              "name": "log"
+            },
+            {
+              "description": "Dispatched when console is cleared",
+              "name": "clear"
+            },
+            {
+              "description": "Dispatched when theme changes",
+              "name": "theme-change"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "theme",
+              "type": {
+                "text": "string"
+              },
+              "description": "Color theme ('dark' or 'light')",
+              "default": "dark"
+            },
+            {
+              "name": "max-logs",
+              "type": {
+                "text": "number"
+              },
+              "description": "Maximum number of logs to retain",
+              "default": "1000"
+            },
+            {
+              "type": {
+                "text": "string"
+              },
+              "description": "Whether to automatically hook console methods",
+              "name": "auto-hook",
+              "default": "true"
+            }
+          ],
+          "superclass": {
+            "name": "HTMLElement"
+          },
+          "tagName": "browser-console",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "browser-console",
+          "declaration": {
+            "name": "BrowserConsole",
+            "module": "src/browser-console.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "BrowserConsole",
+          "declaration": {
+            "name": "BrowserConsole",
+            "module": "src/browser-console.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "BrowserConsole",
+            "module": "src/browser-console.js"
+          }
+        }
+      ]
+    }
+  ]
+}
