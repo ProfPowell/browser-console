@@ -6,7 +6,6 @@
   <title>browser-console - Console Log Display Web Component</title>
   <meta name="description" content="A zero-dependency vanilla JavaScript web component that captures and displays browser console output with syntax highlighting and type-aware formatting." />
   <link rel="stylesheet" href="styles.css" />
-  <script type="module" src="https://unpkg.com/@profpowell/code-block"></script>
   <script type="module" src="browser-console.js"></script>
   <script>
     // Theme persistence
@@ -135,6 +134,7 @@ bc.copyLogs()              // Copy to clipboard</code-block>
     document.getElementById('theme-icon').textContent =
       document.body.classList.contains('dark') ? '☀️' : '🌙'
   </script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/ProfPowell/code-block@v2.0.1/dist/code-block.min.js"></script>
   <script type="module">
     // Populate hero console with demo messages
     const heroConsole = document.getElementById('hero-console')
