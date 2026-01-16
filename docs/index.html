@@ -1,632 +1,138 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Browser Console - API Reference</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-      background: #f5f5f5;
-      line-height: 1.6;
-      color: #333;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-
-    header {
-      background: white;
-      padding: 30px;
-      border-radius: 8px;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 15px;
-    }
-
-    header hgroup h1 {
-      color: #333;
-      margin-bottom: 10px;
-    }
-
-    header hgroup p {
-      color: #666;
-      font-size: 16px;
-    }
-
-    header nav a {
-      display: inline-block;
-      padding: 10px 20px;
-      background: #0066cc;
-      color: white;
-      text-decoration: none;
-      border-radius: 4px;
-      font-size: 14px;
-      transition: background 0.2s;
-    }
-
-    header nav a:hover {
-      background: #0052a3;
-    }
-
-    main {
-      background: white;
-      border-radius: 8px;
-      padding: 30px;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-
-    h2 {
-      color: #333;
-      margin-bottom: 20px;
-      padding-bottom: 10px;
-      border-bottom: 2px solid #0066cc;
-    }
-
-    h3 {
-      color: #444;
-      margin: 25px 0 15px;
-      font-size: 18px;
-    }
-
-    h4 {
-      color: #555;
-      margin: 20px 0 10px;
-      font-size: 15px;
-      font-family: 'Consolas', 'Monaco', monospace;
-    }
-
-    p {
-      margin-bottom: 15px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 15px 0;
-      font-size: 14px;
-    }
-
-    th, td {
-      text-align: left;
-      padding: 12px 15px;
-      border-bottom: 1px solid #e0e0e0;
-    }
-
-    th {
-      background: #f8f9fa;
-      font-weight: 600;
-      color: #333;
-    }
-
-    tr:hover {
-      background: #f8f9fa;
-    }
-
-    code {
-      background: #f4f4f4;
-      padding: 2px 6px;
-      border-radius: 3px;
-      font-family: 'Consolas', 'Monaco', monospace;
-      font-size: 13px;
-      color: #d14;
-    }
-
-    pre {
-      background: #1e1e1e;
-      color: #d4d4d4;
-      padding: 20px;
-      border-radius: 6px;
-      overflow-x: auto;
-      font-family: 'Consolas', 'Monaco', monospace;
-      font-size: 14px;
-      line-height: 1.5;
-      margin: 15px 0;
-    }
-
-    pre code {
-      background: none;
-      padding: 0;
-      color: inherit;
-    }
-
-    .tag-name {
-      color: #569cd6;
-    }
-
-    .attr-name {
-      color: #9cdcfe;
-    }
-
-    .attr-value {
-      color: #ce9178;
-    }
-
-    nav[aria-label="Table of contents"] {
-      background: #f8f9fa;
-      padding: 20px;
-      border-radius: 6px;
-      margin-bottom: 25px;
-    }
-
-    nav[aria-label="Table of contents"] h3 {
-      margin-top: 0;
-      margin-bottom: 10px;
-    }
-
-    nav[aria-label="Table of contents"] ul {
-      list-style: none;
-      columns: 2;
-    }
-
-    nav[aria-label="Table of contents"] li {
-      margin: 5px 0;
-    }
-
-    nav[aria-label="Table of contents"] a {
-      color: #0066cc;
-      text-decoration: none;
-    }
-
-    nav[aria-label="Table of contents"] a:hover {
-      text-decoration: underline;
-    }
-
-    pre.method-signature {
-      font-family: 'Consolas', 'Monaco', monospace;
-      background: #f4f4f4;
-      color: #333;
-      padding: 10px 15px;
-      border-radius: 4px;
-      border-left: 3px solid #0066cc;
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      color: #666;
-      font-size: 14px;
-    }
-
-    footer a {
-      color: #0066cc;
-    }
-
-    @media (max-width: 768px) {
-      nav[aria-label="Table of contents"] ul {
-        columns: 1;
-      }
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>browser-console - Console Log Display Web Component</title>
+  <meta name="description" content="A zero-dependency vanilla JavaScript web component that captures and displays browser console output with syntax highlighting and type-aware formatting." />
+  <link rel="stylesheet" href="styles.css" />
+  <script type="module" src="https://cdn.jsdelivr.net/gh/ProfPowell/browser-console@main/dist/browser-console.js"></script>
+  <script>
+    // Theme persistence
+    const savedTheme = localStorage.getItem('docs-theme') || 'light'
+    document.documentElement.setAttribute('data-theme', savedTheme)
+  </script>
 </head>
 <body>
-  <header>
-    <hgroup>
-      <h1>Browser Console API Reference</h1>
-      <p>Complete documentation for the &lt;browser-console&gt; web component</p>
-    </hgroup>
+  <header class="site-header">
     <nav>
-      <a href="../examples/">View Live Demo</a>
+      <a href="index.html" class="nav-brand">&lt;browser-console&gt;</a>
+      <div class="nav-links">
+        <a href="index.html" class="active">Home</a>
+        <a href="demos.html">Demos</a>
+        <a href="api.html">API</a>
+        <a href="https://github.com/ProfPowell/browser-console">GitHub</a>
+        <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+          <span id="theme-icon">🌙</span>
+        </button>
+      </div>
     </nav>
   </header>
 
   <main>
-    <nav aria-label="Table of contents">
-      <h3>Contents</h3>
-      <ul>
-        <li><a href="#installation">Installation</a></li>
-        <li><a href="#usage">Basic Usage</a></li>
-        <li><a href="#attributes">Attributes</a></li>
-        <li><a href="#properties">Properties</a></li>
-        <li><a href="#methods">Methods</a></li>
-        <li><a href="#css-properties">CSS Custom Properties</a></li>
-        <li><a href="#css-parts">CSS Parts</a></li>
-        <li><a href="#events">Events</a></li>
-      </ul>
-    </nav>
+    <section class="hero">
+      <h1>&lt;browser-console&gt;</h1>
+      <p class="tagline">A zero-dependency vanilla JavaScript web component that captures and displays browser console output with syntax highlighting and type-aware formatting.</p>
+      <div class="hero-actions">
+        <a href="demos.html" class="btn primary">View Demos</a>
+        <a href="api.html" class="btn secondary">API Docs</a>
+      </div>
+    </section>
 
-    <section id="installation">
+    <section class="features">
+      <h2>Features</h2>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <h3>Full Console Support</h3>
+          <p>Supports log, info, warn, error, debug, table, time/timeEnd, group/groupEnd, trace, count, dir, and more.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Type-Aware Formatting</h3>
+          <p>Intelligent display of Objects, Arrays, Map, Set, Symbol, BigInt, Date, RegExp, Error, and DOM elements.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Expandable Objects</h3>
+          <p>Click to expand nested objects and arrays. Preserves expansion state across renders with keyboard navigation.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Search &amp; Filter</h3>
+          <p>Filter logs by type (log, info, warn, error) or search text. Copy visible logs to clipboard with one click.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Light &amp; Dark Themes</h3>
+          <p>Built-in VS Code-inspired themes with full CSS custom property support for customization.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Zero Dependencies</h3>
+          <p>Pure vanilla JavaScript with no external dependencies. Works with any framework or none at all.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="quick-start">
+      <h2>Quick Start</h2>
+
       <h3>Installation</h3>
-      <p><strong>npm:</strong></p>
       <pre><code>npm install @profpowell/browser-console</code></pre>
-      <p><strong>CDN:</strong></p>
+
+      <p>Or via CDN:</p>
       <pre><code>&lt;script type="module" src="https://unpkg.com/@profpowell/browser-console"&gt;&lt;/script&gt;</code></pre>
-    </section>
 
-    <section id="usage">
       <h3>Basic Usage</h3>
-      <pre><code><span class="tag-name">&lt;browser-console</span> <span class="attr-name">theme</span>=<span class="attr-value">"dark"</span> <span class="attr-name">max-logs</span>=<span class="attr-value">"500"</span><span class="tag-name">&gt;&lt;/browser-console&gt;</span></code></pre>
-      <p>The component automatically hooks into console methods and displays all logs with syntax highlighting.</p>
+      <pre><code>&lt;browser-console theme="dark" max-logs="500"&gt;&lt;/browser-console&gt;</code></pre>
+
+      <p>The component automatically hooks into console methods and displays all logs with syntax highlighting. Just add it to your page and start logging!</p>
+
+      <h3>JavaScript API</h3>
+      <pre><code>const bc = document.querySelector('browser-console')
+
+// Programmatic control
+bc.setTheme('light')
+bc.setFilter('error')      // Show only errors
+bc.setSearchQuery('user')  // Filter by text
+bc.clearLogs()             // Clear all logs
+bc.copyLogs()              // Copy to clipboard</code></pre>
     </section>
 
-
-      <section id="attributes">
-        <h3>Attributes</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Type</th>
-              <th>Default</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><code>theme</code></td>
-              <td><code>string</code></td>
-              <td><code>dark</code></td>
-              <td>Color theme ('dark' or 'light')</td>
-            </tr>
-            <tr>
-              <td><code>max-logs</code></td>
-              <td><code>number</code></td>
-              <td><code>1000</code></td>
-              <td>Maximum number of logs to retain</td>
-            </tr>
-            <tr>
-              <td><code>auto-hook</code></td>
-              <td><code>string</code></td>
-              <td><code>true</code></td>
-              <td>Whether to automatically hook console methods</td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-
-      <section id="properties">
-        <h3>Properties</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Type</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><code>logs</code></td>
-              <td><code>Array</code></td>
-              <td>Array of captured log entries</td>
-            </tr>
-            <tr>
-              <td><code>originalConsole</code></td>
-              <td><code>Object&lt;string, Function&gt;</code></td>
-              <td>Original console methods for restoration</td>
-            </tr>
-            <tr>
-              <td><code>filter</code></td>
-              <td><code>string|null</code></td>
-              <td>Current log filter (null shows all)</td>
-            </tr>
-            <tr>
-              <td><code>maxLogs</code></td>
-              <td><code>number</code></td>
-              <td>Maximum logs to retain</td>
-            </tr>
-            <tr>
-              <td><code>timers</code></td>
-              <td><code>Object&lt;string, number&gt;</code></td>
-              <td>Timer tracking for console.time/timeEnd</td>
-            </tr>
-            <tr>
-              <td><code>counters</code></td>
-              <td><code>Object&lt;string, number&gt;</code></td>
-              <td>Counter tracking for console.count</td>
-            </tr>
-            <tr>
-              <td><code>theme</code></td>
-              <td><code>string</code></td>
-              <td>Current theme ('dark' or 'light')</td>
-            </tr>
-            <tr>
-              <td><code>searchQuery</code></td>
-              <td><code>string</code></td>
-              <td>Current search/filter query</td>
-            </tr>
-            <tr>
-              <td><code>groupDepth</code></td>
-              <td><code>number</code></td>
-              <td>Current console.group nesting depth</td>
-            </tr>
-            <tr>
-              <td><code>groupStack</code></td>
-              <td><code>Array&lt;{label: string, collapsed: boolean, id: string}&gt;</code></td>
-              <td>Stack of open groups</td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-
-      <section id="methods">
-        <h3>Methods</h3>
-        <h4>updateTheme()</h4>
-        <pre class="method-signature"><code>updateTheme(): void</code></pre>
-        <p>Update theme</p>
-
-        <h4>setTheme()</h4>
-        <pre class="method-signature"><code>setTheme(theme: unknown): void</code></pre>
-        <p>Set theme programmatically</p>
-
-        <h4>hookConsole()</h4>
-        <pre class="method-signature"><code>hookConsole(): void</code></pre>
-        <p>Hook into console methods to capture logs</p>
-
-        <h4>unhookConsole()</h4>
-        <pre class="method-signature"><code>unhookConsole(): void</code></pre>
-        <p>Restore original console methods</p>
-
-        <h4>addLog()</h4>
-        <pre class="method-signature"><code>addLog(log: unknown): void</code></pre>
-        <p>Add a log entry</p>
-
-        <h4>appendLog()</h4>
-        <pre class="method-signature"><code>appendLog(log: unknown): void</code></pre>
-        <p>Append a single log to the view (Incremental Rendering)</p>
-
-        <h4>clearLogs()</h4>
-        <pre class="method-signature"><code>clearLogs(): void</code></pre>
-        <p>Clear all logs</p>
-
-        <h4>formatValuePlainText()</h4>
-        <pre class="method-signature"><code>formatValuePlainText(value: *, depth: number): string</code></pre>
-        <p>Format a value as plain text for clipboard</p>
-
-        <h4>formatLogsForClipboard()</h4>
-        <pre class="method-signature"><code>formatLogsForClipboard(): string</code></pre>
-        <p>Format logs for clipboard as plain text</p>
-
-        <h4>copyLogs()</h4>
-        <pre class="method-signature"><code>copyLogs(): void</code></pre>
-        <p>Copy visible logs to clipboard</p>
-
-        <h4>setFilter()</h4>
-        <pre class="method-signature"><code>setFilter(filter: string|null): void</code></pre>
-        <p>Set filter for log methods</p>
-
-        <h4>setSearchQuery()</h4>
-        <pre class="method-signature"><code>setSearchQuery(query: string): void</code></pre>
-        <p>Set search query for text filtering</p>
-
-        <h4>matchesFilters()</h4>
-        <pre class="method-signature"><code>matchesFilters(log: Object): boolean</code></pre>
-        <p>Check if a log entry matches current filters</p>
-
-        <h4>render()</h4>
-        <pre class="method-signature"><code>render(): void</code></pre>
-        <p>Initial render of the component structure</p>
-
-        <h4>getExpansionStates()</h4>
-        <pre class="method-signature"><code>getExpansionStates(): Map&lt;string, boolean&gt;</code></pre>
-        <p>Get current expansion states from DOM</p>
-
-        <h4>restoreExpansionStates()</h4>
-        <pre class="method-signature"><code>restoreExpansionStates(states: Map&lt;string, boolean&gt;): void</code></pre>
-        <p>Restore expansion states after render</p>
-
-        <h4>renderLogs()</h4>
-        <pre class="method-signature"><code>renderLogs(): void</code></pre>
-        <p>Render all logs with expansion state preservation</p>
-
-        <h4>renderLog()</h4>
-        <pre class="method-signature"><code>renderLog(log: unknown, index: unknown): void</code></pre>
-        <p>Render a single log entry</p>
-
-        <h4>formatTimestamp()</h4>
-        <pre class="method-signature"><code>formatTimestamp(date: unknown): void</code></pre>
-        <p>Format timestamp</p>
-
-        <h4>formatLogData()</h4>
-        <pre class="method-signature"><code>formatLogData(data: Array, method: string, logIndex: number): string</code></pre>
-        <p>Format log data for display</p>
-
-        <h4>formatTable()</h4>
-        <pre class="method-signature"><code>formatTable(data: unknown): void</code></pre>
-        <p>Format table data</p>
-
-        <h4>formatValue()</h4>
-        <pre class="method-signature"><code>formatValue(value: *, depth: number, expanded: boolean, visited: WeakSet, path: string): void</code></pre>
-        <p>Format a single value</p>
-
-        <h4>formatArray()</h4>
-        <pre class="method-signature"><code>formatArray(arr: Array, depth: number, expanded: boolean, visited: WeakSet, path: string): void</code></pre>
-        <p>Format an array</p>
-
-        <h4>formatObject()</h4>
-        <pre class="method-signature"><code>formatObject(obj: Object, depth: number, expanded: boolean, visited: WeakSet, path: string): void</code></pre>
-        <p>Format an object</p>
-
-        <h4>formatElement()</h4>
-        <pre class="method-signature"><code>formatElement(element: unknown): void</code></pre>
-        <p>Format a DOM element</p>
-
-        <h4>formatMap()</h4>
-        <pre class="method-signature"><code>formatMap(map: Map, depth: number, visited: WeakSet, path: string): void</code></pre>
-        <p>Format a Map</p>
-
-        <h4>formatSet()</h4>
-        <pre class="method-signature"><code>formatSet(set: Set, depth: number, visited: WeakSet, path: string): void</code></pre>
-        <p>Format a Set</p>
-
-        <h4>getType()</h4>
-        <pre class="method-signature"><code>getType(value: *): string</code></pre>
-        <p>Get the type of a value</p>
-
-        <h4>escapeHtml()</h4>
-        <pre class="method-signature"><code>escapeHtml(text: string): string</code></pre>
-        <p>Escape HTML for safe display</p>
-
-        <h4>toggleExpand()</h4>
-        <pre class="method-signature"><code>toggleExpand(header: HTMLElement): void</code></pre>
-        <p>Toggle expand/collapse state of an expandable header</p>
-
-        <h4>handleLogClick()</h4>
-        <pre class="method-signature"><code>handleLogClick(e: unknown): void</code></pre>
-        <p>Handle clicks on log entries (delegated)</p>
-
-        <h4>handleLogKeydown()</h4>
-        <pre class="method-signature"><code>handleLogKeydown(e: KeyboardEvent): void</code></pre>
-        <p>Handle keyboard events on log entries (delegated)</p>
-
-        <h4>getStyles()</h4>
-        <pre class="method-signature"><code>getStyles(): void</code></pre>
-        <p>Get component styles</p>
-
-      </section>
-
-      <section id="css-properties">
-        <h3>CSS Custom Properties</h3>
-        <p>Use these to customize the appearance:</p>
-        <table>
-          <thead>
-            <tr>
-              <th>Property</th>
-              <th>Default</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><code>--bg-primary</code></td>
-              <td><code>#1e1e1e</code></td>
-              <td>Primary background color</td>
-            </tr>
-            <tr>
-              <td><code>--bg-secondary</code></td>
-              <td><code>#252526</code></td>
-              <td>Secondary background color (header)</td>
-            </tr>
-            <tr>
-              <td><code>--bg-hover</code></td>
-              <td><code>#2a2d2e</code></td>
-              <td>Hover state background</td>
-            </tr>
-            <tr>
-              <td><code>--text-primary</code></td>
-              <td><code>#d4d4d4</code></td>
-              <td>Primary text color</td>
-            </tr>
-            <tr>
-              <td><code>--text-secondary</code></td>
-              <td><code>#808080</code></td>
-              <td>Secondary text color (timestamps)</td>
-            </tr>
-            <tr>
-              <td><code>--border-color</code></td>
-              <td><code>#3c3c3c</code></td>
-              <td>Border color</td>
-            </tr>
-            <tr>
-              <td><code>--accent-color</code></td>
-              <td><code>#0078d4</code></td>
-              <td>Accent color for active states</td>
-            </tr>
-            <tr>
-              <td><code>--log-color</code></td>
-              <td><code>#d4d4d4</code></td>
-              <td>console.log text color</td>
-            </tr>
-            <tr>
-              <td><code>--info-color</code></td>
-              <td><code>#3794ff</code></td>
-              <td>console.info text color</td>
-            </tr>
-            <tr>
-              <td><code>--warn-color</code></td>
-              <td><code>#cca700</code></td>
-              <td>console.warn text color</td>
-            </tr>
-            <tr>
-              <td><code>--error-color</code></td>
-              <td><code>#f14c4c</code></td>
-              <td>console.error text color</td>
-            </tr>
-            <tr>
-              <td><code>--debug-color</code></td>
-              <td><code>#b5cea8</code></td>
-              <td>console.debug text color</td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-
-      <section id="css-parts">
-        <h3>CSS Parts</h3>
-        <p>Style internal elements using <code>::part()</code>:</p>
-        <table>
-          <thead>
-            <tr>
-              <th>Part</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><code>header</code></td>
-              <td>The console header containing filters and actions</td>
-            </tr>
-            <tr>
-              <td><code>logs</code></td>
-              <td>The scrollable log entries container</td>
-            </tr>
-            <tr>
-              <td><code>filter-button</code></td>
-              <td>Filter buttons (All, Log, Info, Warn, Error)</td>
-            </tr>
-            <tr>
-              <td><code>action-button</code></td>
-              <td>Action buttons (theme toggle, copy, clear)</td>
-            </tr>
-            <tr>
-              <td><code>log-entry</code></td>
-              <td>Individual log entry row</td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-
-      <section id="events">
-        <h3>Events</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>Event</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><code>log</code></td>
-              <td>Dispatched when a new log entry is added</td>
-            </tr>
-            <tr>
-              <td><code>clear</code></td>
-              <td>Dispatched when console is cleared</td>
-            </tr>
-            <tr>
-              <td><code>theme-change</code></td>
-              <td>Dispatched when theme changes</td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-
+    <section class="related">
+      <h2>Related Components</h2>
+      <div class="related-grid">
+        <a href="https://profpowell.github.io/code-block/" class="related-card">
+          <strong>&lt;code-block&gt;</strong>
+          <span>Syntax highlighted code blocks</span>
+        </a>
+        <a href="https://profpowell.github.io/browser-window/" class="related-card">
+          <strong>&lt;browser-window&gt;</strong>
+          <span>Safari-style browser frames</span>
+        </a>
+        <a href="https://profpowell.github.io/terminal-window/" class="related-card">
+          <strong>&lt;terminal-window&gt;</strong>
+          <span>Interactive terminal emulator</span>
+        </a>
+        <a href="https://profpowell.github.io/http-component/" class="related-card">
+          <strong>&lt;http-component&gt;</strong>
+          <span>HTTP request/response viewer</span>
+        </a>
+      </div>
+    </section>
   </main>
 
-  <footer>
-    <p>Auto-generated from <a href="../custom-elements.json">custom-elements.json</a></p>
+  <footer class="site-footer">
+    <p>MIT License | <a href="https://github.com/ProfPowell/browser-console">View on GitHub</a> | <a href="https://www.npmjs.com/package/@profpowell/browser-console">npm</a></p>
   </footer>
+
+  <script>
+    function toggleTheme() {
+      const html = document.documentElement
+      const current = html.getAttribute('data-theme')
+      const next = current === 'dark' ? 'light' : 'dark'
+      html.setAttribute('data-theme', next)
+      localStorage.setItem('docs-theme', next)
+      document.getElementById('theme-icon').textContent = next === 'dark' ? '☀️' : '🌙'
+    }
+    // Set initial icon
+    document.getElementById('theme-icon').textContent =
+      document.documentElement.getAttribute('data-theme') === 'dark' ? '☀️' : '🌙'
+  </script>
 </body>
 </html>

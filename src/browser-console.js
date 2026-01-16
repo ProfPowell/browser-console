@@ -51,86 +51,86 @@
  */
 class BrowserConsole extends HTMLElement {
   /** @type {number} Default maximum number of logs to retain */
-  static MAX_LOGS_DEFAULT = 1000;
+  static MAX_LOGS_DEFAULT = 1000
 
   /** @type {number} Maximum depth for nested object expansion */
-  static MAX_DEPTH = 2;
+  static MAX_DEPTH = 2
 
   /** @type {number} Number of items to show in array/object preview */
-  static PREVIEW_ITEMS = 3;
+  static PREVIEW_ITEMS = 3
 
   /** @type {number} Maximum length for function preview string */
-  static FUNCTION_PREVIEW_LENGTH = 50;
+  static FUNCTION_PREVIEW_LENGTH = 50
 
   /**
    * Creates a new BrowserConsole instance
    * @constructor
    */
   constructor() {
-    super();
-    this.attachShadow({ mode: 'open' });
+    super()
+    this.attachShadow({ mode: 'open' })
 
     /** @type {Array<{method: string, data: unknown[], timestamp: Date}>} */
-    this.logs = [];
+    this.logs = []
 
     /** @type {Object<string, Function>} Original console methods for restoration */
-    this.originalConsole = {};
+    this.originalConsole = {}
 
     /** @type {string|null} Current log filter (null shows all) */
-    this.filter = null;
+    this.filter = null
 
     /** @type {number} Maximum number of logs to retain */
-    this.maxLogs = BrowserConsole.MAX_LOGS_DEFAULT;
+    this.maxLogs = BrowserConsole.MAX_LOGS_DEFAULT
 
     /** @type {Object<string, number>} Timer tracking for console.time/timeEnd */
-    this.timers = {};
+    this.timers = {}
 
     /** @type {Object<string, number>} Counter tracking for console.count */
-    this.counters = {};
+    this.counters = {}
 
     /** @type {'dark'|'light'} Current theme */
-    this.theme = 'dark';
+    this.theme = 'dark'
 
     /** @type {string} Current search query for filtering logs */
-    this.searchQuery = '';
+    this.searchQuery = ''
 
     /** @type {number} Current group nesting depth */
-    this.groupDepth = 0;
+    this.groupDepth = 0
 
     /** @type {Array<{label: string, collapsed: boolean, id: string}>} Stack of open groups */
-    this.groupStack = [];
+    this.groupStack = []
 
-    this.render();
+    this.render()
   }
 
   connectedCallback() {
-    const autoHook = this.getAttribute('auto-hook') !== 'false';
-    const theme = this.getAttribute('theme') || 'dark';
-    const maxLogs = this.getAttribute('max-logs');
+    const autoHook = this.getAttribute('auto-hook') !== 'false'
+    const theme = this.getAttribute('theme') || 'dark'
+    const maxLogs = this.getAttribute('max-logs')
 
-    this.theme = theme;
+    this.theme = theme
     if (maxLogs) {
-      this.maxLogs = parseInt(maxLogs, 10) || BrowserConsole.MAX_LOGS_DEFAULT;
+      this.maxLogs = parseInt(maxLogs, 10) || BrowserConsole.MAX_LOGS_DEFAULT
     }
 
     if (autoHook) {
-      this.hookConsole();
+      this.hookConsole()
     }
 
-    this.updateTheme();
+    this.updateTheme()
   }
 
   static get observedAttributes() {
-    return ['theme', 'max-logs'];
+    return ['theme', 'max-logs']
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
     if (name === 'theme' && oldValue !== newValue) {
-      this.theme = newValue || 'dark';
-      this.updateTheme();
+      this.theme = newValue || 'dark'
+      this.updateTheme()
     }
     if (name === 'max-logs' && oldValue !== newValue) {
-      this.maxLogs = parseInt(newValue, 10) || BrowserConsole.MAX_LOGS_DEFAULT;
+      this.maxLogs = parseInt(newValue, 10) || BrowserConsole.MAX_LOGS_DEFAULT
     }
   }
 
@@ -138,14 +138,14 @@ class BrowserConsole extends HTMLElement {
    * Update theme
    */
   updateTheme() {
-    const feed = this.shadowRoot.querySelector('.console-feed');
+    const feed = this.shadowRoot.querySelector('.console-feed')
     if (feed) {
-      feed.dataset.theme = this.theme;
+      feed.dataset.theme = this.theme
     }
     // Update theme icon: show sun in dark mode (click for light), moon in light mode (click for dark)
-    const themeIcon = this.shadowRoot.querySelector('.theme-icon');
+    const themeIcon = this.shadowRoot.querySelector('.theme-icon')
     if (themeIcon) {
-      themeIcon.textContent = this.theme === 'dark' ? '☀️' : '🌙';
+      themeIcon.textContent = this.theme === 'dark' ? '☀️' : '🌙'
     }
   }
 
@@ -153,12 +153,12 @@ class BrowserConsole extends HTMLElement {
    * Set theme programmatically
    */
   setTheme(theme) {
-    this.theme = theme;
-    this.setAttribute('theme', theme);
+    this.theme = theme
+    this.setAttribute('theme', theme)
   }
 
   disconnectedCallback() {
-    this.unhookConsole();
+    this.unhookConsole()
   }
 
   /**
@@ -166,23 +166,38 @@ class BrowserConsole extends HTMLElement {
    */
   hookConsole() {
     const methods = [
-      'log', 'info', 'warn', 'error', 'debug', 'table', 'clear',
-      'time', 'timeEnd', 'timeLog', 'count', 'countReset', 'assert',
-      'group', 'groupCollapsed', 'groupEnd', 'trace', 'dir'
-    ];
+      'log',
+      'info',
+      'warn',
+      'error',
+      'debug',
+      'table',
+      'clear',
+      'time',
+      'timeEnd',
+      'timeLog',
+      'count',
+      'countReset',
+      'assert',
+      'group',
+      'groupCollapsed',
+      'groupEnd',
+      'trace',
+      'dir'
+    ]
 
-    methods.forEach(method => {
-      this.originalConsole[method] = console[method];
+    methods.forEach((method) => {
+      this.originalConsole[method] = console[method]
       console[method] = (...args) => {
         // Call original console method
-        this.originalConsole[method]?.apply(console, args);
+        this.originalConsole[method]?.apply(console, args)
 
         // Handle group methods
         if (method === 'group' || method === 'groupCollapsed') {
-          const label = args[0] || 'console.group';
-          const groupId = `group_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-          this.groupStack.push({ label, collapsed: method === 'groupCollapsed', id: groupId });
-          this.groupDepth++;
+          const label = args[0] || 'console.group'
+          const groupId = `group_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`
+          this.groupStack.push({ label, collapsed: method === 'groupCollapsed', id: groupId })
+          this.groupDepth++
           this.addLog({
             method: 'group',
             data: [label],
@@ -190,16 +205,16 @@ class BrowserConsole extends HTMLElement {
             groupDepth: this.groupDepth,
             collapsed: method === 'groupCollapsed',
             groupId
-          });
-          return;
+          })
+          return
         }
 
         if (method === 'groupEnd') {
           if (this.groupDepth > 0) {
-            this.groupStack.pop();
-            this.groupDepth--;
+            this.groupStack.pop()
+            this.groupDepth--
           }
-          return;
+          return
         }
 
         // Handle trace
@@ -207,15 +222,15 @@ class BrowserConsole extends HTMLElement {
           const stack = new Error().stack
             .split('\n')
             .slice(2) // Remove Error and console.trace lines
-            .join('\n');
+            .join('\n')
           this.addLog({
             method: 'trace',
             data: args.length ? args : ['console.trace'],
             timestamp: new Date(),
             stack,
             groupDepth: this.groupDepth
-          });
-          return;
+          })
+          return
         }
 
         // Handle dir (same as log but marked for expanded view)
@@ -225,65 +240,65 @@ class BrowserConsole extends HTMLElement {
             data: args,
             timestamp: new Date(),
             groupDepth: this.groupDepth
-          });
-          return;
+          })
+          return
         }
 
         // Special handling for time/timeEnd/timeLog
         if (method === 'time') {
-          const label = args[0] || 'default';
-          this.timers[label] = performance.now();
-          return;
+          const label = args[0] || 'default'
+          this.timers[label] = performance.now()
+          return
         }
 
         if (method === 'timeEnd') {
-          const label = args[0] || 'default';
+          const label = args[0] || 'default'
           if (this.timers[label] !== undefined) {
-            const duration = performance.now() - this.timers[label];
-            delete this.timers[label];
+            const duration = performance.now() - this.timers[label]
+            delete this.timers[label]
             this.addLog({
               method: 'time',
               data: [label, duration],
               timestamp: new Date(),
               groupDepth: this.groupDepth
-            });
+            })
           }
-          return;
+          return
         }
 
         if (method === 'timeLog') {
-          const label = args[0] || 'default';
+          const label = args[0] || 'default'
           if (this.timers[label] !== undefined) {
-            const duration = performance.now() - this.timers[label];
-            const extraArgs = args.slice(1);
+            const duration = performance.now() - this.timers[label]
+            const extraArgs = args.slice(1)
             this.addLog({
               method: 'time',
               data: [label, duration, ...extraArgs],
               timestamp: new Date(),
               groupDepth: this.groupDepth
-            });
+            })
           }
-          return;
+          return
         }
 
         // Handle count
         if (method === 'count') {
-          const label = args[0] || 'default';
-          this.counters[label] = (this.counters[label] || 0) + 1;
+          const label = args[0] || 'default'
+          this.counters[label] = (this.counters[label] || 0) + 1
           this.addLog({
             method: 'count',
             data: [label, this.counters[label]],
             timestamp: new Date(),
             groupDepth: this.groupDepth
-          });
-          return;
+          })
+          return
         }
 
         // Handle countReset
         if (method === 'countReset') {
-          const label = args[0] || 'default';
-          delete this.counters[label];
-          return;
+          const label = args[0] || 'default'
+          delete this.counters[label]
+          return
         }
 
         // Capture the log with current group depth
@@ -292,19 +307,19 @@ class BrowserConsole extends HTMLElement {
           data: args,
           timestamp: new Date(),
           groupDepth: this.groupDepth
-        });
-      };
-    });
+        })
+      }
+    })
   }
 
   /**
    * Restore original console methods
    */
   unhookConsole() {
-    Object.keys(this.originalConsole).forEach(method => {
-      console[method] = this.originalConsole[method];
-    });
-    this.originalConsole = {};
+    Object.keys(this.originalConsole).forEach((method) => {
+      console[method] = this.originalConsole[method]
+    })
+    this.originalConsole = {}
   }
 
   /**
@@ -312,20 +327,20 @@ class BrowserConsole extends HTMLElement {
    */
   addLog(log) {
     if (log.method === 'clear') {
-      this.clearLogs();
-      return;
+      this.clearLogs()
+      return
     }
 
-    this.logs.push(log);
+    this.logs.push(log)
 
     // Limit number of logs
     if (this.logs.length > this.maxLogs) {
-      this.logs.shift();
+      this.logs.shift()
     }
 
     // Only append if it matches current filter or no filter
     if (!this.filter || this.filter === log.method) {
-      this.appendLog(log);
+      this.appendLog(log)
     }
   }
 
@@ -333,31 +348,31 @@ class BrowserConsole extends HTMLElement {
    * Append a single log to the view (Incremental Rendering)
    */
   appendLog(log) {
-    const logsContainer = this.shadowRoot.querySelector('.console-logs');
-    if (!logsContainer) return;
+    const logsContainer = this.shadowRoot.querySelector('.console-logs')
+    if (!logsContainer) return
 
     // Render the log HTML
-    const html = this.renderLog(log, this.logs.length - 1);
+    const html = this.renderLog(log, this.logs.length - 1)
 
     // Insert HTML directly
-    logsContainer.insertAdjacentHTML('beforeend', html);
+    logsContainer.insertAdjacentHTML('beforeend', html)
 
     // Prune DOM if needed
     // We use a slightly higher limit for DOM to be safe, or exact maxLogs
     if (logsContainer.children.length > this.maxLogs) {
-      logsContainer.firstElementChild.remove();
+      logsContainer.firstElementChild.remove()
     }
 
     // Auto-scroll
-    logsContainer.scrollTop = logsContainer.scrollHeight;
+    logsContainer.scrollTop = logsContainer.scrollHeight
   }
 
   /**
    * Clear all logs
    */
   clearLogs() {
-    this.logs = [];
-    this.renderLogs();
+    this.logs = []
+    this.renderLogs()
   }
 
   /**
@@ -367,32 +382,32 @@ class BrowserConsole extends HTMLElement {
    * @returns {string} Plain text representation
    */
   formatValuePlainText(value, depth = 0) {
-    if (value === null) return 'null';
-    if (value === undefined) return 'undefined';
-    if (typeof value === 'string') return `"${value}"`;
-    if (typeof value === 'number' || typeof value === 'boolean') return String(value);
-    if (typeof value === 'bigint') return `${value}n`;
-    if (typeof value === 'symbol') return value.toString();
+    if (value === null) return 'null'
+    if (value === undefined) return 'undefined'
+    if (typeof value === 'string') return `"${value}"`
+    if (typeof value === 'number' || typeof value === 'boolean') return String(value)
+    if (typeof value === 'bigint') return `${value}n`
+    if (typeof value === 'symbol') return value.toString()
     if (typeof value === 'function') {
-      const preview = value.toString().slice(0, 50);
-      return preview + (value.toString().length > 50 ? '...' : '');
+      const preview = value.toString().slice(0, 50)
+      return preview + (value.toString().length > 50 ? '...' : '')
     }
     if (Array.isArray(value)) {
-      if (depth > 2) return `Array(${value.length})`;
-      return `[${value.map(v => this.formatValuePlainText(v, depth + 1)).join(', ')}]`;
+      if (depth > 2) return `Array(${value.length})`
+      return `[${value.map((v) => this.formatValuePlainText(v, depth + 1)).join(', ')}]`
     }
-    if (value instanceof Date) return value.toISOString();
-    if (value instanceof Error) return value.toString();
-    if (value instanceof Map) return `Map(${value.size})`;
-    if (value instanceof Set) return `Set(${value.size})`;
+    if (value instanceof Date) return value.toISOString()
+    if (value instanceof Error) return value.toString()
+    if (value instanceof Map) return `Map(${value.size})`
+    if (value instanceof Set) return `Set(${value.size})`
     if (typeof value === 'object') {
-      if (depth > 2) return '{...}';
+      if (depth > 2) return '{...}'
       const entries = Object.entries(value)
         .map(([k, v]) => `${k}: ${this.formatValuePlainText(v, depth + 1)}`)
-        .join(', ');
-      return `{${entries}}`;
+        .join(', ')
+      return `{${entries}}`
     }
-    return String(value);
+    return String(value)
   }
 
   /**
@@ -400,39 +415,41 @@ class BrowserConsole extends HTMLElement {
    * @returns {string} Plain text representation of visible logs
    */
   formatLogsForClipboard() {
-    const filteredLogs = this.logs.filter(log => this.matchesFilters(log));
+    const filteredLogs = this.logs.filter((log) => this.matchesFilters(log))
 
-    return filteredLogs.map(log => {
-      const timestamp = this.formatTimestamp(log.timestamp);
-      const method = log.method.toUpperCase();
-      const data = log.data.map(item => this.formatValuePlainText(item)).join(' ');
-      return `[${timestamp}] [${method}] ${data}`;
-    }).join('\n');
+    return filteredLogs
+      .map((log) => {
+        const timestamp = this.formatTimestamp(log.timestamp)
+        const method = log.method.toUpperCase()
+        const data = log.data.map((item) => this.formatValuePlainText(item)).join(' ')
+        return `[${timestamp}] [${method}] ${data}`
+      })
+      .join('\n')
   }
 
   /**
    * Copy visible logs to clipboard
    */
   async copyLogs() {
-    const text = this.formatLogsForClipboard();
-    const copyBtn = this.shadowRoot.querySelector('.copy-btn');
-    const iconSpan = copyBtn.querySelector('.copy-icon');
-    const originalIcon = iconSpan.textContent;
+    const text = this.formatLogsForClipboard()
+    const copyBtn = this.shadowRoot.querySelector('.copy-btn')
+    const iconSpan = copyBtn.querySelector('.copy-icon')
+    const originalIcon = iconSpan.textContent
 
     try {
-      await navigator.clipboard.writeText(text);
+      await navigator.clipboard.writeText(text)
       // Show success feedback
-      iconSpan.textContent = '✓';
+      iconSpan.textContent = '✓'
       setTimeout(() => {
-        iconSpan.textContent = originalIcon;
-      }, 1500);
+        iconSpan.textContent = originalIcon
+      }, 1500)
     } catch (err) {
       // Fallback for older browsers or permission denied
-      console.error('Failed to copy logs:', err);
-      iconSpan.textContent = '✗';
+      console.error('Failed to copy logs:', err)
+      iconSpan.textContent = '✗'
       setTimeout(() => {
-        iconSpan.textContent = originalIcon;
-      }, 1500);
+        iconSpan.textContent = originalIcon
+      }, 1500)
     }
   }
 
@@ -441,8 +458,8 @@ class BrowserConsole extends HTMLElement {
    * @param {string|null} filter - Log method to filter by, or null for all
    */
   setFilter(filter) {
-    this.filter = filter;
-    this.renderLogs();
+    this.filter = filter
+    this.renderLogs()
   }
 
   /**
@@ -450,8 +467,8 @@ class BrowserConsole extends HTMLElement {
    * @param {string} query - Search text to filter logs by
    */
   setSearchQuery(query) {
-    this.searchQuery = query.toLowerCase();
-    this.renderLogs();
+    this.searchQuery = query.toLowerCase()
+    this.renderLogs()
   }
 
   /**
@@ -462,18 +479,18 @@ class BrowserConsole extends HTMLElement {
   matchesFilters(log) {
     // Check method filter
     if (this.filter && log.method !== this.filter) {
-      return false;
+      return false
     }
 
     // Check text search
     if (this.searchQuery) {
-      const logText = JSON.stringify(log.data).toLowerCase();
+      const logText = JSON.stringify(log.data).toLowerCase()
       if (!logText.includes(this.searchQuery)) {
-        return false;
+        return false
       }
     }
 
-    return true;
+    return true
   }
 
   /**
@@ -515,43 +532,43 @@ class BrowserConsole extends HTMLElement {
         </div>
         <div class="console-logs" role="log" aria-live="polite" aria-label="Console log entries"></div>
       </div>
-    `;
+    `
 
     // Attach event listeners
-    this.shadowRoot.querySelector('.clear-btn').addEventListener('click', () => this.clearLogs());
+    this.shadowRoot.querySelector('.clear-btn').addEventListener('click', () => this.clearLogs())
 
-    this.shadowRoot.querySelector('.copy-btn').addEventListener('click', () => this.copyLogs());
+    this.shadowRoot.querySelector('.copy-btn').addEventListener('click', () => this.copyLogs())
 
     this.shadowRoot.querySelector('.theme-btn').addEventListener('click', () => {
-      this.setTheme(this.theme === 'dark' ? 'light' : 'dark');
-    });
+      this.setTheme(this.theme === 'dark' ? 'light' : 'dark')
+    })
 
-    this.shadowRoot.querySelectorAll('.filter-btn').forEach(btn => {
+    this.shadowRoot.querySelectorAll('.filter-btn').forEach((btn) => {
       btn.addEventListener('click', (e) => {
-        this.shadowRoot.querySelectorAll('.filter-btn').forEach(b => {
-          b.classList.remove('active');
-          b.setAttribute('aria-pressed', 'false');
-        });
-        e.target.classList.add('active');
-        e.target.setAttribute('aria-pressed', 'true');
-        const filter = e.target.dataset.filter;
-        this.setFilter(filter === 'all' ? null : filter);
-      });
-    });
+        this.shadowRoot.querySelectorAll('.filter-btn').forEach((b) => {
+          b.classList.remove('active')
+          b.setAttribute('aria-pressed', 'false')
+        })
+        e.target.classList.add('active')
+        e.target.setAttribute('aria-pressed', 'true')
+        const filter = e.target.dataset.filter
+        this.setFilter(filter === 'all' ? null : filter)
+      })
+    })
 
     // Search input listener with debounce
-    let searchTimeout;
+    let searchTimeout
     this.shadowRoot.querySelector('.search-input').addEventListener('input', (e) => {
-      clearTimeout(searchTimeout);
+      clearTimeout(searchTimeout)
       searchTimeout = setTimeout(() => {
-        this.setSearchQuery(e.target.value);
-      }, 150);
-    });
+        this.setSearchQuery(e.target.value)
+      }, 150)
+    })
 
     // Delegated event listeners for logs (click and keyboard)
-    const logsContainer = this.shadowRoot.querySelector('.console-logs');
-    logsContainer.addEventListener('click', (e) => this.handleLogClick(e));
-    logsContainer.addEventListener('keydown', (e) => this.handleLogKeydown(e));
+    const logsContainer = this.shadowRoot.querySelector('.console-logs')
+    logsContainer.addEventListener('click', (e) => this.handleLogClick(e))
+    logsContainer.addEventListener('keydown', (e) => this.handleLogKeydown(e))
   }
 
   /**
@@ -559,16 +576,16 @@ class BrowserConsole extends HTMLElement {
    * @returns {Map<string, boolean>} Map of element IDs to expanded state
    */
   getExpansionStates() {
-    const states = new Map();
-    const headers = this.shadowRoot.querySelectorAll('.expandable-header');
-    headers.forEach(header => {
-      const targetId = header.dataset.target;
-      const isExpanded = header.getAttribute('aria-expanded') === 'true';
+    const states = new Map()
+    const headers = this.shadowRoot.querySelectorAll('.expandable-header')
+    headers.forEach((header) => {
+      const targetId = header.dataset.target
+      const isExpanded = header.getAttribute('aria-expanded') === 'true'
       if (targetId) {
-        states.set(targetId, isExpanded);
+        states.set(targetId, isExpanded)
       }
-    });
-    return states;
+    })
+    return states
   }
 
   /**
@@ -578,52 +595,50 @@ class BrowserConsole extends HTMLElement {
   restoreExpansionStates(states) {
     states.forEach((isExpanded, targetId) => {
       if (isExpanded) {
-        const content = this.shadowRoot.getElementById(targetId);
-        const header = this.shadowRoot.querySelector(`[data-target="${targetId}"]`);
+        const content = this.shadowRoot.getElementById(targetId)
+        const header = this.shadowRoot.querySelector(`[data-target="${targetId}"]`)
         if (content && header) {
-          content.style.display = 'block';
-          header.setAttribute('aria-expanded', 'true');
-          const icon = header.querySelector('.expand-icon');
+          content.style.display = 'block'
+          header.setAttribute('aria-expanded', 'true')
+          const icon = header.querySelector('.expand-icon')
           if (icon) {
-            icon.textContent = '\u25BC'; // Down arrow
+            icon.textContent = '\u25BC' // Down arrow
           }
         }
       }
-    });
+    })
   }
 
   /**
    * Render all logs with expansion state preservation
    */
   renderLogs() {
-    const logsContainer = this.shadowRoot.querySelector('.console-logs');
+    const logsContainer = this.shadowRoot.querySelector('.console-logs')
 
     // Save expansion states before re-render
-    const states = this.getExpansionStates();
+    const states = this.getExpansionStates()
 
     // Filter logs by both method and search query
-    const filteredLogs = this.logs.filter(log => this.matchesFilters(log));
+    const filteredLogs = this.logs.filter((log) => this.matchesFilters(log))
 
-    logsContainer.innerHTML = filteredLogs.map((log, index) =>
-      this.renderLog(log, index)
-    ).join('');
+    logsContainer.innerHTML = filteredLogs.map((log, index) => this.renderLog(log, index)).join('')
 
     // Restore expansion states after re-render
-    this.restoreExpansionStates(states);
+    this.restoreExpansionStates(states)
   }
 
   /**
    * Render a single log entry
    */
   renderLog(log, index) {
-    const timestamp = this.formatTimestamp(log.timestamp);
-    const methodClass = `log-${log.method}`;
-    const indentStyle = log.groupDepth ? `padding-left: ${log.groupDepth * 20}px;` : '';
+    const timestamp = this.formatTimestamp(log.timestamp)
+    const methodClass = `log-${log.method}`
+    const indentStyle = log.groupDepth ? `padding-left: ${log.groupDepth * 20}px;` : ''
 
     // Handle group rendering (collapsible)
     if (log.method === 'group') {
-      const groupId = log.groupId || `group_${index}`;
-      const isCollapsed = log.collapsed;
+      const groupId = log.groupId || `group_${index}`
+      const isCollapsed = log.collapsed
       return `
         <div class="log-entry log-group" data-index="${index}" style="${indentStyle}">
           <span class="log-timestamp">${timestamp}</span>
@@ -635,14 +650,14 @@ class BrowserConsole extends HTMLElement {
             </span>
           </span>
         </div>
-      `;
+      `
     }
 
     // Handle trace rendering
     if (log.method === 'trace') {
       const traceContent = log.stack
         ? `<pre class="stack-trace">${this.escapeHtml(log.stack)}</pre>`
-        : '';
+        : ''
       return `
         <div class="log-entry log-trace" data-index="${index}" style="${indentStyle}">
           <span class="log-timestamp">${timestamp}</span>
@@ -652,12 +667,12 @@ class BrowserConsole extends HTMLElement {
             ${traceContent}
           </div>
         </div>
-      `;
+      `
     }
 
     // Handle count rendering
     if (log.method === 'count') {
-      const [label, count] = log.data;
+      const [label, count] = log.data
       return `
         <div class="log-entry log-count" data-index="${index}" style="${indentStyle}">
           <span class="log-timestamp">${timestamp}</span>
@@ -667,42 +682,40 @@ class BrowserConsole extends HTMLElement {
             <span class="value-number">${count}</span>
           </span>
         </div>
-      `;
+      `
     }
 
     // Handle dir rendering (expanded objects)
     if (log.method === 'dir') {
-      const visited = new WeakSet();
-      const content = log.data.map((item, argIndex) =>
-        this.formatValue(item, 0, true, visited, `${index}_${argIndex}`)
-      ).join(' ');
+      const visited = new WeakSet()
+      const content = log.data
+        .map((item, argIndex) => this.formatValue(item, 0, true, visited, `${index}_${argIndex}`))
+        .join(' ')
       return `
         <div class="log-entry log-dir" data-index="${index}" style="${indentStyle}">
           <span class="log-timestamp">${timestamp}</span>
           <span class="log-method">[DIR]</span>
           <span class="log-content">${content}</span>
         </div>
-      `;
+      `
     }
 
     // Handle table rendering
     if (log.method === 'table') {
-      const tableHtml = this.formatTable(log.data[0]);
+      const tableHtml = this.formatTable(log.data[0])
       return `
         <div class="log-entry ${methodClass}" data-index="${index}" style="${indentStyle}">
           <span class="log-timestamp">${timestamp}</span>
           <span class="log-method">[TABLE]</span>
           <div class="log-content">${tableHtml}</div>
         </div>
-      `;
+      `
     }
 
     // Handle time tracking (supports extra args from timeLog)
     if (log.method === 'time' && log.data.length >= 2) {
-      const [label, duration, ...extraArgs] = log.data;
-      const extraContent = extraArgs.length
-        ? ` ${this.formatLogData(extraArgs, 'log', index)}`
-        : '';
+      const [label, duration, ...extraArgs] = log.data
+      const extraContent = extraArgs.length ? ` ${this.formatLogData(extraArgs, 'log', index)}` : ''
       return `
         <div class="log-entry ${methodClass}" data-index="${index}" style="${indentStyle}">
           <span class="log-timestamp">${timestamp}</span>
@@ -712,7 +725,7 @@ class BrowserConsole extends HTMLElement {
             <span class="value-number">${duration.toFixed(2)}ms</span>${extraContent}
           </span>
         </div>
-      `;
+      `
     }
 
     return `
@@ -721,7 +734,7 @@ class BrowserConsole extends HTMLElement {
         <span class="log-method">[${log.method.toUpperCase()}]</span>
         <span class="log-content">${this.formatLogData(log.data, log.method, index)}</span>
       </div>
-    `;
+    `
   }
 
   /**
@@ -734,7 +747,7 @@ class BrowserConsole extends HTMLElement {
       minute: '2-digit',
       second: '2-digit',
       fractionalSecondDigits: 3
-    });
+    })
   }
 
   /**
@@ -746,10 +759,10 @@ class BrowserConsole extends HTMLElement {
    */
   formatLogData(data, method, logIndex) {
     // Share a single WeakSet across all arguments to detect circular refs
-    const visited = new WeakSet();
-    return data.map((item, argIndex) =>
-      this.formatValue(item, 0, false, visited, `${logIndex}_${argIndex}`)
-    ).join(' ');
+    const visited = new WeakSet()
+    return data
+      .map((item, argIndex) => this.formatValue(item, 0, false, visited, `${logIndex}_${argIndex}`))
+      .join(' ')
   }
 
   /**
@@ -757,16 +770,16 @@ class BrowserConsole extends HTMLElement {
    */
   formatTable(data) {
     if (!data) {
-      return '<span class="value-undefined">undefined</span>';
+      return '<span class="value-undefined">undefined</span>'
     }
 
     // Handle array of objects
     if (Array.isArray(data) && data.length > 0) {
-      const isObjectArray = data.every(item => typeof item === 'object' && item !== null);
+      const isObjectArray = data.every((item) => typeof item === 'object' && item !== null)
 
       if (isObjectArray) {
         // Get all unique keys
-        const keys = [...new Set(data.flatMap(obj => Object.keys(obj)))];
+        const keys = [...new Set(data.flatMap((obj) => Object.keys(obj)))]
 
         return `
           <div class="table-wrapper">
@@ -774,20 +787,24 @@ class BrowserConsole extends HTMLElement {
               <thead>
                 <tr>
                   <th>(index)</th>
-                  ${keys.map(key => `<th>${this.escapeHtml(key)}</th>`).join('')}
+                  ${keys.map((key) => `<th>${this.escapeHtml(key)}</th>`).join('')}
                 </tr>
               </thead>
               <tbody>
-                ${data.map((row, index) => `
+                ${data
+                  .map(
+                    (row, index) => `
                   <tr>
                     <td class="table-index">${index}</td>
-                    ${keys.map(key => `<td>${this.formatValue(row[key], 0, false)}</td>`).join('')}
+                    ${keys.map((key) => `<td>${this.formatValue(row[key], 0, false)}</td>`).join('')}
                   </tr>
-                `).join('')}
+                `
+                  )
+                  .join('')}
               </tbody>
             </table>
           </div>
-        `;
+        `
       }
 
       // Simple array
@@ -801,21 +818,25 @@ class BrowserConsole extends HTMLElement {
               </tr>
             </thead>
             <tbody>
-              ${data.map((value, index) => `
+              ${data
+                .map(
+                  (value, index) => `
                 <tr>
                   <td class="table-index">${index}</td>
                   <td>${this.formatValue(value, 0, false)}</td>
                 </tr>
-              `).join('')}
+              `
+                )
+                .join('')}
             </tbody>
           </table>
         </div>
-      `;
+      `
     }
 
     // Handle plain object
     if (typeof data === 'object' && data !== null) {
-      const keys = Object.keys(data);
+      const keys = Object.keys(data)
 
       return `
         <div class="table-wrapper">
@@ -827,19 +848,23 @@ class BrowserConsole extends HTMLElement {
               </tr>
             </thead>
             <tbody>
-              ${keys.map(key => `
+              ${keys
+                .map(
+                  (key) => `
                 <tr>
                   <td class="table-index">${this.escapeHtml(key)}</td>
                   <td>${this.formatValue(data[key], 0, false)}</td>
                 </tr>
-              `).join('')}
+              `
+                )
+                .join('')}
             </tbody>
           </table>
         </div>
-      `;
+      `
     }
 
-    return this.formatValue(data, 0, false);
+    return this.formatValue(data, 0, false)
   }
 
   /**
@@ -851,99 +876,105 @@ class BrowserConsole extends HTMLElement {
    * @param {string} path - Stable path for generating element IDs
    */
   formatValue(value, depth = 0, expanded = false, visited = new WeakSet(), path = '0') {
-    const type = this.getType(value);
+    const type = this.getType(value)
 
     switch (type) {
       case 'string':
-        return `<span class="value-string">"${this.escapeHtml(value)}"</span>`;
+        return `<span class="value-string">"${this.escapeHtml(value)}"</span>`
 
       case 'number':
-        return `<span class="value-number">${value}</span>`;
+        return `<span class="value-number">${value}</span>`
 
       case 'bigint':
-        return `<span class="value-number">${value}n</span>`;
+        return `<span class="value-number">${value}n</span>`
 
       case 'boolean':
-        return `<span class="value-boolean">${value}</span>`;
+        return `<span class="value-boolean">${value}</span>`
 
       case 'null':
-        return `<span class="value-null">null</span>`;
+        return `<span class="value-null">null</span>`
 
       case 'undefined':
-        return `<span class="value-undefined">undefined</span>`;
+        return `<span class="value-undefined">undefined</span>`
 
       case 'symbol':
-        return `<span class="value-symbol">${this.escapeHtml(value.toString())}</span>`;
+        return `<span class="value-symbol">${this.escapeHtml(value.toString())}</span>`
 
-      case 'function':
-        const fnStr = value.toString();
-        const fnPreview = fnStr.length > BrowserConsole.FUNCTION_PREVIEW_LENGTH
-          ? fnStr.substring(0, BrowserConsole.FUNCTION_PREVIEW_LENGTH) + '...'
-          : fnStr;
-        return `<span class="value-function">${this.escapeHtml(fnPreview)}</span>`;
+      case 'function': {
+        const fnStr = value.toString()
+        const fnPreview =
+          fnStr.length > BrowserConsole.FUNCTION_PREVIEW_LENGTH
+            ? fnStr.substring(0, BrowserConsole.FUNCTION_PREVIEW_LENGTH) + '...'
+            : fnStr
+        return `<span class="value-function">${this.escapeHtml(fnPreview)}</span>`
+      }
 
-      case 'map':
+      case 'map': {
         if (visited.has(value)) {
-          return `<span class="value-object">[Circular]</span>`;
+          return `<span class="value-object">[Circular]</span>`
         }
         if (depth > BrowserConsole.MAX_DEPTH) {
-          return `<span class="value-object">Map(${value.size})</span>`;
+          return `<span class="value-object">Map(${value.size})</span>`
         }
-        visited.add(value);
-        const mapResult = this.formatMap(value, depth, visited, path);
-        visited.delete(value);
-        return mapResult;
+        visited.add(value)
+        const mapResult = this.formatMap(value, depth, visited, path)
+        visited.delete(value)
+        return mapResult
+      }
 
-      case 'set':
+      case 'set': {
         if (visited.has(value)) {
-          return `<span class="value-array">[Circular]</span>`;
+          return `<span class="value-array">[Circular]</span>`
         }
         if (depth > BrowserConsole.MAX_DEPTH) {
-          return `<span class="value-array">Set(${value.size})</span>`;
+          return `<span class="value-array">Set(${value.size})</span>`
         }
-        visited.add(value);
-        const setResult = this.formatSet(value, depth, visited, path);
-        visited.delete(value);
-        return setResult;
+        visited.add(value)
+        const setResult = this.formatSet(value, depth, visited, path)
+        visited.delete(value)
+        return setResult
+      }
 
-      case 'array':
+      case 'array': {
         if (visited.has(value)) {
-          return `<span class="value-array">[Circular]</span>`;
+          return `<span class="value-array">[Circular]</span>`
         }
         if (depth > BrowserConsole.MAX_DEPTH) {
-          return `<span class="value-array">[Array(${value.length})]</span>`;
+          return `<span class="value-array">[Array(${value.length})]</span>`
         }
-        visited.add(value);
-        const arrResult = this.formatArray(value, depth, expanded, visited, path);
-        visited.delete(value);
-        return arrResult;
+        visited.add(value)
+        const arrResult = this.formatArray(value, depth, expanded, visited, path)
+        visited.delete(value)
+        return arrResult
+      }
 
-      case 'object':
+      case 'object': {
         if (value instanceof Error) {
-          return `<span class="value-error">${this.escapeHtml(value.toString())}</span>`;
+          return `<span class="value-error">${this.escapeHtml(value.toString())}</span>`
         }
         if (value instanceof Date) {
-          return `<span class="value-date">${value.toISOString()}</span>`;
+          return `<span class="value-date">${value.toISOString()}</span>`
         }
         if (value instanceof RegExp) {
-          return `<span class="value-regexp">${this.escapeHtml(value.toString())}</span>`;
+          return `<span class="value-regexp">${this.escapeHtml(value.toString())}</span>`
         }
         if (visited.has(value)) {
-          return `<span class="value-object">[Circular]</span>`;
+          return `<span class="value-object">[Circular]</span>`
         }
         if (depth > BrowserConsole.MAX_DEPTH) {
-          return `<span class="value-object">{Object}</span>`;
+          return `<span class="value-object">{Object}</span>`
         }
-        visited.add(value);
-        const objResult = this.formatObject(value, depth, expanded, visited, path);
-        visited.delete(value);
-        return objResult;
+        visited.add(value)
+        const objResult = this.formatObject(value, depth, expanded, visited, path)
+        visited.delete(value)
+        return objResult
+      }
 
       case 'element':
-        return this.formatElement(value);
+        return this.formatElement(value)
 
       default:
-        return `<span class="value-default">${this.escapeHtml(String(value))}</span>`;
+        return `<span class="value-default">${this.escapeHtml(String(value))}</span>`
     }
   }
 
@@ -957,25 +988,31 @@ class BrowserConsole extends HTMLElement {
    */
   formatArray(arr, depth, expanded, visited, path) {
     if (arr.length === 0) {
-      return `<span class="value-array">[]</span>`;
+      return `<span class="value-array">[]</span>`
     }
 
-    const id = `arr_${path}`;
+    const id = `arr_${path}`
 
     // Create preview (first 3 items)
-    const preview = arr.slice(0, BrowserConsole.PREVIEW_ITEMS).map((item, i) =>
-      this.formatValue(item, depth + 1, false, visited, `${path}_${i}`)
-    ).join(', ');
-    const suffix = arr.length > BrowserConsole.PREVIEW_ITEMS ? `, ... ${arr.length - BrowserConsole.PREVIEW_ITEMS} more` : '';
+    const preview = arr
+      .slice(0, BrowserConsole.PREVIEW_ITEMS)
+      .map((item, i) => this.formatValue(item, depth + 1, false, visited, `${path}_${i}`))
+      .join(', ')
+    const suffix =
+      arr.length > BrowserConsole.PREVIEW_ITEMS
+        ? `, ... ${arr.length - BrowserConsole.PREVIEW_ITEMS} more`
+        : ''
 
     // Create full expanded view
-    const fullContent = arr.map((item, index) => {
-      const value = this.formatValue(item, depth + 1, false, visited, `${path}_${index}`);
-      return `<div class="object-property">
+    const fullContent = arr
+      .map((item, index) => {
+        const value = this.formatValue(item, depth + 1, false, visited, `${path}_${index}`)
+        return `<div class="object-property">
         <span class="property-key">${index}:</span>
         <span class="property-value">${value}</span>
-      </div>`;
-    }).join('');
+      </div>`
+      })
+      .join('')
 
     return `
       <div class="expandable-container">
@@ -986,7 +1023,7 @@ class BrowserConsole extends HTMLElement {
         <div class="expandable-content" id="${id}" style="display: none;" role="region">
           ${fullContent}
         </div>
-      </div>`;
+      </div>`
   }
 
   /**
@@ -999,40 +1036,48 @@ class BrowserConsole extends HTMLElement {
    */
   formatObject(obj, depth, expanded, visited, path) {
     // Use Reflect.ownKeys to include Symbol keys
-    const keys = Reflect.ownKeys(obj);
+    const keys = Reflect.ownKeys(obj)
 
     if (keys.length === 0) {
-      return `<span class="value-object">{}</span>`;
+      return `<span class="value-object">{}</span>`
     }
 
-    const id = `obj_${path}`;
+    const id = `obj_${path}`
 
     // Format key for display (handles Symbols)
     const formatKey = (key) => {
       if (typeof key === 'symbol') {
-        return `<span class="value-symbol">${this.escapeHtml(key.toString())}</span>`;
+        return `<span class="value-symbol">${this.escapeHtml(key.toString())}</span>`
       }
-      return this.escapeHtml(String(key));
-    };
+      return this.escapeHtml(String(key))
+    }
 
     // Create preview (first 3 properties)
-    const preview = keys.slice(0, BrowserConsole.PREVIEW_ITEMS).map((key, i) => {
-      const value = this.formatValue(obj[key], depth + 1, false, visited, `${path}_p${i}`);
-      return `${formatKey(key)}: ${value}`;
-    }).join(', ');
+    const preview = keys
+      .slice(0, BrowserConsole.PREVIEW_ITEMS)
+      .map((key, i) => {
+        const value = this.formatValue(obj[key], depth + 1, false, visited, `${path}_p${i}`)
+        return `${formatKey(key)}: ${value}`
+      })
+      .join(', ')
 
-    const suffix = keys.length > BrowserConsole.PREVIEW_ITEMS ? `, ... ${keys.length - BrowserConsole.PREVIEW_ITEMS} more` : '';
+    const suffix =
+      keys.length > BrowserConsole.PREVIEW_ITEMS
+        ? `, ... ${keys.length - BrowserConsole.PREVIEW_ITEMS} more`
+        : ''
 
     // Create full expanded view
-    const fullContent = keys.map((key, i) => {
-      const value = this.formatValue(obj[key], depth + 1, false, visited, `${path}_p${i}`);
-      return `<div class="object-property">
+    const fullContent = keys
+      .map((key, i) => {
+        const value = this.formatValue(obj[key], depth + 1, false, visited, `${path}_p${i}`)
+        return `<div class="object-property">
         <span class="property-key">${formatKey(key)}:</span>
         <span class="property-value">${value}</span>
-      </div>`;
-    }).join('');
+      </div>`
+      })
+      .join('')
 
-    const constructorName = obj.constructor?.name || 'Object';
+    const constructorName = obj.constructor?.name || 'Object'
 
     return `
       <div class="expandable-container">
@@ -1043,18 +1088,18 @@ class BrowserConsole extends HTMLElement {
         <div class="expandable-content" id="${id}" style="display: none;" role="region">
           ${fullContent}
         </div>
-      </div>`;
+      </div>`
   }
 
   /**
    * Format a DOM element
    */
   formatElement(element) {
-    const tagName = element.tagName.toLowerCase();
-    const id = element.id ? `#${element.id}` : '';
-    const classes = element.className ? `.${element.className.split(' ').join('.')}` : '';
+    const tagName = element.tagName.toLowerCase()
+    const id = element.id ? `#${element.id}` : ''
+    const classes = element.className ? `.${element.className.split(' ').join('.')}` : ''
 
-    return `<span class="value-element">&lt;${tagName}${id}${classes}&gt;</span>`;
+    return `<span class="value-element">&lt;${tagName}${id}${classes}&gt;</span>`
   }
 
   /**
@@ -1066,29 +1111,37 @@ class BrowserConsole extends HTMLElement {
    */
   formatMap(map, depth, visited, path) {
     if (map.size === 0) {
-      return `<span class="value-object">Map(0) {}</span>`;
+      return `<span class="value-object">Map(0) {}</span>`
     }
 
-    const id = `map_${path}`;
-    const entries = [...map.entries()];
+    const id = `map_${path}`
+    const entries = [...map.entries()]
 
     // Create preview (first 3 entries)
-    const preview = entries.slice(0, BrowserConsole.PREVIEW_ITEMS).map(([key, val], i) => {
-      const keyStr = this.formatValue(key, depth + 1, false, visited, `${path}_k${i}`);
-      const valStr = this.formatValue(val, depth + 1, false, visited, `${path}_v${i}`);
-      return `${keyStr} => ${valStr}`;
-    }).join(', ');
-    const suffix = map.size > BrowserConsole.PREVIEW_ITEMS ? `, ... ${map.size - BrowserConsole.PREVIEW_ITEMS} more` : '';
+    const preview = entries
+      .slice(0, BrowserConsole.PREVIEW_ITEMS)
+      .map(([key, val], i) => {
+        const keyStr = this.formatValue(key, depth + 1, false, visited, `${path}_k${i}`)
+        const valStr = this.formatValue(val, depth + 1, false, visited, `${path}_v${i}`)
+        return `${keyStr} => ${valStr}`
+      })
+      .join(', ')
+    const suffix =
+      map.size > BrowserConsole.PREVIEW_ITEMS
+        ? `, ... ${map.size - BrowserConsole.PREVIEW_ITEMS} more`
+        : ''
 
     // Create full expanded view
-    const fullContent = entries.map(([key, val], i) => {
-      const keyStr = this.formatValue(key, depth + 1, false, visited, `${path}_k${i}`);
-      const valStr = this.formatValue(val, depth + 1, false, visited, `${path}_v${i}`);
-      return `<div class="object-property">
+    const fullContent = entries
+      .map(([key, val], i) => {
+        const keyStr = this.formatValue(key, depth + 1, false, visited, `${path}_k${i}`)
+        const valStr = this.formatValue(val, depth + 1, false, visited, `${path}_v${i}`)
+        return `<div class="object-property">
         <span class="property-key">${keyStr} =></span>
         <span class="property-value">${valStr}</span>
-      </div>`;
-    }).join('');
+      </div>`
+      })
+      .join('')
 
     return `
       <div class="expandable-container">
@@ -1099,7 +1152,7 @@ class BrowserConsole extends HTMLElement {
         <div class="expandable-content" id="${id}" style="display: none;" role="region">
           ${fullContent}
         </div>
-      </div>`;
+      </div>`
   }
 
   /**
@@ -1111,25 +1164,31 @@ class BrowserConsole extends HTMLElement {
    */
   formatSet(set, depth, visited, path) {
     if (set.size === 0) {
-      return `<span class="value-array">Set(0) {}</span>`;
+      return `<span class="value-array">Set(0) {}</span>`
     }
 
-    const id = `set_${path}`;
-    const values = [...set.values()];
+    const id = `set_${path}`
+    const values = [...set.values()]
 
     // Create preview (first 3 values)
-    const preview = values.slice(0, BrowserConsole.PREVIEW_ITEMS).map((val, i) =>
-      this.formatValue(val, depth + 1, false, visited, `${path}_${i}`)
-    ).join(', ');
-    const suffix = set.size > BrowserConsole.PREVIEW_ITEMS ? `, ... ${set.size - BrowserConsole.PREVIEW_ITEMS} more` : '';
+    const preview = values
+      .slice(0, BrowserConsole.PREVIEW_ITEMS)
+      .map((val, i) => this.formatValue(val, depth + 1, false, visited, `${path}_${i}`))
+      .join(', ')
+    const suffix =
+      set.size > BrowserConsole.PREVIEW_ITEMS
+        ? `, ... ${set.size - BrowserConsole.PREVIEW_ITEMS} more`
+        : ''
 
     // Create full expanded view
-    const fullContent = values.map((val, i) => {
-      const valStr = this.formatValue(val, depth + 1, false, visited, `${path}_${i}`);
-      return `<div class="object-property">
+    const fullContent = values
+      .map((val, i) => {
+        const valStr = this.formatValue(val, depth + 1, false, visited, `${path}_${i}`)
+        return `<div class="object-property">
         <span class="property-value">${valStr}</span>
-      </div>`;
-    }).join('');
+      </div>`
+      })
+      .join('')
 
     return `
       <div class="expandable-container">
@@ -1140,7 +1199,7 @@ class BrowserConsole extends HTMLElement {
         <div class="expandable-content" id="${id}" style="display: none;" role="region">
           ${fullContent}
         </div>
-      </div>`;
+      </div>`
   }
 
   /**
@@ -1149,15 +1208,15 @@ class BrowserConsole extends HTMLElement {
    * @returns {string} Type name
    */
   getType(value) {
-    if (value === null) return 'null';
-    if (value === undefined) return 'undefined';
-    if (Array.isArray(value)) return 'array';
-    if (value instanceof HTMLElement) return 'element';
-    if (value instanceof Map) return 'map';
-    if (value instanceof Set) return 'set';
-    if (typeof value === 'bigint') return 'bigint';
-    if (typeof value === 'symbol') return 'symbol';
-    return typeof value;
+    if (value === null) return 'null'
+    if (value === undefined) return 'undefined'
+    if (Array.isArray(value)) return 'array'
+    if (value instanceof HTMLElement) return 'element'
+    if (value instanceof Map) return 'map'
+    if (value instanceof Set) return 'set'
+    if (typeof value === 'bigint') return 'bigint'
+    if (typeof value === 'symbol') return 'symbol'
+    return typeof value
   }
 
   /**
@@ -1172,8 +1231,8 @@ class BrowserConsole extends HTMLElement {
       '>': '&gt;',
       '"': '&quot;',
       "'": '&#39;'
-    };
-    return String(text).replace(/[&<>"']/g, char => htmlEntities[char]);
+    }
+    return String(text).replace(/[&<>"']/g, (char) => htmlEntities[char])
   }
 
   /**
@@ -1181,21 +1240,21 @@ class BrowserConsole extends HTMLElement {
    * @param {HTMLElement} header - The expandable header element
    */
   toggleExpand(header) {
-    const targetId = header.dataset.target;
-    const content = this.shadowRoot.getElementById(targetId);
-    const icon = header.querySelector('.expand-icon');
+    const targetId = header.dataset.target
+    const content = this.shadowRoot.getElementById(targetId)
+    const icon = header.querySelector('.expand-icon')
 
     if (content) {
-      const isExpanded = content.style.display !== 'none';
+      const isExpanded = content.style.display !== 'none'
 
       if (isExpanded) {
-        content.style.display = 'none';
-        header.setAttribute('aria-expanded', 'false');
-        if (icon) icon.textContent = '▶';
+        content.style.display = 'none'
+        header.setAttribute('aria-expanded', 'false')
+        if (icon) icon.textContent = '▶'
       } else {
-        content.style.display = 'block';
-        header.setAttribute('aria-expanded', 'true');
-        if (icon) icon.textContent = '▼';
+        content.style.display = 'block'
+        header.setAttribute('aria-expanded', 'true')
+        if (icon) icon.textContent = '▼'
       }
     }
   }
@@ -1204,11 +1263,11 @@ class BrowserConsole extends HTMLElement {
    * Handle clicks on log entries (delegated)
    */
   handleLogClick(e) {
-    const header = e.target.closest('.expandable-header');
-    if (!header) return;
+    const header = e.target.closest('.expandable-header')
+    if (!header) return
 
-    e.stopPropagation();
-    this.toggleExpand(header);
+    e.stopPropagation()
+    this.toggleExpand(header)
   }
 
   /**
@@ -1216,14 +1275,14 @@ class BrowserConsole extends HTMLElement {
    * @param {KeyboardEvent} e - Keyboard event
    */
   handleLogKeydown(e) {
-    const header = e.target.closest('.expandable-header');
-    if (!header) return;
+    const header = e.target.closest('.expandable-header')
+    if (!header) return
 
     // Toggle on Enter or Space
     if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      e.stopPropagation();
-      this.toggleExpand(header);
+      e.preventDefault()
+      e.stopPropagation()
+      this.toggleExpand(header)
     }
   }
 
@@ -1740,13 +1799,13 @@ class BrowserConsole extends HTMLElement {
           transition: none;
         }
       }
-    `;
+    `
   }
 }
 
 // Register the custom element
-customElements.define('browser-console', BrowserConsole);
+customElements.define('browser-console', BrowserConsole)
 
 // Export for ES modules
-export { BrowserConsole };
-export default BrowserConsole;
+export { BrowserConsole }
+export default BrowserConsole

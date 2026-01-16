@@ -1,25 +1,20 @@
-import { defineConfig } from '@playwright/test';
+import { defineConfig } from '@playwright/test'
 
 export default defineConfig({
-  testDir: './test/e2e',
-  timeout: 30000,
+  testDir: './test',
+  fullyParallel: false,
+  forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
-
+  workers: 1,
+  reporter: 'html',
   use: {
-    baseURL: 'http://localhost:3000',
-    screenshot: 'only-on-failure',
-    trace: 'on-first-retry',
+    baseURL: 'http://localhost:5174',
+    trace: 'on-first-retry'
   },
-
-  projects: [
-    { name: 'chromium', use: { browserName: 'chromium' } },
-  ],
-
   webServer: {
-    command: 'npx serve -l 3000 .',
-    port: 3000,
+    command: 'npx vite --port 5174',
+    url: 'http://localhost:5174/test/test-page.html',
     reuseExistingServer: !process.env.CI,
-    timeout: 10000,
-  },
-});
+    timeout: 30000
+  }
+})

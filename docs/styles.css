@@ -1,0 +1,618 @@
+/**
+ * Browser Console Documentation Site Styles
+ * Shared styles for index.html, demos.html, api.html
+ */
+
+/* ============================================
+   CSS Custom Properties (Theme Variables)
+   ============================================ */
+
+:root {
+  /* Light theme (default) */
+  --bg-color: #ffffff;
+  --bg-secondary: #f6f8fa;
+  --text-color: #1f2328;
+  --text-muted: #656d76;
+  --border-color: #d0d7de;
+  --link-color: #0969da;
+  --link-hover: #0550ae;
+  --code-bg: #f6f8fa;
+  --card-bg: #ffffff;
+  --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.08);
+  --card-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --btn-primary-bg: #238636;
+  --btn-primary-text: #ffffff;
+  --btn-primary-hover: #2ea043;
+  --btn-secondary-bg: #f6f8fa;
+  --btn-secondary-text: #1f2328;
+  --btn-secondary-border: #d0d7de;
+  --btn-secondary-hover: #f3f4f6;
+  --header-bg: #f6f8fa;
+  --header-border: #d0d7de;
+}
+
+[data-theme="dark"] {
+  --bg-color: #0d1117;
+  --bg-secondary: #161b22;
+  --text-color: #e6edf3;
+  --text-muted: #8b949e;
+  --border-color: #30363d;
+  --link-color: #58a6ff;
+  --link-hover: #79c0ff;
+  --code-bg: #161b22;
+  --card-bg: #161b22;
+  --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+  --card-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --btn-primary-bg: #238636;
+  --btn-primary-text: #ffffff;
+  --btn-primary-hover: #2ea043;
+  --btn-secondary-bg: #21262d;
+  --btn-secondary-text: #e6edf3;
+  --btn-secondary-border: #30363d;
+  --btn-secondary-hover: #30363d;
+  --header-bg: #161b22;
+  --header-border: #30363d;
+}
+
+/* ============================================
+   Base Styles
+   ============================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--text-color);
+  background-color: var(--bg-color);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+a {
+  color: var(--link-color);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--link-hover);
+  text-decoration: underline;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 0;
+  margin-bottom: 0.5em;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 1.75rem; margin-top: 2rem; }
+h3 { font-size: 1.25rem; margin-top: 1.5rem; }
+
+p {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+code {
+  font-family: ui-monospace, 'SFMono-Regular', 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.875em;
+  background-color: var(--code-bg);
+  padding: 0.2em 0.4em;
+  border-radius: 6px;
+}
+
+pre {
+  overflow-x: auto;
+  padding: 1rem;
+  background-color: var(--code-bg);
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+}
+
+pre code {
+  padding: 0;
+  background: none;
+}
+
+/* ============================================
+   Header & Navigation
+   ============================================ */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: var(--header-bg);
+  border-bottom: 1px solid var(--header-border);
+  padding: 0.75rem 1.5rem;
+}
+
+.site-header nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 1rem;
+}
+
+.nav-brand {
+  font-family: ui-monospace, 'SFMono-Regular', 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+.nav-brand:hover {
+  color: var(--link-color);
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.nav-links a {
+  color: var(--text-muted);
+  font-size: 0.9375rem;
+  padding-bottom: 2px;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  color: var(--text-color);
+  text-decoration: none;
+  border-bottom-color: var(--link-color);
+}
+
+/* Theme Toggle */
+.theme-toggle {
+  background: none;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 0.375rem 0.625rem;
+  cursor: pointer;
+  font-size: 1rem;
+  color: var(--text-color);
+  transition: background-color 0.15s ease;
+}
+
+.theme-toggle:hover {
+  background-color: var(--btn-secondary-hover);
+}
+
+/* ============================================
+   Main Content Container
+   ============================================ */
+
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+section {
+  margin-bottom: 3rem;
+}
+
+/* ============================================
+   Hero Section
+   ============================================ */
+
+.hero {
+  text-align: center;
+  padding: 3rem 0 2rem;
+}
+
+.hero h1 {
+  font-family: ui-monospace, 'SFMono-Regular', 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+.tagline {
+  font-size: 1.25rem;
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hero-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* ============================================
+   Buttons
+   ============================================ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem 1.25rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  border-radius: 6px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+}
+
+.btn:hover {
+  text-decoration: none;
+  transform: translateY(-1px);
+}
+
+.btn.primary {
+  background-color: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  border: 1px solid var(--btn-primary-bg);
+}
+
+.btn.primary:hover {
+  background-color: var(--btn-primary-hover);
+  border-color: var(--btn-primary-hover);
+  color: var(--btn-primary-text);
+}
+
+.btn.secondary {
+  background-color: var(--btn-secondary-bg);
+  color: var(--btn-secondary-text);
+  border: 1px solid var(--btn-secondary-border);
+}
+
+.btn.secondary:hover {
+  background-color: var(--btn-secondary-hover);
+  color: var(--btn-secondary-text);
+}
+
+/* ============================================
+   Features Grid
+   ============================================ */
+
+.features {
+  padding-top: 1rem;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.feature-card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: var(--card-shadow);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.feature-card:hover {
+  box-shadow: var(--card-shadow-hover);
+  transform: translateY(-2px);
+}
+
+.feature-card h3 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-size: 1.125rem;
+}
+
+.feature-card p {
+  color: var(--text-muted);
+  margin-bottom: 0;
+  font-size: 0.9375rem;
+}
+
+/* ============================================
+   Quick Start Section
+   ============================================ */
+
+.quick-start {
+  background-color: var(--bg-secondary);
+  border-radius: 8px;
+  padding: 2rem;
+  margin-top: 2rem;
+}
+
+.quick-start h2 {
+  margin-top: 0;
+}
+
+.quick-start h3 {
+  margin-top: 1.5rem;
+  font-size: 1rem;
+  color: var(--text-muted);
+}
+
+.quick-start h3:first-of-type {
+  margin-top: 1rem;
+}
+
+/* ============================================
+   Related Components
+   ============================================ */
+
+.related {
+  border-top: 1px solid var(--border-color);
+  padding-top: 2rem;
+  margin-top: 3rem;
+}
+
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.related-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 1.25rem;
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--text-color);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.related-card:hover {
+  border-color: var(--link-color);
+  box-shadow: var(--card-shadow);
+  text-decoration: none;
+  color: var(--text-color);
+}
+
+.related-card strong {
+  font-family: ui-monospace, 'SFMono-Regular', 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.9375rem;
+  margin-bottom: 0.25rem;
+}
+
+.related-card span {
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+}
+
+/* ============================================
+   Footer
+   ============================================ */
+
+.site-footer {
+  border-top: 1px solid var(--border-color);
+  padding: 2rem 1.5rem;
+  margin-top: 3rem;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+.site-footer a {
+  color: var(--text-muted);
+}
+
+.site-footer a:hover {
+  color: var(--link-color);
+}
+
+/* ============================================
+   Demo Page Styles
+   ============================================ */
+
+.demo-section {
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.demo-section:last-child {
+  border-bottom: none;
+}
+
+.demo-section h3 {
+  margin-top: 0;
+}
+
+.demo-container {
+  margin: 1.5rem 0;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.demo-preview {
+  padding: 1.5rem;
+  background-color: var(--bg-secondary);
+  min-height: 200px;
+}
+
+.demo-code {
+  border-top: 1px solid var(--border-color);
+}
+
+.demo-code pre {
+  margin: 0;
+  border: none;
+  border-radius: 0;
+}
+
+/* ============================================
+   API Page Styles
+   ============================================ */
+
+.api-section {
+  margin-bottom: 3rem;
+}
+
+.api-section h3 {
+  font-family: ui-monospace, 'SFMono-Regular', 'SF Mono', Menlo, Consolas, monospace;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.api-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: 0.9375rem;
+}
+
+.api-table th,
+.api-table td {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.api-table th {
+  background-color: var(--bg-secondary);
+  font-weight: 600;
+}
+
+.api-table tr:nth-child(even) {
+  background-color: var(--bg-secondary);
+}
+
+.api-table code {
+  font-size: 0.8125rem;
+}
+
+.api-type {
+  color: var(--text-muted);
+  font-family: ui-monospace, 'SFMono-Regular', 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.8125rem;
+}
+
+.api-default {
+  color: var(--link-color);
+  font-family: ui-monospace, 'SFMono-Regular', 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.8125rem;
+}
+
+/* ============================================
+   Utility Classes
+   ============================================ */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+.mt-0 { margin-top: 0; }
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+.mb-0 { margin-bottom: 0; }
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+.mb-3 { margin-bottom: 1.5rem; }
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+
+@media (max-width: 768px) {
+  .site-header {
+    padding: 0.625rem 1rem;
+  }
+
+  .site-header nav {
+    flex-wrap: wrap;
+  }
+
+  .nav-links {
+    gap: 1rem;
+    font-size: 0.875rem;
+  }
+
+  .hero h1 {
+    font-size: 2rem;
+  }
+
+  .tagline {
+    font-size: 1rem;
+  }
+
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .related-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .quick-start {
+    padding: 1.5rem;
+  }
+
+  .api-table {
+    font-size: 0.8125rem;
+  }
+
+  .api-table th,
+  .api-table td {
+    padding: 0.5rem 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-links {
+    width: 100%;
+    justify-content: center;
+    order: 3;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+  }
+
+  .related-grid {
+    grid-template-columns: 1fr;
+  }
+}

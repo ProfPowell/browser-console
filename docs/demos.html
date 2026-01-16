@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Demos - browser-console</title>
+  <meta name="description" content="Interactive demos for the browser-console web component showing all features and console methods." />
+  <link rel="stylesheet" href="styles.css" />
+  <script type="module" src="https://cdn.jsdelivr.net/gh/ProfPowell/browser-console@main/dist/browser-console.js"></script>
+  <script>
+    const savedTheme = localStorage.getItem('docs-theme') || 'light'
+    document.documentElement.setAttribute('data-theme', savedTheme)
+  </script>
+  <style>
+    .demo-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .demo-controls button {
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      background: var(--btn-secondary-bg);
+      color: var(--btn-secondary-text);
+      cursor: pointer;
+      font-family: inherit;
+      transition: background-color 0.15s ease;
+    }
+    .demo-controls button:hover {
+      background: var(--btn-secondary-hover);
+    }
+    .demo-controls button.primary {
+      background: var(--btn-primary-bg);
+      color: var(--btn-primary-text);
+      border-color: var(--btn-primary-bg);
+    }
+    .demo-controls button.primary:hover {
+      background: var(--btn-primary-hover);
+    }
+    .demo-controls button.danger {
+      background: #dc3545;
+      color: white;
+      border-color: #dc3545;
+    }
+    .demo-controls button.danger:hover {
+      background: #c82333;
+    }
+    .console-wrapper {
+      height: 350px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      overflow: hidden;
+      background: #1e1e1e;
+    }
+    .console-wrapper browser-console {
+      height: 100%;
+    }
+    .demo-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+    @media (max-width: 900px) {
+      .demo-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .demo-item h4 {
+      margin-top: 0;
+      margin-bottom: 0.75rem;
+      font-size: 1rem;
+    }
+    .live-demo {
+      margin-top: 2rem;
+    }
+    .live-demo .console-wrapper {
+      height: 500px;
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <nav>
+      <a href="index.html" class="nav-brand">&lt;browser-console&gt;</a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="demos.html" class="active">Demos</a>
+        <a href="api.html">API</a>
+        <a href="https://github.com/ProfPowell/browser-console">GitHub</a>
+        <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+          <span id="theme-icon">🌙</span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Interactive Demos</h1>
+    <p class="text-muted">Click the buttons below to see the browser-console component in action. All console output is captured and displayed in real-time.</p>
+
+    <section class="live-demo">
+      <h2>Live Console</h2>
+      <div class="demo-controls">
+        <button onclick="tests.log()">console.log()</button>
+        <button onclick="tests.info()">console.info()</button>
+        <button onclick="tests.warn()">console.warn()</button>
+        <button onclick="tests.error()">console.error()</button>
+        <button onclick="tests.debug()">console.debug()</button>
+        <button onclick="tests.clear()" class="danger">Clear</button>
+      </div>
+      <div class="console-wrapper">
+        <browser-console id="main-console" theme="dark"></browser-console>
+      </div>
+    </section>
+
+    <section class="demo-section">
+      <h2>Console Methods</h2>
+      <div class="demo-grid">
+        <div class="demo-item">
+          <h4>console.table()</h4>
+          <p class="text-muted">Display tabular data in a formatted table.</p>
+          <div class="demo-controls">
+            <button onclick="tests.table()">Show Table</button>
+          </div>
+        </div>
+        <div class="demo-item">
+          <h4>console.time() / timeEnd()</h4>
+          <p class="text-muted">Measure execution time with named timers.</p>
+          <div class="demo-controls">
+            <button onclick="tests.timer()">Run Timer</button>
+            <button onclick="tests.timelog()">timeLog Demo</button>
+          </div>
+        </div>
+        <div class="demo-item">
+          <h4>console.group()</h4>
+          <p class="text-muted">Create collapsible groups of related logs.</p>
+          <div class="demo-controls">
+            <button onclick="tests.group()">Expanded Group</button>
+            <button onclick="tests.groupCollapsed()">Collapsed Group</button>
+          </div>
+        </div>
+        <div class="demo-item">
+          <h4>console.trace() / count()</h4>
+          <p class="text-muted">Stack traces and call counters.</p>
+          <div class="demo-controls">
+            <button onclick="tests.trace()">Stack Trace</button>
+            <button onclick="tests.count()">Count Calls</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="demo-section">
+      <h2>Data Types</h2>
+      <div class="demo-grid">
+        <div class="demo-item">
+          <h4>Primitive Types</h4>
+          <p class="text-muted">Strings, numbers, booleans, null, undefined, BigInt.</p>
+          <div class="demo-controls">
+            <button onclick="tests.string()">String</button>
+            <button onclick="tests.number()">Number</button>
+            <button onclick="tests.boolean()">Boolean</button>
+            <button onclick="tests.null()">Null/Undefined</button>
+            <button onclick="tests.bigint()">BigInt</button>
+          </div>
+        </div>
+        <div class="demo-item">
+          <h4>Objects &amp; Arrays</h4>
+          <p class="text-muted">Expandable objects with nested properties.</p>
+          <div class="demo-controls">
+            <button onclick="tests.object()">Object</button>
+            <button onclick="tests.array()">Array</button>
+            <button onclick="tests.nested()">Nested</button>
+            <button onclick="tests.function()">Function</button>
+          </div>
+        </div>
+        <div class="demo-item">
+          <h4>Collections</h4>
+          <p class="text-muted">Map, Set, and Symbol support.</p>
+          <div class="demo-controls">
+            <button onclick="tests.map()">Map</button>
+            <button onclick="tests.set()">Set</button>
+            <button onclick="tests.symbol()">Symbol</button>
+          </div>
+        </div>
+        <div class="demo-item">
+          <h4>Special Types</h4>
+          <p class="text-muted">Date, RegExp, Error, and DOM elements.</p>
+          <div class="demo-controls">
+            <button onclick="tests.date()">Date</button>
+            <button onclick="tests.regex()">RegExp</button>
+            <button onclick="tests.element()">DOM Element</button>
+            <button onclick="tests.errorObj()">Error</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="demo-section">
+      <h2>Stress Tests</h2>
+      <div class="demo-controls">
+        <button onclick="tests.large()">Large Object</button>
+        <button onclick="tests.multiple()">Multiple Logs</button>
+        <button onclick="tests.mixed()">Mixed Types</button>
+        <button onclick="tests.all()" class="primary">Run All Tests</button>
+      </div>
+    </section>
+
+    <section class="demo-section">
+      <h2>Theme Comparison</h2>
+      <p class="text-muted">The component supports both dark and light themes.</p>
+      <div class="demo-grid">
+        <div class="demo-item">
+          <h4>Dark Theme</h4>
+          <div class="console-wrapper">
+            <browser-console id="dark-console" theme="dark"></browser-console>
+          </div>
+        </div>
+        <div class="demo-item">
+          <h4>Light Theme</h4>
+          <div class="console-wrapper" style="background: #fff;">
+            <browser-console id="light-console" theme="light"></browser-console>
+          </div>
+        </div>
+      </div>
+      <div class="demo-controls mt-2">
+        <button onclick="logToThemeConsoles()">Log to Both</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>MIT License | <a href="https://github.com/ProfPowell/browser-console">View on GitHub</a> | <a href="https://www.npmjs.com/package/@profpowell/browser-console">npm</a></p>
+  </footer>
+
+  <script>
+    function toggleTheme() {
+      const html = document.documentElement
+      const current = html.getAttribute('data-theme')
+      const next = current === 'dark' ? 'light' : 'dark'
+      html.setAttribute('data-theme', next)
+      localStorage.setItem('docs-theme', next)
+      document.getElementById('theme-icon').textContent = next === 'dark' ? '☀️' : '🌙'
+    }
+    document.getElementById('theme-icon').textContent =
+      document.documentElement.getAttribute('data-theme') === 'dark' ? '☀️' : '🌙'
+
+    // Test functions
+    const tests = {
+      log: () => console.log('This is a standard log message'),
+      info: () => console.info('This is an informational message'),
+      warn: () => console.warn('This is a warning message'),
+      error: () => console.error('This is an error message'),
+      debug: () => console.debug('This is a debug message'),
+
+      string: () => console.log('Hello, World!', 'Multiple strings', 'Can be logged'),
+      number: () => console.log(42, 3.14159, -100, Infinity, NaN),
+      boolean: () => console.log(true, false),
+      null: () => console.log(null, undefined),
+      bigint: () => {
+        console.log('BigInt values:', 123n, BigInt(9007199254740991), 0n)
+        console.log('Large BigInt:', 9007199254740991n * 1000n)
+      },
+
+      object: () => console.log({
+        name: 'John Doe',
+        age: 30,
+        email: 'john@example.com',
+        active: true
+      }),
+      array: () => {
+        console.log([1, 2, 3, 4, 5])
+        console.log(['apple', 'banana', 'cherry', 'date', 'elderberry'])
+      },
+      nested: () => console.log({
+        user: {
+          name: 'Jane Smith',
+          profile: {
+            age: 28,
+            location: { city: 'San Francisco', country: 'USA' }
+          }
+        },
+        hobbies: ['coding', 'reading', 'gaming']
+      }),
+      function: () => {
+        console.log(function myFunction() { return 'hello' })
+        console.log(() => 'arrow function')
+      },
+
+      map: () => {
+        const map = new Map([
+          ['name', 'Alice'],
+          ['age', 30],
+          ['active', true],
+          [{ key: 'obj' }, 'object key']
+        ])
+        console.log('Map:', map)
+      },
+      set: () => {
+        const set = new Set([1, 2, 3, 'hello', true, { a: 1 }])
+        console.log('Set:', set)
+      },
+      symbol: () => {
+        const sym = Symbol('mySymbol')
+        console.log('Symbol:', sym)
+        console.log('Object with Symbol key:', {
+          name: 'Test',
+          [Symbol('secret')]: 'hidden value',
+          [Symbol.for('shared')]: 'shared value'
+        })
+      },
+
+      date: () => {
+        console.log(new Date())
+        console.log(new Date('2024-01-01'))
+      },
+      regex: () => {
+        console.log(/[a-z]+/gi)
+        console.log(new RegExp('\\d+', 'g'))
+      },
+      element: () => {
+        console.log(document.body)
+        console.log(document.querySelector('h1'))
+      },
+      errorObj: () => {
+        console.error(new Error('Something went wrong!'))
+        console.error(new TypeError('Type error occurred'))
+      },
+
+      table: () => {
+        const users = [
+          { id: 1, name: 'Alice', role: 'Admin', email: 'alice@example.com' },
+          { id: 2, name: 'Bob', role: 'User', email: 'bob@example.com' },
+          { id: 3, name: 'Charlie', role: 'Moderator', email: 'charlie@example.com' }
+        ]
+        console.table(users)
+      },
+      timer: () => {
+        console.time('performance-test')
+        let sum = 0
+        for (let i = 0; i < 1000000; i++) { sum += i }
+        console.timeEnd('performance-test')
+      },
+      timelog: () => {
+        console.time('long-operation')
+        console.log('Starting operation...')
+        setTimeout(() => {
+          console.timeLog('long-operation', 'Still running...')
+          setTimeout(() => {
+            console.timeLog('long-operation', 'Almost done...')
+            setTimeout(() => console.timeEnd('long-operation'), 200)
+          }, 200)
+        }, 200)
+      },
+      group: () => {
+        console.group('User Details')
+        console.log('Name: John Doe')
+        console.log('Email: john@example.com')
+        console.group('Nested Group')
+        console.log('This is nested inside')
+        console.warn('Nested warning')
+        console.groupEnd()
+        console.log('Back to parent group')
+        console.groupEnd()
+        console.log('Outside all groups')
+      },
+      groupCollapsed: () => {
+        console.groupCollapsed('Collapsed Group (click to expand)')
+        console.log('Hidden content 1')
+        console.log('Hidden content 2')
+        console.log('Hidden content 3')
+        console.groupEnd()
+      },
+      trace: () => {
+        function innerFunction() {
+          console.trace('Stack trace from innerFunction')
+        }
+        function outerFunction() { innerFunction() }
+        outerFunction()
+      },
+      count: () => {
+        console.count('button-clicks')
+        console.count('button-clicks')
+        console.count('button-clicks')
+        console.count('other-counter')
+        console.log('Click this button multiple times to see count increase')
+      },
+      dir: () => {
+        const obj = {
+          name: 'Directory View',
+          nested: { level1: { level2: { deep: 'value' } } },
+          array: [1, 2, 3]
+        }
+        console.dir(obj)
+      },
+
+      mixed: () => console.log('Mixed:', 123, true, { key: 'value' }, [1, 2, 3], null, undefined),
+      large: () => {
+        const largeObj = {
+          id: 12345,
+          timestamp: new Date(),
+          data: Array.from({ length: 50 }, (_, i) => ({
+            index: i,
+            value: Math.random(),
+            label: `Item ${i}`
+          })),
+          metadata: { version: '1.0.0', author: 'System', tags: ['test', 'demo', 'example'] }
+        }
+        console.log(largeObj)
+      },
+      multiple: () => {
+        for (let i = 0; i < 5; i++) {
+          console.log(`Log entry #${i + 1}`, { iteration: i, timestamp: Date.now() })
+        }
+      },
+
+      clear: () => console.clear(),
+      all: () => {
+        console.clear()
+        setTimeout(() => tests.log(), 100)
+        setTimeout(() => tests.info(), 200)
+        setTimeout(() => tests.warn(), 300)
+        setTimeout(() => tests.error(), 400)
+        setTimeout(() => tests.bigint(), 500)
+        setTimeout(() => tests.map(), 600)
+        setTimeout(() => tests.set(), 700)
+        setTimeout(() => tests.object(), 800)
+        setTimeout(() => tests.group(), 900)
+        setTimeout(() => tests.trace(), 1100)
+      }
+    }
+
+    // Log to theme comparison consoles
+    function logToThemeConsoles() {
+      const darkConsole = document.getElementById('dark-console')
+      const lightConsole = document.getElementById('light-console')
+
+      // Temporarily unhook main console to avoid duplicates
+      const mainConsole = document.getElementById('main-console')
+      mainConsole.unhookConsole()
+
+      console.log('Hello from both consoles!')
+      console.info('Info message')
+      console.warn('Warning message')
+      console.error('Error message')
+      console.log({ theme: 'comparison', values: [1, 2, 3] })
+
+      // Re-hook main console
+      mainConsole.hookConsole()
+    }
+
+    // Welcome message
+    console.log('%cbrowser-console Demo', 'font-size: 16px; font-weight: bold; color: #0066cc;')
+    console.log('Click the buttons above to test different console methods and data types.')
+    console.log('Try the search box to filter logs, or the copy button to export.')
+  </script>
+</body>
+</html>

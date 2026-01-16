@@ -1,0 +1,464 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API Reference - browser-console</title>
+  <meta name="description" content="Complete API documentation for the browser-console web component including attributes, methods, events, and CSS custom properties." />
+  <link rel="stylesheet" href="styles.css" />
+  <script>
+    const savedTheme = localStorage.getItem('docs-theme') || 'light'
+    document.documentElement.setAttribute('data-theme', savedTheme)
+  </script>
+  <style>
+    .toc {
+      background: var(--bg-secondary);
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+    }
+    .toc h3 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+    }
+    .toc ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.5rem;
+    }
+    .toc a {
+      display: block;
+      padding: 0.25rem 0;
+    }
+    .method-signature {
+      font-family: ui-monospace, 'SFMono-Regular', 'SF Mono', Menlo, Consolas, monospace;
+      background: var(--code-bg);
+      color: var(--text-color);
+      padding: 0.75rem 1rem;
+      border-radius: 6px;
+      border-left: 3px solid var(--link-color);
+      margin: 0.5rem 0 1rem;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <nav>
+      <a href="index.html" class="nav-brand">&lt;browser-console&gt;</a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="demos.html">Demos</a>
+        <a href="api.html" class="active">API</a>
+        <a href="https://github.com/ProfPowell/browser-console">GitHub</a>
+        <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+          <span id="theme-icon">🌙</span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <h1>API Reference</h1>
+    <p class="text-muted">Complete documentation for the <code>&lt;browser-console&gt;</code> web component.</p>
+
+    <nav class="toc" aria-label="Table of contents">
+      <h3>Contents</h3>
+      <ul>
+        <li><a href="#installation">Installation</a></li>
+        <li><a href="#usage">Basic Usage</a></li>
+        <li><a href="#attributes">Attributes</a></li>
+        <li><a href="#properties">Properties</a></li>
+        <li><a href="#methods">Methods</a></li>
+        <li><a href="#events">Events</a></li>
+        <li><a href="#css-properties">CSS Custom Properties</a></li>
+        <li><a href="#css-parts">CSS Parts</a></li>
+      </ul>
+    </nav>
+
+    <section id="installation" class="api-section">
+      <h2>Installation</h2>
+      <h3>npm</h3>
+      <pre><code>npm install @profpowell/browser-console</code></pre>
+
+      <h3>CDN</h3>
+      <pre><code>&lt;script type="module" src="https://unpkg.com/@profpowell/browser-console"&gt;&lt;/script&gt;</code></pre>
+
+      <h3>ES Module Import</h3>
+      <pre><code>import '@profpowell/browser-console'
+// or
+import { BrowserConsole } from '@profpowell/browser-console'</code></pre>
+    </section>
+
+    <section id="usage" class="api-section">
+      <h2>Basic Usage</h2>
+      <pre><code>&lt;browser-console theme="dark" max-logs="500"&gt;&lt;/browser-console&gt;</code></pre>
+      <p>The component automatically hooks into console methods and displays all logs with syntax highlighting.</p>
+    </section>
+
+    <section id="attributes" class="api-section">
+      <h2>Attributes</h2>
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Default</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>theme</code></td>
+            <td><span class="api-type">string</span></td>
+            <td><span class="api-default">"dark"</span></td>
+            <td>Color theme: <code>"dark"</code> or <code>"light"</code></td>
+          </tr>
+          <tr>
+            <td><code>max-logs</code></td>
+            <td><span class="api-type">number</span></td>
+            <td><span class="api-default">1000</span></td>
+            <td>Maximum number of logs to retain in memory</td>
+          </tr>
+          <tr>
+            <td><code>auto-hook</code></td>
+            <td><span class="api-type">string</span></td>
+            <td><span class="api-default">"true"</span></td>
+            <td>Whether to automatically hook console methods on connect. Set to <code>"false"</code> to manually control.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="properties" class="api-section">
+      <h2>Properties</h2>
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>logs</code></td>
+            <td><span class="api-type">LogEntry[]</span></td>
+            <td>Array of captured log entries</td>
+          </tr>
+          <tr>
+            <td><code>originalConsole</code></td>
+            <td><span class="api-type">Object&lt;string, Function&gt;</span></td>
+            <td>Original console methods stored for restoration</td>
+          </tr>
+          <tr>
+            <td><code>filter</code></td>
+            <td><span class="api-type">string | null</span></td>
+            <td>Current log filter (<code>null</code> shows all)</td>
+          </tr>
+          <tr>
+            <td><code>maxLogs</code></td>
+            <td><span class="api-type">number</span></td>
+            <td>Maximum logs to retain (default: 1000)</td>
+          </tr>
+          <tr>
+            <td><code>timers</code></td>
+            <td><span class="api-type">Object&lt;string, number&gt;</span></td>
+            <td>Timer tracking for <code>console.time/timeEnd</code></td>
+          </tr>
+          <tr>
+            <td><code>counters</code></td>
+            <td><span class="api-type">Object&lt;string, number&gt;</span></td>
+            <td>Counter tracking for <code>console.count</code></td>
+          </tr>
+          <tr>
+            <td><code>theme</code></td>
+            <td><span class="api-type">"dark" | "light"</span></td>
+            <td>Current theme</td>
+          </tr>
+          <tr>
+            <td><code>searchQuery</code></td>
+            <td><span class="api-type">string</span></td>
+            <td>Current search/filter query</td>
+          </tr>
+          <tr>
+            <td><code>groupDepth</code></td>
+            <td><span class="api-type">number</span></td>
+            <td>Current <code>console.group</code> nesting depth</td>
+          </tr>
+          <tr>
+            <td><code>groupStack</code></td>
+            <td><span class="api-type">GroupStackEntry[]</span></td>
+            <td>Stack of open groups</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="methods" class="api-section">
+      <h2>Methods</h2>
+
+      <h3><code>hookConsole()</code></h3>
+      <pre class="method-signature">hookConsole(): void</pre>
+      <p>Hook into console methods to capture logs. Called automatically on connect unless <code>auto-hook="false"</code>.</p>
+
+      <h3><code>unhookConsole()</code></h3>
+      <pre class="method-signature">unhookConsole(): void</pre>
+      <p>Restore original console methods. Called automatically on disconnect.</p>
+
+      <h3><code>setTheme(theme)</code></h3>
+      <pre class="method-signature">setTheme(theme: "dark" | "light"): void</pre>
+      <p>Set theme programmatically. Also updates the <code>theme</code> attribute.</p>
+
+      <h3><code>setFilter(filter)</code></h3>
+      <pre class="method-signature">setFilter(filter: string | null): void</pre>
+      <p>Set filter for log methods. Pass <code>null</code> to show all logs, or a method name like <code>"error"</code>, <code>"warn"</code>, <code>"info"</code>, <code>"log"</code>.</p>
+
+      <h3><code>setSearchQuery(query)</code></h3>
+      <pre class="method-signature">setSearchQuery(query: string): void</pre>
+      <p>Set search query for text filtering. Filters logs that contain the query string.</p>
+
+      <h3><code>clearLogs()</code></h3>
+      <pre class="method-signature">clearLogs(): void</pre>
+      <p>Clear all logs from the display and internal array.</p>
+
+      <h3><code>copyLogs()</code></h3>
+      <pre class="method-signature">copyLogs(): Promise&lt;void&gt;</pre>
+      <p>Copy visible logs to clipboard as plain text.</p>
+
+      <h3><code>addLog(log)</code></h3>
+      <pre class="method-signature">addLog(log: LogEntry): void</pre>
+      <p>Add a log entry programmatically.</p>
+
+      <h3><code>matchesFilters(log)</code></h3>
+      <pre class="method-signature">matchesFilters(log: LogEntry): boolean</pre>
+      <p>Check if a log entry matches current filters (method filter and search query).</p>
+
+      <h3><code>formatLogsForClipboard()</code></h3>
+      <pre class="method-signature">formatLogsForClipboard(): string</pre>
+      <p>Format visible logs as plain text for clipboard.</p>
+    </section>
+
+    <section id="events" class="api-section">
+      <h2>Events</h2>
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>Event</th>
+            <th>Detail</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>log</code></td>
+            <td><code>{ log: LogEntry }</code></td>
+            <td>Dispatched when a new log entry is added</td>
+          </tr>
+          <tr>
+            <td><code>clear</code></td>
+            <td>—</td>
+            <td>Dispatched when console is cleared</td>
+          </tr>
+          <tr>
+            <td><code>theme-change</code></td>
+            <td><code>{ theme: string }</code></td>
+            <td>Dispatched when theme changes</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="css-properties" class="api-section">
+      <h2>CSS Custom Properties</h2>
+      <p>Use these to customize the appearance of the component:</p>
+
+      <h3>Background &amp; Layout</h3>
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Default (Dark)</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>--bg-primary</code></td>
+            <td><span class="api-default">#1e1e1e</span></td>
+            <td>Primary background color</td>
+          </tr>
+          <tr>
+            <td><code>--bg-secondary</code></td>
+            <td><span class="api-default">#252526</span></td>
+            <td>Secondary background color (header)</td>
+          </tr>
+          <tr>
+            <td><code>--bg-hover</code></td>
+            <td><span class="api-default">#2a2d2e</span></td>
+            <td>Hover state background</td>
+          </tr>
+          <tr>
+            <td><code>--border-color</code></td>
+            <td><span class="api-default">#3c3c3c</span></td>
+            <td>Border color</td>
+          </tr>
+          <tr>
+            <td><code>--accent-color</code></td>
+            <td><span class="api-default">#0078d4</span></td>
+            <td>Accent color for active states</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Text Colors</h3>
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Default (Dark)</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>--text-primary</code></td>
+            <td><span class="api-default">#d4d4d4</span></td>
+            <td>Primary text color</td>
+          </tr>
+          <tr>
+            <td><code>--text-secondary</code></td>
+            <td><span class="api-default">#808080</span></td>
+            <td>Secondary text color (timestamps)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Log Level Colors</h3>
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Default (Dark)</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>--log-color</code></td>
+            <td><span class="api-default">#d4d4d4</span></td>
+            <td><code>console.log</code> text color</td>
+          </tr>
+          <tr>
+            <td><code>--info-color</code></td>
+            <td><span class="api-default">#3794ff</span></td>
+            <td><code>console.info</code> text color</td>
+          </tr>
+          <tr>
+            <td><code>--warn-color</code></td>
+            <td><span class="api-default">#cca700</span></td>
+            <td><code>console.warn</code> text color</td>
+          </tr>
+          <tr>
+            <td><code>--error-color</code></td>
+            <td><span class="api-default">#f14c4c</span></td>
+            <td><code>console.error</code> text color</td>
+          </tr>
+          <tr>
+            <td><code>--debug-color</code></td>
+            <td><span class="api-default">#b5cea8</span></td>
+            <td><code>console.debug</code> text color</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="css-parts" class="api-section">
+      <h2>CSS Parts</h2>
+      <p>Style internal elements using <code>::part()</code>:</p>
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>Part</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>header</code></td>
+            <td>The console header containing filters and actions</td>
+          </tr>
+          <tr>
+            <td><code>logs</code></td>
+            <td>The scrollable log entries container</td>
+          </tr>
+          <tr>
+            <td><code>filter-button</code></td>
+            <td>Filter buttons (All, Log, Info, Warn, Error)</td>
+          </tr>
+          <tr>
+            <td><code>action-button</code></td>
+            <td>Action buttons (theme toggle, copy, clear)</td>
+          </tr>
+          <tr>
+            <td><code>log-entry</code></td>
+            <td>Individual log entry row</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Example</h3>
+      <pre><code>browser-console::part(header) {
+  background: #2d2d2d;
+  border-bottom: 2px solid #0078d4;
+}
+
+browser-console::part(log-entry) {
+  font-size: 13px;
+}</code></pre>
+    </section>
+
+    <section class="api-section">
+      <h2>TypeScript Types</h2>
+      <pre><code>interface LogEntry {
+  method: 'log' | 'info' | 'warn' | 'error' | 'debug' | 'table' | 'time' | 'clear' | 'count' | 'assert' | 'group' | 'trace' | 'dir'
+  data: unknown[]
+  timestamp: Date
+  groupDepth?: number
+  collapsed?: boolean
+  groupId?: string
+  stack?: string
+}
+
+interface GroupStackEntry {
+  label: string
+  collapsed: boolean
+  id: string
+}
+
+type Theme = 'dark' | 'light'
+type Filter = 'log' | 'info' | 'warn' | 'error' | null</code></pre>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>MIT License | <a href="https://github.com/ProfPowell/browser-console">View on GitHub</a> | <a href="https://www.npmjs.com/package/@profpowell/browser-console">npm</a></p>
+  </footer>
+
+  <script>
+    function toggleTheme() {
+      const html = document.documentElement
+      const current = html.getAttribute('data-theme')
+      const next = current === 'dark' ? 'light' : 'dark'
+      html.setAttribute('data-theme', next)
+      localStorage.setItem('docs-theme', next)
+      document.getElementById('theme-icon').textContent = next === 'dark' ? '☀️' : '🌙'
+    }
+    document.getElementById('theme-icon').textContent =
+      document.documentElement.getAttribute('data-theme') === 'dark' ? '☀️' : '🌙'
+  </script>
+</body>
+</html>
