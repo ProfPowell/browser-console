@@ -10,7 +10,7 @@
   <script>
     // Theme persistence
     const savedTheme = localStorage.getItem('docs-theme') || 'light'
-    document.documentElement.setAttribute('data-theme', savedTheme)
+    if (savedTheme === 'dark') document.body.classList.add('dark')
   </script>
 </head>
 <body>
@@ -123,16 +123,13 @@ bc.copyLogs()              // Copy to clipboard</code-block>
 
   <script>
     function toggleTheme() {
-      const html = document.documentElement
-      const current = html.getAttribute('data-theme')
-      const next = current === 'dark' ? 'light' : 'dark'
-      html.setAttribute('data-theme', next)
-      localStorage.setItem('docs-theme', next)
-      document.getElementById('theme-icon').textContent = next === 'dark' ? '☀️' : '🌙'
+      const isDark = document.body.classList.toggle('dark')
+      localStorage.setItem('docs-theme', isDark ? 'dark' : 'light')
+      document.getElementById('theme-icon').textContent = isDark ? '☀️' : '🌙'
     }
     // Set initial icon
     document.getElementById('theme-icon').textContent =
-      document.documentElement.getAttribute('data-theme') === 'dark' ? '☀️' : '🌙'
+      document.body.classList.contains('dark') ? '☀️' : '🌙'
   </script>
 </body>
 </html>
