@@ -7,6 +7,7 @@
   <meta name="description" content="A zero-dependency vanilla JavaScript web component that captures and displays browser console output with syntax highlighting and type-aware formatting." />
   <link rel="stylesheet" href="styles.css" />
   <script type="module" src="https://unpkg.com/@profpowell/code-block"></script>
+  <script type="module" src="browser-console.js"></script>
   <script>
     // Theme persistence
     const savedTheme = localStorage.getItem('docs-theme') || 'light'
@@ -33,6 +34,9 @@
     <section class="hero">
       <h1>&lt;browser-console&gt;</h1>
       <p class="tagline">A zero-dependency vanilla JavaScript web component that captures and displays browser console output with syntax highlighting and type-aware formatting.</p>
+      <div class="hero-demo">
+        <browser-console id="hero-console" theme="dark" auto-hook="false"></browser-console>
+      </div>
       <div class="hero-actions">
         <a href="demos.html" class="btn primary">View Demos</a>
         <a href="api.html" class="btn secondary">API Docs</a>
@@ -130,6 +134,14 @@ bc.copyLogs()              // Copy to clipboard</code-block>
     // Set initial icon
     document.getElementById('theme-icon').textContent =
       document.body.classList.contains('dark') ? '☀️' : '🌙'
+  </script>
+  <script type="module">
+    // Populate hero console with demo messages
+    const heroConsole = document.getElementById('hero-console')
+    heroConsole.addLog({ method: 'log', data: ['Hello, World!'], timestamp: new Date() })
+    heroConsole.addLog({ method: 'info', data: ['User logged in successfully'], timestamp: new Date() })
+    heroConsole.addLog({ method: 'warn', data: ['API rate limit: 95% used'], timestamp: new Date() })
+    heroConsole.addLog({ method: 'log', data: [{ user: 'alice', status: 'active', role: 'admin' }], timestamp: new Date() })
   </script>
 </body>
 </html>

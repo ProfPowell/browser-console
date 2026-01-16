@@ -160,9 +160,17 @@ main {
 }
 
 .hero-demo {
-  max-width: 500px;
+  max-width: 600px;
   margin: 2rem auto;
   text-align: left;
+  height: 200px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+.hero-demo browser-console {
+  height: 100%;
 }
 
 .hero-actions {
