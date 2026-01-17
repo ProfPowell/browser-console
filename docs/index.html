@@ -8,9 +8,10 @@
   <link rel="stylesheet" href="styles.css" />
   <script type="module" src="browser-console.js"></script>
   <script>
-    // Theme persistence
-    const savedTheme = localStorage.getItem('docs-theme') || 'light'
-    if (savedTheme === 'dark') document.body.classList.add('dark')
+    // Load saved theme
+    if (localStorage.getItem('browser-console-theme') === 'dark') {
+      document.body.classList.add('dark')
+    }
   </script>
 </head>
 <body>
@@ -22,9 +23,7 @@
         <a href="demos.html">Demos</a>
         <a href="api.html">API</a>
         <a href="https://github.com/ProfPowell/browser-console">GitHub</a>
-        <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
-          <span id="theme-icon">🌙</span>
-        </button>
+        <button class="theme-toggle" title="Toggle theme">🌓</button>
       </div>
     </nav>
   </header>
@@ -125,14 +124,14 @@ bc.copyLogs()              // Copy to clipboard</code-block>
   </footer>
 
   <script>
-    function toggleTheme() {
-      const isDark = document.body.classList.toggle('dark')
-      localStorage.setItem('docs-theme', isDark ? 'dark' : 'light')
-      document.getElementById('theme-icon').textContent = isDark ? '☀️' : '🌙'
-    }
-    // Set initial icon
-    document.getElementById('theme-icon').textContent =
-      document.body.classList.contains('dark') ? '☀️' : '🌙'
+    (function() {
+      const toggle = document.querySelector('.theme-toggle')
+      toggle?.addEventListener('click', () => {
+        document.body.classList.toggle('dark')
+        const isDark = document.body.classList.contains('dark')
+        localStorage.setItem('browser-console-theme', isDark ? 'dark' : 'light')
+      })
+    })()
   </script>
   <script type="module" src="https://cdn.jsdelivr.net/gh/ProfPowell/code-block@v2.0.1/dist/code-block.min.js"></script>
   <script type="module">
