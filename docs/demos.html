@@ -7,6 +7,7 @@
   <meta name="description" content="Interactive demos for the browser-console web component showing all features and console methods." />
   <link rel="stylesheet" href="styles.css" />
   <script type="module" src="browser-console.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/ProfPowell/code-block@v2.0.1/dist/code-block.min.js"></script>
   <script>
     // Load saved theme
     if (localStorage.getItem('browser-console-theme') === 'dark') {
@@ -51,7 +52,7 @@
       background: #c82333;
     }
     .console-wrapper {
-      height: 350px;
+      height: 180px;
       border: 1px solid var(--border-color);
       border-radius: 8px;
       overflow: hidden;
@@ -60,14 +61,42 @@
     .console-wrapper browser-console {
       height: 100%;
     }
+    .console-wrapper.tall {
+      height: 300px;
+    }
+    .demo-card {
+      background: var(--card-bg, #f8f9fa);
+      padding: 1.5rem;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      margin-bottom: 1.5rem;
+    }
+    .demo-card h3 {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      font-size: 1.125rem;
+    }
+    .demo-card p {
+      margin-bottom: 1rem;
+    }
+    .demo-card code-block {
+      margin-bottom: 1rem;
+      display: block;
+    }
     .demo-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 2rem;
+      gap: 1.5rem;
       margin-top: 1.5rem;
     }
+    .theme-demo-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
     @media (max-width: 900px) {
-      .demo-grid {
+      .demo-grid,
+      .theme-demo-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -76,11 +105,8 @@
       margin-bottom: 0.75rem;
       font-size: 1rem;
     }
-    .live-demo {
-      margin-top: 2rem;
-    }
-    .live-demo .console-wrapper {
-      height: 500px;
+    body.dark .demo-card {
+      --card-bg: #2d2d2d;
     }
   </style>
 </head>
@@ -100,135 +126,281 @@
 
   <main>
     <h1>Interactive Demos</h1>
-    <p class="text-muted">Click the buttons below to see the browser-console component in action. All console output is captured and displayed in real-time.</p>
-
-    <section class="live-demo">
-      <h2>Live Console</h2>
-      <div class="demo-controls">
-        <button onclick="tests.log()">console.log()</button>
-        <button onclick="tests.info()">console.info()</button>
-        <button onclick="tests.warn()">console.warn()</button>
-        <button onclick="tests.error()">console.error()</button>
-        <button onclick="tests.debug()">console.debug()</button>
-        <button onclick="tests.clear()" class="danger">Clear</button>
-      </div>
-      <div class="console-wrapper">
-        <browser-console id="main-console" theme="dark"></browser-console>
-      </div>
-    </section>
+    <p class="text-muted">Each demo shows the code, a trigger button, and a dedicated console to see results. Click buttons to run demos.</p>
 
     <section class="demo-section">
       <h2>Console Methods</h2>
-      <div class="demo-grid">
-        <div class="demo-item">
-          <h4>console.table()</h4>
-          <p class="text-muted">Display tabular data in a formatted table.</p>
-          <div class="demo-controls">
-            <button onclick="tests.table()">Show Table</button>
-          </div>
+
+      <div class="demo-card">
+        <h3>Log Levels</h3>
+        <p class="text-muted">Five log levels for different message types: log, info, warn, error, and debug.</p>
+        <code-block language="javascript">
+console.log('Standard log message')
+console.info('Informational message')
+console.warn('Warning message')
+console.error('Error message')
+console.debug('Debug message')
+        </code-block>
+        <div class="demo-controls">
+          <button onclick="demos.logLevels('log-levels-console')">Run Demo</button>
+          <button onclick="demoClear('log-levels-console')" class="danger">Clear</button>
         </div>
-        <div class="demo-item">
-          <h4>console.time() / timeEnd()</h4>
-          <p class="text-muted">Measure execution time with named timers.</p>
-          <div class="demo-controls">
-            <button onclick="tests.timer()">Run Timer</button>
-            <button onclick="tests.timelog()">timeLog Demo</button>
-          </div>
+        <div class="console-wrapper">
+          <browser-console id="log-levels-console" theme="dark" hook="false"></browser-console>
         </div>
-        <div class="demo-item">
-          <h4>console.group()</h4>
-          <p class="text-muted">Create collapsible groups of related logs.</p>
-          <div class="demo-controls">
-            <button onclick="tests.group()">Expanded Group</button>
-            <button onclick="tests.groupCollapsed()">Collapsed Group</button>
-          </div>
+      </div>
+
+      <div class="demo-card">
+        <h3>console.table()</h3>
+        <p class="text-muted">Display tabular data in a formatted table.</p>
+        <code-block language="javascript">
+const users = [
+  { id: 1, name: 'Alice', role: 'Admin' },
+  { id: 2, name: 'Bob', role: 'User' },
+  { id: 3, name: 'Charlie', role: 'Moderator' }
+]
+console.table(users)
+        </code-block>
+        <div class="demo-controls">
+          <button onclick="demos.table('table-console')">Run Demo</button>
+          <button onclick="demoClear('table-console')" class="danger">Clear</button>
         </div>
-        <div class="demo-item">
-          <h4>console.trace() / count()</h4>
-          <p class="text-muted">Stack traces and call counters.</p>
-          <div class="demo-controls">
-            <button onclick="tests.trace()">Stack Trace</button>
-            <button onclick="tests.count()">Count Calls</button>
-          </div>
+        <div class="console-wrapper">
+          <browser-console id="table-console" theme="dark" hook="false"></browser-console>
+        </div>
+      </div>
+
+      <div class="demo-card">
+        <h3>console.time()</h3>
+        <p class="text-muted">Measure execution time with named timers.</p>
+        <code-block language="javascript">
+console.time('performance-test')
+// ... some code to measure ...
+console.timeLog('performance-test', 'Checkpoint')
+console.timeEnd('performance-test')
+        </code-block>
+        <div class="demo-controls">
+          <button onclick="demos.timer('timer-console')">Run Timer</button>
+          <button onclick="demos.timeLog('timer-console')">TimeLog Demo</button>
+          <button onclick="demoClear('timer-console')" class="danger">Clear</button>
+        </div>
+        <div class="console-wrapper">
+          <browser-console id="timer-console" theme="dark" hook="false"></browser-console>
+        </div>
+      </div>
+
+      <div class="demo-card">
+        <h3>console.group()</h3>
+        <p class="text-muted">Create collapsible groups of related logs.</p>
+        <code-block language="javascript">
+console.group('User Details')
+console.log('Name: John Doe')
+console.log('Email: john@example.com')
+console.groupEnd()
+
+console.groupCollapsed('Collapsed Group')
+console.log('Hidden content')
+console.groupEnd()
+        </code-block>
+        <div class="demo-controls">
+          <button onclick="demos.group('group-console')">Expanded Group</button>
+          <button onclick="demos.groupCollapsed('group-console')">Collapsed Group</button>
+          <button onclick="demoClear('group-console')" class="danger">Clear</button>
+        </div>
+        <div class="console-wrapper">
+          <browser-console id="group-console" theme="dark" hook="false"></browser-console>
+        </div>
+      </div>
+
+      <div class="demo-card">
+        <h3>console.trace() / count()</h3>
+        <p class="text-muted">Stack traces and call counters for debugging.</p>
+        <code-block language="javascript">
+function innerFunction() {
+  console.trace('Stack trace')
+}
+innerFunction()
+
+console.count('button-clicks')  // button-clicks: 1
+console.count('button-clicks')  // button-clicks: 2
+        </code-block>
+        <div class="demo-controls">
+          <button onclick="demos.trace('trace-console')">Stack Trace</button>
+          <button onclick="demos.count('trace-console')">Count Calls</button>
+          <button onclick="demoClear('trace-console')" class="danger">Clear</button>
+        </div>
+        <div class="console-wrapper">
+          <browser-console id="trace-console" theme="dark" hook="false"></browser-console>
         </div>
       </div>
     </section>
 
     <section class="demo-section">
       <h2>Data Types</h2>
-      <div class="demo-grid">
-        <div class="demo-item">
-          <h4>Primitive Types</h4>
-          <p class="text-muted">Strings, numbers, booleans, null, undefined, BigInt.</p>
-          <div class="demo-controls">
-            <button onclick="tests.string()">String</button>
-            <button onclick="tests.number()">Number</button>
-            <button onclick="tests.boolean()">Boolean</button>
-            <button onclick="tests.null()">Null/Undefined</button>
-            <button onclick="tests.bigint()">BigInt</button>
-          </div>
+
+      <div class="demo-card">
+        <h3>Primitives</h3>
+        <p class="text-muted">Strings, numbers, booleans, null, undefined, BigInt, and Symbol.</p>
+        <code-block language="javascript">
+console.log('Hello, World!')
+console.log(42, 3.14159, Infinity, NaN)
+console.log(true, false)
+console.log(null, undefined)
+console.log(123n, BigInt(9007199254740991))
+console.log(Symbol('mySymbol'))
+        </code-block>
+        <div class="demo-controls">
+          <button onclick="demos.primitives('primitives-console')">Run Demo</button>
+          <button onclick="demoClear('primitives-console')" class="danger">Clear</button>
         </div>
-        <div class="demo-item">
-          <h4>Objects &amp; Arrays</h4>
-          <p class="text-muted">Expandable objects with nested properties.</p>
-          <div class="demo-controls">
-            <button onclick="tests.object()">Object</button>
-            <button onclick="tests.array()">Array</button>
-            <button onclick="tests.nested()">Nested</button>
-            <button onclick="tests.function()">Function</button>
-          </div>
-        </div>
-        <div class="demo-item">
-          <h4>Collections</h4>
-          <p class="text-muted">Map, Set, and Symbol support.</p>
-          <div class="demo-controls">
-            <button onclick="tests.map()">Map</button>
-            <button onclick="tests.set()">Set</button>
-            <button onclick="tests.symbol()">Symbol</button>
-          </div>
-        </div>
-        <div class="demo-item">
-          <h4>Special Types</h4>
-          <p class="text-muted">Date, RegExp, Error, and DOM elements.</p>
-          <div class="demo-controls">
-            <button onclick="tests.date()">Date</button>
-            <button onclick="tests.regex()">RegExp</button>
-            <button onclick="tests.element()">DOM Element</button>
-            <button onclick="tests.errorObj()">Error</button>
-          </div>
+        <div class="console-wrapper">
+          <browser-console id="primitives-console" theme="dark" hook="false"></browser-console>
         </div>
       </div>
-    </section>
 
-    <section class="demo-section">
-      <h2>Stress Tests</h2>
-      <div class="demo-controls">
-        <button onclick="tests.large()">Large Object</button>
-        <button onclick="tests.multiple()">Multiple Logs</button>
-        <button onclick="tests.mixed()">Mixed Types</button>
-        <button onclick="tests.all()" class="primary">Run All Tests</button>
+      <div class="demo-card">
+        <h3>Objects &amp; Arrays</h3>
+        <p class="text-muted">Expandable objects with nested properties.</p>
+        <code-block language="javascript">
+console.log({ name: 'John', age: 30, active: true })
+console.log([1, 2, 3, 4, 5])
+console.log({
+  user: {
+    profile: { city: 'San Francisco' }
+  },
+  hobbies: ['coding', 'reading']
+})
+        </code-block>
+        <div class="demo-controls">
+          <button onclick="demos.objects('objects-console')">Run Demo</button>
+          <button onclick="demoClear('objects-console')" class="danger">Clear</button>
+        </div>
+        <div class="console-wrapper">
+          <browser-console id="objects-console" theme="dark" hook="false"></browser-console>
+        </div>
+      </div>
+
+      <div class="demo-card">
+        <h3>Collections</h3>
+        <p class="text-muted">Map and Set data structures.</p>
+        <code-block language="javascript">
+const map = new Map([
+  ['name', 'Alice'],
+  ['age', 30],
+  [{ key: 'obj' }, 'object key']
+])
+console.log('Map:', map)
+
+const set = new Set([1, 2, 3, 'hello', { a: 1 }])
+console.log('Set:', set)
+        </code-block>
+        <div class="demo-controls">
+          <button onclick="demos.collections('collections-console')">Run Demo</button>
+          <button onclick="demoClear('collections-console')" class="danger">Clear</button>
+        </div>
+        <div class="console-wrapper">
+          <browser-console id="collections-console" theme="dark" hook="false"></browser-console>
+        </div>
+      </div>
+
+      <div class="demo-card">
+        <h3>Special Types</h3>
+        <p class="text-muted">Date, RegExp, Error, and DOM elements.</p>
+        <code-block language="javascript">
+console.log(new Date())
+console.log(/[a-z]+/gi)
+console.error(new Error('Something went wrong!'))
+console.log(document.body)
+        </code-block>
+        <div class="demo-controls">
+          <button onclick="demos.specialTypes('special-console')">Run Demo</button>
+          <button onclick="demoClear('special-console')" class="danger">Clear</button>
+        </div>
+        <div class="console-wrapper">
+          <browser-console id="special-console" theme="dark" hook="false"></browser-console>
+        </div>
       </div>
     </section>
 
     <section class="demo-section">
       <h2>Theme Comparison</h2>
-      <p class="text-muted">The component supports both dark and light themes.</p>
-      <div class="demo-grid">
+      <p class="text-muted">The component supports dark and light themes via the <code>theme</code> attribute.</p>
+
+      <div class="demo-card">
+        <h3>Setting Theme via HTML Attribute</h3>
+        <code-block language="html">
+&lt;!-- Dark theme (default) --&gt;
+&lt;browser-console theme="dark"&gt;&lt;/browser-console&gt;
+
+&lt;!-- Light theme --&gt;
+&lt;browser-console theme="light"&gt;&lt;/browser-console&gt;
+        </code-block>
+      </div>
+
+      <div class="demo-card">
+        <h3>Programmatic Theme Control</h3>
+        <code-block language="javascript">
+const consoleEl = document.querySelector('browser-console')
+
+// Get current theme
+const theme = consoleEl.getTheme()  // 'dark' or 'light'
+
+// Set theme
+consoleEl.setTheme('light')
+consoleEl.setTheme('dark')
+        </code-block>
+      </div>
+
+      <div class="theme-demo-grid">
         <div class="demo-item">
           <h4>Dark Theme</h4>
           <div class="console-wrapper">
-            <browser-console id="dark-console" theme="dark"></browser-console>
+            <browser-console id="dark-console" theme="dark" hook="false"></browser-console>
           </div>
         </div>
         <div class="demo-item">
           <h4>Light Theme</h4>
           <div class="console-wrapper" style="background: #fff;">
-            <browser-console id="light-console" theme="light"></browser-console>
+            <browser-console id="light-console" theme="light" hook="false"></browser-console>
           </div>
         </div>
       </div>
       <div class="demo-controls mt-2">
-        <button onclick="logToThemeConsoles()">Log to Both</button>
+        <button onclick="demos.logToBoth()">Log to Both</button>
+        <button onclick="demos.clearBoth()" class="danger">Clear Both</button>
+      </div>
+    </section>
+
+    <section class="demo-section">
+      <h2>Stress Tests</h2>
+
+      <div class="demo-card">
+        <h3>Performance Testing</h3>
+        <p class="text-muted">Test with large objects, multiple rapid logs, and mixed types.</p>
+        <code-block language="javascript">
+// Large object with 50 items
+const largeObj = {
+  data: Array.from({ length: 50 }, (_, i) => ({
+    index: i, value: Math.random()
+  }))
+}
+console.log(largeObj)
+
+// Multiple rapid logs
+for (let i = 0; i < 10; i++) {
+  console.log(`Entry #${i}`, { timestamp: Date.now() })
+}
+        </code-block>
+        <div class="demo-controls">
+          <button onclick="demos.largeObject('stress-console')">Large Object</button>
+          <button onclick="demos.multipleLogs('stress-console')">Multiple Logs</button>
+          <button onclick="demos.mixedTypes('stress-console')">Mixed Types</button>
+          <button onclick="demos.runAll('stress-console')" class="primary">Run All</button>
+          <button onclick="demoClear('stress-console')" class="danger">Clear</button>
+        </div>
+        <div class="console-wrapper tall">
+          <browser-console id="stress-console" theme="dark" hook="false"></browser-console>
+        </div>
       </div>
     </section>
   </main>
@@ -247,157 +419,161 @@
       })
     })()
 
-    // Test functions
-    const tests = {
-      log: () => console.log('This is a standard log message'),
-      info: () => console.info('This is an informational message'),
-      warn: () => console.warn('This is a warning message'),
-      error: () => console.error('This is an error message'),
-      debug: () => console.debug('This is a debug message'),
+    // Helper to add log directly to a specific console using addLog API
+    function addLog(consoleId, method, ...data) {
+      const el = document.getElementById(consoleId)
+      if (el) el.addLog({ method, data, timestamp: new Date() })
+    }
 
-      string: () => console.log('Hello, World!', 'Multiple strings', 'Can be logged'),
-      number: () => console.log(42, 3.14159, -100, Infinity, NaN),
-      boolean: () => console.log(true, false),
-      null: () => console.log(null, undefined),
-      bigint: () => {
-        console.log('BigInt values:', 123n, BigInt(9007199254740991), 0n)
-        console.log('Large BigInt:', 9007199254740991n * 1000n)
+    // Helper to clear a specific console
+    function demoClear(consoleId) {
+      const el = document.getElementById(consoleId)
+      if (el) el.clearLogs()
+    }
+
+    // Demo functions using addLog API directly (no hook manipulation)
+    const demos = {
+      logLevels: (consoleId) => {
+        addLog(consoleId, 'log', 'Standard log message')
+        addLog(consoleId, 'info', 'Informational message')
+        addLog(consoleId, 'warn', 'Warning message')
+        addLog(consoleId, 'error', 'Error message')
+        addLog(consoleId, 'debug', 'Debug message')
       },
 
-      object: () => console.log({
-        name: 'John Doe',
-        age: 30,
-        email: 'john@example.com',
-        active: true
-      }),
-      array: () => {
-        console.log([1, 2, 3, 4, 5])
-        console.log(['apple', 'banana', 'cherry', 'date', 'elderberry'])
-      },
-      nested: () => console.log({
-        user: {
-          name: 'Jane Smith',
-          profile: {
-            age: 28,
-            location: { city: 'San Francisco', country: 'USA' }
-          }
-        },
-        hobbies: ['coding', 'reading', 'gaming']
-      }),
-      function: () => {
-        console.log(function myFunction() { return 'hello' })
-        console.log(() => 'arrow function')
+      table: (consoleId) => {
+        const users = [
+          { id: 1, name: 'Alice', role: 'Admin', email: 'alice@example.com' },
+          { id: 2, name: 'Bob', role: 'User', email: 'bob@example.com' },
+          { id: 3, name: 'Charlie', role: 'Moderator', email: 'charlie@example.com' }
+        ]
+        addLog(consoleId, 'table', users)
       },
 
-      map: () => {
+      timer: (consoleId) => {
+        const start = performance.now()
+        let sum = 0
+        for (let i = 0; i < 1000000; i++) { sum += i }
+        const elapsed = (performance.now() - start).toFixed(3)
+        addLog(consoleId, 'log', `performance-test: ${elapsed}ms`)
+      },
+
+      timeLog: (consoleId) => {
+        const start = performance.now()
+        addLog(consoleId, 'log', 'Starting operation...')
+        setTimeout(() => {
+          addLog(consoleId, 'log', `long-operation: ${(performance.now() - start).toFixed(1)}ms Still running...`)
+          setTimeout(() => {
+            addLog(consoleId, 'log', `long-operation: ${(performance.now() - start).toFixed(1)}ms Almost done...`)
+            setTimeout(() => {
+              addLog(consoleId, 'log', `long-operation: ${(performance.now() - start).toFixed(1)}ms`)
+            }, 200)
+          }, 200)
+        }, 200)
+      },
+
+      group: (consoleId) => {
+        addLog(consoleId, 'group', 'User Details')
+        addLog(consoleId, 'log', 'Name: John Doe')
+        addLog(consoleId, 'log', 'Email: john@example.com')
+        addLog(consoleId, 'group', 'Nested Group')
+        addLog(consoleId, 'log', 'This is nested inside')
+        addLog(consoleId, 'warn', 'Nested warning')
+        addLog(consoleId, 'groupEnd')
+        addLog(consoleId, 'log', 'Back to parent group')
+        addLog(consoleId, 'groupEnd')
+        addLog(consoleId, 'log', 'Outside all groups')
+      },
+
+      groupCollapsed: (consoleId) => {
+        addLog(consoleId, 'groupCollapsed', 'Collapsed Group (click to expand)')
+        addLog(consoleId, 'log', 'Hidden content 1')
+        addLog(consoleId, 'log', 'Hidden content 2')
+        addLog(consoleId, 'log', 'Hidden content 3')
+        addLog(consoleId, 'groupEnd')
+      },
+
+      trace: (consoleId) => {
+        addLog(consoleId, 'trace', 'Stack trace from innerFunction')
+      },
+
+      count: (consoleId) => {
+        addLog(consoleId, 'count', 'button-clicks')
+        addLog(consoleId, 'count', 'button-clicks')
+        addLog(consoleId, 'count', 'button-clicks')
+        addLog(consoleId, 'count', 'other-counter')
+        addLog(consoleId, 'log', 'Click this button multiple times to see count increase')
+      },
+
+      primitives: (consoleId) => {
+        addLog(consoleId, 'log', 'Hello, World!', 'Multiple strings')
+        addLog(consoleId, 'log', 42, 3.14159, -100, Infinity, NaN)
+        addLog(consoleId, 'log', true, false)
+        addLog(consoleId, 'log', null, undefined)
+        addLog(consoleId, 'log', 'BigInt:', 123n, BigInt(9007199254740991))
+        addLog(consoleId, 'log', 'Symbol:', Symbol('mySymbol'))
+      },
+
+      objects: (consoleId) => {
+        addLog(consoleId, 'log', { name: 'John Doe', age: 30, email: 'john@example.com', active: true })
+        addLog(consoleId, 'log', [1, 2, 3, 4, 5])
+        addLog(consoleId, 'log', ['apple', 'banana', 'cherry'])
+        addLog(consoleId, 'log', {
+          user: {
+            name: 'Jane Smith',
+            profile: {
+              age: 28,
+              location: { city: 'San Francisco', country: 'USA' }
+            }
+          },
+          hobbies: ['coding', 'reading', 'gaming']
+        })
+      },
+
+      collections: (consoleId) => {
         const map = new Map([
           ['name', 'Alice'],
           ['age', 30],
           ['active', true],
           [{ key: 'obj' }, 'object key']
         ])
-        console.log('Map:', map)
-      },
-      set: () => {
+        addLog(consoleId, 'log', 'Map:', map)
+
         const set = new Set([1, 2, 3, 'hello', true, { a: 1 }])
-        console.log('Set:', set)
+        addLog(consoleId, 'log', 'Set:', set)
       },
-      symbol: () => {
-        const sym = Symbol('mySymbol')
-        console.log('Symbol:', sym)
-        console.log('Object with Symbol key:', {
-          name: 'Test',
-          [Symbol('secret')]: 'hidden value',
-          [Symbol.for('shared')]: 'shared value'
+
+      specialTypes: (consoleId) => {
+        addLog(consoleId, 'log', new Date())
+        addLog(consoleId, 'log', new Date('2024-01-01'))
+        addLog(consoleId, 'log', /[a-z]+/gi)
+        addLog(consoleId, 'log', new RegExp('\\d+', 'g'))
+        addLog(consoleId, 'error', new Error('Something went wrong!'))
+        addLog(consoleId, 'error', new TypeError('Type error occurred'))
+        addLog(consoleId, 'log', document.body)
+        addLog(consoleId, 'log', document.querySelector('h1'))
+      },
+
+      logToBoth: () => {
+        const logs = [
+          ['log', 'Hello from both consoles!'],
+          ['info', 'Info message'],
+          ['warn', 'Warning message'],
+          ['error', 'Error message'],
+          ['log', { theme: 'comparison', values: [1, 2, 3] }]
+        ]
+        logs.forEach(([method, ...data]) => {
+          addLog('dark-console', method, ...data)
+          addLog('light-console', method, ...data)
         })
       },
 
-      date: () => {
-        console.log(new Date())
-        console.log(new Date('2024-01-01'))
-      },
-      regex: () => {
-        console.log(/[a-z]+/gi)
-        console.log(new RegExp('\\d+', 'g'))
-      },
-      element: () => {
-        console.log(document.body)
-        console.log(document.querySelector('h1'))
-      },
-      errorObj: () => {
-        console.error(new Error('Something went wrong!'))
-        console.error(new TypeError('Type error occurred'))
+      clearBoth: () => {
+        demoClear('dark-console')
+        demoClear('light-console')
       },
 
-      table: () => {
-        const users = [
-          { id: 1, name: 'Alice', role: 'Admin', email: 'alice@example.com' },
-          { id: 2, name: 'Bob', role: 'User', email: 'bob@example.com' },
-          { id: 3, name: 'Charlie', role: 'Moderator', email: 'charlie@example.com' }
-        ]
-        console.table(users)
-      },
-      timer: () => {
-        console.time('performance-test')
-        let sum = 0
-        for (let i = 0; i < 1000000; i++) { sum += i }
-        console.timeEnd('performance-test')
-      },
-      timelog: () => {
-        console.time('long-operation')
-        console.log('Starting operation...')
-        setTimeout(() => {
-          console.timeLog('long-operation', 'Still running...')
-          setTimeout(() => {
-            console.timeLog('long-operation', 'Almost done...')
-            setTimeout(() => console.timeEnd('long-operation'), 200)
-          }, 200)
-        }, 200)
-      },
-      group: () => {
-        console.group('User Details')
-        console.log('Name: John Doe')
-        console.log('Email: john@example.com')
-        console.group('Nested Group')
-        console.log('This is nested inside')
-        console.warn('Nested warning')
-        console.groupEnd()
-        console.log('Back to parent group')
-        console.groupEnd()
-        console.log('Outside all groups')
-      },
-      groupCollapsed: () => {
-        console.groupCollapsed('Collapsed Group (click to expand)')
-        console.log('Hidden content 1')
-        console.log('Hidden content 2')
-        console.log('Hidden content 3')
-        console.groupEnd()
-      },
-      trace: () => {
-        function innerFunction() {
-          console.trace('Stack trace from innerFunction')
-        }
-        function outerFunction() { innerFunction() }
-        outerFunction()
-      },
-      count: () => {
-        console.count('button-clicks')
-        console.count('button-clicks')
-        console.count('button-clicks')
-        console.count('other-counter')
-        console.log('Click this button multiple times to see count increase')
-      },
-      dir: () => {
-        const obj = {
-          name: 'Directory View',
-          nested: { level1: { level2: { deep: 'value' } } },
-          array: [1, 2, 3]
-        }
-        console.dir(obj)
-      },
-
-      mixed: () => console.log('Mixed:', 123, true, { key: 'value' }, [1, 2, 3], null, undefined),
-      large: () => {
+      largeObject: (consoleId) => {
         const largeObj = {
           id: 12345,
           timestamp: new Date(),
@@ -408,53 +584,26 @@
           })),
           metadata: { version: '1.0.0', author: 'System', tags: ['test', 'demo', 'example'] }
         }
-        console.log(largeObj)
+        addLog(consoleId, 'log', largeObj)
       },
-      multiple: () => {
-        for (let i = 0; i < 5; i++) {
-          console.log(`Log entry #${i + 1}`, { iteration: i, timestamp: Date.now() })
+
+      multipleLogs: (consoleId) => {
+        for (let i = 0; i < 10; i++) {
+          addLog(consoleId, 'log', `Log entry #${i + 1}`, { iteration: i, timestamp: Date.now() })
         }
       },
 
-      clear: () => console.clear(),
-      all: () => {
-        console.clear()
-        setTimeout(() => tests.log(), 100)
-        setTimeout(() => tests.info(), 200)
-        setTimeout(() => tests.warn(), 300)
-        setTimeout(() => tests.error(), 400)
-        setTimeout(() => tests.bigint(), 500)
-        setTimeout(() => tests.map(), 600)
-        setTimeout(() => tests.set(), 700)
-        setTimeout(() => tests.object(), 800)
-        setTimeout(() => tests.group(), 900)
-        setTimeout(() => tests.trace(), 1100)
+      mixedTypes: (consoleId) => {
+        addLog(consoleId, 'log', 'Mixed:', 123, true, { key: 'value' }, [1, 2, 3], null, undefined)
+      },
+
+      runAll: (consoleId) => {
+        demoClear(consoleId)
+        setTimeout(() => demos.largeObject(consoleId), 100)
+        setTimeout(() => demos.multipleLogs(consoleId), 300)
+        setTimeout(() => demos.mixedTypes(consoleId), 500)
       }
     }
-
-    // Log to theme comparison consoles
-    function logToThemeConsoles() {
-      const darkConsole = document.getElementById('dark-console')
-      const lightConsole = document.getElementById('light-console')
-
-      // Temporarily unhook main console to avoid duplicates
-      const mainConsole = document.getElementById('main-console')
-      mainConsole.unhookConsole()
-
-      console.log('Hello from both consoles!')
-      console.info('Info message')
-      console.warn('Warning message')
-      console.error('Error message')
-      console.log({ theme: 'comparison', values: [1, 2, 3] })
-
-      // Re-hook main console
-      mainConsole.hookConsole()
-    }
-
-    // Welcome message
-    console.log('%cbrowser-console Demo', 'font-size: 16px; font-weight: bold; color: #0066cc;')
-    console.log('Click the buttons above to test different console methods and data types.')
-    console.log('Try the search box to filter logs, or the copy button to export.')
   </script>
 </body>
 </html>
