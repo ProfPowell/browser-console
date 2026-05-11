@@ -1,6 +1,6 @@
 var x = Object.defineProperty;
-var $ = (b, e, t) => e in b ? x(b, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : b[e] = t;
-var g = (b, e, t) => $(b, typeof e != "symbol" ? e + "" : e, t);
+var _ = (f, e, t) => e in f ? x(f, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : f[e] = t;
+var g = (f, e, t) => _(f, typeof e != "symbol" ? e + "" : e, t);
 const l = class l extends HTMLElement {
   /**
    * Creates a new BrowserConsole instance
@@ -62,12 +62,12 @@ const l = class l extends HTMLElement {
       "dir"
     ].forEach((t) => {
       this.originalConsole[t] = console[t], console[t] = (...a) => {
-        var o;
-        if ((o = this.originalConsole[t]) == null || o.apply(console, a), t === "group" || t === "groupCollapsed") {
-          const r = a[0] || "console.group", s = `group_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-          this.groupStack.push({ label: r, collapsed: t === "groupCollapsed", id: s }), this.groupDepth++, this.addLog({
+        var r;
+        if ((r = this.originalConsole[t]) == null || r.apply(console, a), t === "group" || t === "groupCollapsed") {
+          const o = a[0] || "console.group", s = `group_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+          this.groupStack.push({ label: o, collapsed: t === "groupCollapsed", id: s }), this.groupDepth++, this.addLog({
             method: "group",
-            data: [r],
+            data: [o],
             timestamp: /* @__PURE__ */ new Date(),
             groupDepth: this.groupDepth,
             collapsed: t === "groupCollapsed",
@@ -80,14 +80,14 @@ const l = class l extends HTMLElement {
           return;
         }
         if (t === "trace") {
-          const r = new Error().stack.split(`
+          const o = new Error().stack.split(`
 `).slice(2).join(`
 `);
           this.addLog({
             method: "trace",
             data: a.length ? a : ["console.trace"],
             timestamp: /* @__PURE__ */ new Date(),
-            stack: r,
+            stack: o,
             groupDepth: this.groupDepth
           });
           return;
@@ -102,17 +102,17 @@ const l = class l extends HTMLElement {
           return;
         }
         if (t === "time") {
-          const r = a[0] || "default";
-          this.timers[r] = performance.now();
+          const o = a[0] || "default";
+          this.timers[o] = performance.now();
           return;
         }
         if (t === "timeEnd") {
-          const r = a[0] || "default";
-          if (this.timers[r] !== void 0) {
-            const s = performance.now() - this.timers[r];
-            delete this.timers[r], this.addLog({
+          const o = a[0] || "default";
+          if (this.timers[o] !== void 0) {
+            const s = performance.now() - this.timers[o];
+            delete this.timers[o], this.addLog({
               method: "time",
-              data: [r, s],
+              data: [o, s],
               timestamp: /* @__PURE__ */ new Date(),
               groupDepth: this.groupDepth
             });
@@ -120,12 +120,12 @@ const l = class l extends HTMLElement {
           return;
         }
         if (t === "timeLog") {
-          const r = a[0] || "default";
-          if (this.timers[r] !== void 0) {
-            const s = performance.now() - this.timers[r], n = a.slice(1);
+          const o = a[0] || "default";
+          if (this.timers[o] !== void 0) {
+            const s = performance.now() - this.timers[o], n = a.slice(1);
             this.addLog({
               method: "time",
-              data: [r, s, ...n],
+              data: [o, s, ...n],
               timestamp: /* @__PURE__ */ new Date(),
               groupDepth: this.groupDepth
             });
@@ -133,18 +133,18 @@ const l = class l extends HTMLElement {
           return;
         }
         if (t === "count") {
-          const r = a[0] || "default";
-          this.counters[r] = (this.counters[r] || 0) + 1, this.addLog({
+          const o = a[0] || "default";
+          this.counters[o] = (this.counters[o] || 0) + 1, this.addLog({
             method: "count",
-            data: [r, this.counters[r]],
+            data: [o, this.counters[o]],
             timestamp: /* @__PURE__ */ new Date(),
             groupDepth: this.groupDepth
           });
           return;
         }
         if (t === "countReset") {
-          const r = a[0] || "default";
-          delete this.counters[r];
+          const o = a[0] || "default";
+          delete this.counters[o];
           return;
         }
         this.addLog({
@@ -196,7 +196,7 @@ const l = class l extends HTMLElement {
    * @returns {string} Plain text representation
    */
   formatValuePlainText(e, t = 0) {
-    return e === null ? "null" : e === void 0 ? "undefined" : typeof e == "string" ? `"${e}"` : typeof e == "number" || typeof e == "boolean" ? String(e) : typeof e == "bigint" ? `${e}n` : typeof e == "symbol" ? e.toString() : typeof e == "function" ? e.toString().slice(0, 50) + (e.toString().length > 50 ? "..." : "") : Array.isArray(e) ? t > 2 ? `Array(${e.length})` : `[${e.map((a) => this.formatValuePlainText(a, t + 1)).join(", ")}]` : e instanceof Date ? e.toISOString() : e instanceof Error ? e.toString() : e instanceof Map ? `Map(${e.size})` : e instanceof Set ? `Set(${e.size})` : typeof e == "object" ? t > 2 ? "{...}" : `{${Object.entries(e).map(([o, r]) => `${o}: ${this.formatValuePlainText(r, t + 1)}`).join(", ")}}` : String(e);
+    return e === null ? "null" : e === void 0 ? "undefined" : typeof e == "string" ? `"${e}"` : typeof e == "number" || typeof e == "boolean" ? String(e) : typeof e == "bigint" ? `${e}n` : typeof e == "symbol" ? e.toString() : typeof e == "function" ? e.toString().slice(0, 50) + (e.toString().length > 50 ? "..." : "") : Array.isArray(e) ? t > 2 ? `Array(${e.length})` : `[${e.map((a) => this.formatValuePlainText(a, t + 1)).join(", ")}]` : e instanceof Date ? e.toISOString() : e instanceof Error ? e.toString() : e instanceof Map ? `Map(${e.size})` : e instanceof Set ? `Set(${e.size})` : typeof e == "object" ? t > 2 ? "{...}" : `{${Object.entries(e).map(([r, o]) => `${r}: ${this.formatValuePlainText(o, t + 1)}`).join(", ")}}` : String(e);
   }
   /**
    * Format logs for clipboard as plain text
@@ -204,8 +204,8 @@ const l = class l extends HTMLElement {
    */
   formatLogsForClipboard() {
     return this.logs.filter((t) => this.matchesFilters(t)).map((t) => {
-      const a = this.formatTimestamp(t.timestamp), o = t.method.toUpperCase(), r = t.data.map((s) => this.formatValuePlainText(s)).join(" ");
-      return `[${a}] [${o}] ${r}`;
+      const a = this.formatTimestamp(t.timestamp), r = t.method.toUpperCase(), o = t.data.map((s) => this.formatValuePlainText(s)).join(" ");
+      return `[${a}] [${r}] ${o}`;
     }).join(`
 `);
   }
@@ -213,14 +213,14 @@ const l = class l extends HTMLElement {
    * Copy visible logs to clipboard
    */
   async copyLogs() {
-    const e = this.formatLogsForClipboard(), a = this.shadowRoot.querySelector(".copy-btn").querySelector(".copy-icon"), o = a.textContent;
+    const e = this.formatLogsForClipboard(), a = this.shadowRoot.querySelector(".copy-btn").querySelector(".copy-icon"), r = a.textContent;
     try {
       await navigator.clipboard.writeText(e), a.textContent = "✓", setTimeout(() => {
-        a.textContent = o;
+        a.textContent = r;
       }, 1500);
-    } catch (r) {
-      console.error("Failed to copy logs:", r), a.textContent = "✗", setTimeout(() => {
-        a.textContent = o;
+    } catch (o) {
+      console.error("Failed to copy logs:", o), a.textContent = "✗", setTimeout(() => {
+        a.textContent = r;
       }, 1500);
     }
   }
@@ -288,12 +288,12 @@ const l = class l extends HTMLElement {
     `, this.shadowRoot.querySelector(".clear-btn").addEventListener("click", () => this.clearLogs()), this.shadowRoot.querySelector(".copy-btn").addEventListener("click", () => this.copyLogs()), this.shadowRoot.querySelector(".theme-btn").addEventListener("click", () => {
       this.setTheme(this.theme === "dark" ? "light" : "dark");
     }), this.shadowRoot.querySelectorAll(".filter-btn").forEach((a) => {
-      a.addEventListener("click", (o) => {
+      a.addEventListener("click", (r) => {
         this.shadowRoot.querySelectorAll(".filter-btn").forEach((s) => {
           s.classList.remove("active"), s.setAttribute("aria-pressed", "false");
-        }), o.target.classList.add("active"), o.target.setAttribute("aria-pressed", "true");
-        const r = o.target.dataset.filter;
-        this.setFilter(r === "all" ? null : r);
+        }), r.target.classList.add("active"), r.target.setAttribute("aria-pressed", "true");
+        const o = r.target.dataset.filter;
+        this.setFilter(o === "all" ? null : o);
       });
     });
     let e;
@@ -312,8 +312,8 @@ const l = class l extends HTMLElement {
   getExpansionStates() {
     const e = /* @__PURE__ */ new Map();
     return this.shadowRoot.querySelectorAll(".expandable-header").forEach((a) => {
-      const o = a.dataset.target, r = a.getAttribute("aria-expanded") === "true";
-      o && e.set(o, r);
+      const r = a.dataset.target, o = a.getAttribute("aria-expanded") === "true";
+      r && e.set(r, o);
     }), e;
   }
   /**
@@ -323,10 +323,10 @@ const l = class l extends HTMLElement {
   restoreExpansionStates(e) {
     e.forEach((t, a) => {
       if (t) {
-        const o = this.shadowRoot.getElementById(a), r = this.shadowRoot.querySelector(`[data-target="${a}"]`);
-        if (o && r) {
-          o.style.display = "block", r.setAttribute("aria-expanded", "true");
-          const s = r.querySelector(".expand-icon");
+        const r = this.shadowRoot.getElementById(a), o = this.shadowRoot.querySelector(`[data-target="${a}"]`);
+        if (r && o) {
+          r.style.display = "block", o.setAttribute("aria-expanded", "true");
+          const s = o.querySelector(".expand-icon");
           s && (s.textContent = "▼");
         }
       }
@@ -336,18 +336,18 @@ const l = class l extends HTMLElement {
    * Render all logs with expansion state preservation
    */
   renderLogs() {
-    const e = this.shadowRoot.querySelector(".console-logs"), t = this.getExpansionStates(), a = this.logs.filter((o) => this.matchesFilters(o));
-    e.innerHTML = a.map((o, r) => this.renderLog(o, r)).join(""), this.restoreExpansionStates(t);
+    const e = this.shadowRoot.querySelector(".console-logs"), t = this.getExpansionStates(), a = this.logs.filter((r) => this.matchesFilters(r));
+    e.innerHTML = a.map((r, o) => this.renderLog(r, o)).join(""), this.restoreExpansionStates(t);
   }
   /**
    * Render a single log entry
    */
   renderLog(e, t) {
-    const a = this.formatTimestamp(e.timestamp), o = `log-${e.method}`, r = e.groupDepth ? `padding-left: ${e.groupDepth * 20}px;` : "";
+    const a = this.formatTimestamp(e.timestamp), r = `log-${e.method}`, o = e.groupDepth ? `padding-left: ${e.groupDepth * 20}px;` : "";
     if (e.method === "group") {
       const s = e.groupId || `group_${t}`, n = e.collapsed;
       return `
-        <div class="log-entry log-group" data-index="${t}" style="${r}">
+        <div class="log-entry log-group" data-index="${t}" style="${o}">
           <span class="log-timestamp">${a}</span>
           <span class="log-method">[GROUP]</span>
           <span class="log-content">
@@ -362,7 +362,7 @@ const l = class l extends HTMLElement {
     if (e.method === "trace") {
       const s = e.stack ? `<pre class="stack-trace">${this.escapeHtml(e.stack)}</pre>` : "";
       return `
-        <div class="log-entry log-trace" data-index="${t}" style="${r}">
+        <div class="log-entry log-trace" data-index="${t}" style="${o}">
           <span class="log-timestamp">${a}</span>
           <span class="log-method">[TRACE]</span>
           <div class="log-content">
@@ -375,7 +375,7 @@ const l = class l extends HTMLElement {
     if (e.method === "count") {
       const [s, n] = e.data;
       return `
-        <div class="log-entry log-count" data-index="${t}" style="${r}">
+        <div class="log-entry log-count" data-index="${t}" style="${o}">
           <span class="log-timestamp">${a}</span>
           <span class="log-method">[COUNT]</span>
           <span class="log-content">
@@ -386,9 +386,9 @@ const l = class l extends HTMLElement {
       `;
     }
     if (e.method === "dir") {
-      const s = /* @__PURE__ */ new WeakSet(), n = e.data.map((i, u) => this.formatValue(i, 0, !0, s, `${t}_${u}`)).join(" ");
+      const s = /* @__PURE__ */ new WeakSet(), n = e.data.map((c, p) => this.formatValue(c, 0, !0, s, `${t}_${p}`)).join(" ");
       return `
-        <div class="log-entry log-dir" data-index="${t}" style="${r}">
+        <div class="log-entry log-dir" data-index="${t}" style="${o}">
           <span class="log-timestamp">${a}</span>
           <span class="log-method">[DIR]</span>
           <span class="log-content">${n}</span>
@@ -398,7 +398,7 @@ const l = class l extends HTMLElement {
     if (e.method === "table") {
       const s = this.formatTable(e.data[0]);
       return `
-        <div class="log-entry ${o}" data-index="${t}" style="${r}">
+        <div class="log-entry ${r}" data-index="${t}" style="${o}">
           <span class="log-timestamp">${a}</span>
           <span class="log-method">[TABLE]</span>
           <div class="log-content">${s}</div>
@@ -406,20 +406,20 @@ const l = class l extends HTMLElement {
       `;
     }
     if (e.method === "time" && e.data.length >= 2) {
-      const [s, n, ...i] = e.data, u = i.length ? ` ${this.formatLogData(i, "log", t)}` : "";
+      const [s, n, ...c] = e.data, p = c.length ? ` ${this.formatLogData(c, "log", t)}` : "";
       return `
-        <div class="log-entry ${o}" data-index="${t}" style="${r}">
+        <div class="log-entry ${r}" data-index="${t}" style="${o}">
           <span class="log-timestamp">${a}</span>
           <span class="log-method">[TIMER]</span>
           <span class="log-content">
             <span class="value-string">${this.escapeHtml(s)}</span>:
-            <span class="value-number">${n.toFixed(2)}ms</span>${u}
+            <span class="value-number">${n.toFixed(2)}ms</span>${p}
           </span>
         </div>
       `;
     }
     return `
-      <div class="log-entry ${o}" data-index="${t}" style="${r}">
+      <div class="log-entry ${r}" data-index="${t}" style="${o}">
         <span class="log-timestamp">${a}</span>
         <span class="log-method">[${e.method.toUpperCase()}]</span>
         <span class="log-content">${this.formatLogData(e.data, e.method, t)}</span>
@@ -446,8 +446,8 @@ const l = class l extends HTMLElement {
    * @returns {string} Formatted HTML string
    */
   formatLogData(e, t, a) {
-    const o = /* @__PURE__ */ new WeakSet();
-    return e.map((r, s) => this.formatValue(r, 0, !1, o, `${a}_${s}`)).join(" ");
+    const r = /* @__PURE__ */ new WeakSet();
+    return e.map((o, s) => this.formatValue(o, 0, !1, r, `${a}_${s}`)).join(" ");
   }
   /**
    * Format table data
@@ -457,22 +457,22 @@ const l = class l extends HTMLElement {
       return '<span class="value-undefined">undefined</span>';
     if (Array.isArray(e) && e.length > 0) {
       if (e.every((a) => typeof a == "object" && a !== null)) {
-        const a = [...new Set(e.flatMap((o) => Object.keys(o)))];
+        const a = [...new Set(e.flatMap((r) => Object.keys(r)))];
         return `
           <div class="table-wrapper">
             <table class="console-table">
               <thead>
                 <tr>
                   <th>(index)</th>
-                  ${a.map((o) => `<th>${this.escapeHtml(o)}</th>`).join("")}
+                  ${a.map((r) => `<th>${this.escapeHtml(r)}</th>`).join("")}
                 </tr>
               </thead>
               <tbody>
                 ${e.map(
-          (o, r) => `
+          (r, o) => `
                   <tr>
-                    <td class="table-index">${r}</td>
-                    ${a.map((s) => `<td>${this.formatValue(o[s], 0, !1)}</td>`).join("")}
+                    <td class="table-index">${o}</td>
+                    ${a.map((s) => `<td>${this.formatValue(r[s], 0, !1)}</td>`).join("")}
                   </tr>
                 `
         ).join("")}
@@ -492,9 +492,9 @@ const l = class l extends HTMLElement {
             </thead>
             <tbody>
               ${e.map(
-        (a, o) => `
+        (a, r) => `
                 <tr>
-                  <td class="table-index">${o}</td>
+                  <td class="table-index">${r}</td>
                   <td>${this.formatValue(a, 0, !1)}</td>
                 </tr>
               `
@@ -535,7 +535,7 @@ const l = class l extends HTMLElement {
    * @param {WeakSet} visited - Set of visited objects for circular detection
    * @param {string} path - Stable path for generating element IDs
    */
-  formatValue(e, t = 0, a = !1, o = /* @__PURE__ */ new WeakSet(), r = "0") {
+  formatValue(e, t = 0, a = !1, r = /* @__PURE__ */ new WeakSet(), o = "0") {
     switch (this.getType(e)) {
       case "string":
         return `<span class="value-string">"${this.escapeHtml(e)}"</span>`;
@@ -552,35 +552,35 @@ const l = class l extends HTMLElement {
       case "symbol":
         return `<span class="value-symbol">${this.escapeHtml(e.toString())}</span>`;
       case "function": {
-        const n = e.toString(), i = n.length > l.FUNCTION_PREVIEW_LENGTH ? n.substring(0, l.FUNCTION_PREVIEW_LENGTH) + "..." : n;
-        return `<span class="value-function">${this.escapeHtml(i)}</span>`;
+        const n = e.toString(), c = n.length > l.FUNCTION_PREVIEW_LENGTH ? n.substring(0, l.FUNCTION_PREVIEW_LENGTH) + "..." : n;
+        return `<span class="value-function">${this.escapeHtml(c)}</span>`;
       }
       case "map": {
-        if (o.has(e))
+        if (r.has(e))
           return '<span class="value-object">[Circular]</span>';
         if (t > l.MAX_DEPTH)
           return `<span class="value-object">Map(${e.size})</span>`;
-        o.add(e);
-        const n = this.formatMap(e, t, o, r);
-        return o.delete(e), n;
+        r.add(e);
+        const n = this.formatMap(e, t, r, o);
+        return r.delete(e), n;
       }
       case "set": {
-        if (o.has(e))
+        if (r.has(e))
           return '<span class="value-array">[Circular]</span>';
         if (t > l.MAX_DEPTH)
           return `<span class="value-array">Set(${e.size})</span>`;
-        o.add(e);
-        const n = this.formatSet(e, t, o, r);
-        return o.delete(e), n;
+        r.add(e);
+        const n = this.formatSet(e, t, r, o);
+        return r.delete(e), n;
       }
       case "array": {
-        if (o.has(e))
+        if (r.has(e))
           return '<span class="value-array">[Circular]</span>';
         if (t > l.MAX_DEPTH)
           return `<span class="value-array">[Array(${e.length})]</span>`;
-        o.add(e);
-        const n = this.formatArray(e, t, a, o, r);
-        return o.delete(e), n;
+        r.add(e);
+        const n = this.formatArray(e, t, a, r, o);
+        return r.delete(e), n;
       }
       case "object": {
         if (e instanceof Error)
@@ -589,13 +589,13 @@ const l = class l extends HTMLElement {
           return `<span class="value-date">${e.toISOString()}</span>`;
         if (e instanceof RegExp)
           return `<span class="value-regexp">${this.escapeHtml(e.toString())}</span>`;
-        if (o.has(e))
+        if (r.has(e))
           return '<span class="value-object">[Circular]</span>';
         if (t > l.MAX_DEPTH)
           return '<span class="value-object">{Object}</span>';
-        o.add(e);
-        const n = this.formatObject(e, t, a, o, r);
-        return o.delete(e), n;
+        r.add(e);
+        const n = this.formatObject(e, t, a, r, o);
+        return r.delete(e), n;
       }
       case "element":
         return this.formatElement(e);
@@ -611,24 +611,24 @@ const l = class l extends HTMLElement {
    * @param {WeakSet} visited - Set of visited objects for circular detection
    * @param {string} path - Stable path for generating element IDs
    */
-  formatArray(e, t, a, o, r) {
+  formatArray(e, t, a, r, o) {
     if (e.length === 0)
       return '<span class="value-array">[]</span>';
-    const s = `arr_${r}`, n = e.slice(0, l.PREVIEW_ITEMS).map((p, c) => this.formatValue(p, t + 1, !1, o, `${r}_${c}`)).join(", "), i = e.length > l.PREVIEW_ITEMS ? `, ... ${e.length - l.PREVIEW_ITEMS} more` : "", u = e.map((p, c) => {
-      const h = this.formatValue(p, t + 1, !1, o, `${r}_${c}`);
+    const s = `arr_${o}`, n = e.slice(0, l.PREVIEW_ITEMS).map((b, i) => this.formatValue(b, t + 1, !1, r, `${o}_${i}`)).join(", "), c = e.length > l.PREVIEW_ITEMS ? `, ... ${e.length - l.PREVIEW_ITEMS} more` : "", p = e.map((b, i) => {
+      const u = this.formatValue(b, t + 1, !1, r, `${o}_${i}`);
       return `<div class="object-property">
-        <span class="property-key">${c}:</span>
-        <span class="property-value">${h}</span>
+        <span class="property-key">${i}:</span>
+        <span class="property-value">${u}</span>
       </div>`;
     }).join("");
     return `
       <div class="expandable-container">
         <span class="expandable-header" data-target="${s}" role="button" tabindex="0" aria-expanded="false" aria-controls="${s}">
           <span class="expand-icon" aria-hidden="true">▶</span>
-          <span class="value-array"><span class="type-label">Array(${e.length})</span> [${n}${i}]</span>
+          <span class="value-array"><span class="type-label">Array(${e.length})</span> [${n}${c}]</span>
         </span>
         <div class="expandable-content" id="${s}" style="display: none;" role="region">
-          ${u}
+          ${p}
         </div>
       </div>`;
   }
@@ -640,29 +640,29 @@ const l = class l extends HTMLElement {
    * @param {WeakSet} visited - Set of visited objects for circular detection
    * @param {string} path - Stable path for generating element IDs
    */
-  formatObject(e, t, a, o, r) {
-    var f;
+  formatObject(e, t, a, r, o) {
+    var h;
     const s = Reflect.ownKeys(e);
     if (s.length === 0)
       return '<span class="value-object">{}</span>';
-    const n = `obj_${r}`, i = (d) => typeof d == "symbol" ? `<span class="value-symbol">${this.escapeHtml(d.toString())}</span>` : this.escapeHtml(String(d)), u = s.slice(0, l.PREVIEW_ITEMS).map((d, m) => {
-      const y = this.formatValue(e[d], t + 1, !1, o, `${r}_p${m}`);
-      return `${i(d)}: ${y}`;
-    }).join(", "), p = s.length > l.PREVIEW_ITEMS ? `, ... ${s.length - l.PREVIEW_ITEMS} more` : "", c = s.map((d, m) => {
-      const y = this.formatValue(e[d], t + 1, !1, o, `${r}_p${m}`);
+    const n = `obj_${o}`, c = (d) => typeof d == "symbol" ? `<span class="value-symbol">${this.escapeHtml(d.toString())}</span>` : this.escapeHtml(String(d)), p = s.slice(0, l.PREVIEW_ITEMS).map((d, m) => {
+      const v = this.formatValue(e[d], t + 1, !1, r, `${o}_p${m}`);
+      return `${c(d)}: ${v}`;
+    }).join(", "), b = s.length > l.PREVIEW_ITEMS ? `, ... ${s.length - l.PREVIEW_ITEMS} more` : "", i = s.map((d, m) => {
+      const v = this.formatValue(e[d], t + 1, !1, r, `${o}_p${m}`);
       return `<div class="object-property">
-        <span class="property-key">${i(d)}:</span>
-        <span class="property-value">${y}</span>
+        <span class="property-key">${c(d)}:</span>
+        <span class="property-value">${v}</span>
       </div>`;
-    }).join(""), h = ((f = e.constructor) == null ? void 0 : f.name) || "Object";
+    }).join(""), u = ((h = e.constructor) == null ? void 0 : h.name) || "Object";
     return `
       <div class="expandable-container">
         <span class="expandable-header" data-target="${n}" role="button" tabindex="0" aria-expanded="false" aria-controls="${n}">
           <span class="expand-icon" aria-hidden="true">▶</span>
-          <span class="value-object"><span class="type-label">${h}</span> {${u}${p}}</span>
+          <span class="value-object"><span class="type-label">${u}</span> {${p}${b}}</span>
         </span>
         <div class="expandable-content" id="${n}" style="display: none;" role="region">
-          ${c}
+          ${i}
         </div>
       </div>`;
   }
@@ -670,8 +670,8 @@ const l = class l extends HTMLElement {
    * Format a DOM element
    */
   formatElement(e) {
-    const t = e.tagName.toLowerCase(), a = e.id ? `#${e.id}` : "", o = e.className ? `.${e.className.split(" ").join(".")}` : "";
-    return `<span class="value-element">&lt;${t}${a}${o}&gt;</span>`;
+    const t = e.tagName.toLowerCase(), a = e.id ? `#${e.id}` : "", r = e.className ? `.${e.className.split(" ").join(".")}` : "";
+    return `<span class="value-element">&lt;${t}${a}${r}&gt;</span>`;
   }
   /**
    * Format a Map
@@ -680,27 +680,27 @@ const l = class l extends HTMLElement {
    * @param {WeakSet} visited - Set of visited objects for circular detection
    * @param {string} path - Stable path for generating element IDs
    */
-  formatMap(e, t, a, o) {
+  formatMap(e, t, a, r) {
     if (e.size === 0)
       return '<span class="value-object">Map(0) {}</span>';
-    const r = `map_${o}`, s = [...e.entries()], n = s.slice(0, l.PREVIEW_ITEMS).map(([p, c], h) => {
-      const f = this.formatValue(p, t + 1, !1, a, `${o}_k${h}`), d = this.formatValue(c, t + 1, !1, a, `${o}_v${h}`);
-      return `${f} => ${d}`;
-    }).join(", "), i = e.size > l.PREVIEW_ITEMS ? `, ... ${e.size - l.PREVIEW_ITEMS} more` : "", u = s.map(([p, c], h) => {
-      const f = this.formatValue(p, t + 1, !1, a, `${o}_k${h}`), d = this.formatValue(c, t + 1, !1, a, `${o}_v${h}`);
+    const o = `map_${r}`, s = [...e.entries()], n = s.slice(0, l.PREVIEW_ITEMS).map(([b, i], u) => {
+      const h = this.formatValue(b, t + 1, !1, a, `${r}_k${u}`), d = this.formatValue(i, t + 1, !1, a, `${r}_v${u}`);
+      return `${h} => ${d}`;
+    }).join(", "), c = e.size > l.PREVIEW_ITEMS ? `, ... ${e.size - l.PREVIEW_ITEMS} more` : "", p = s.map(([b, i], u) => {
+      const h = this.formatValue(b, t + 1, !1, a, `${r}_k${u}`), d = this.formatValue(i, t + 1, !1, a, `${r}_v${u}`);
       return `<div class="object-property">
-        <span class="property-key">${f} =></span>
+        <span class="property-key">${h} =></span>
         <span class="property-value">${d}</span>
       </div>`;
     }).join("");
     return `
       <div class="expandable-container">
-        <span class="expandable-header" data-target="${r}" role="button" tabindex="0" aria-expanded="false" aria-controls="${r}">
+        <span class="expandable-header" data-target="${o}" role="button" tabindex="0" aria-expanded="false" aria-controls="${o}">
           <span class="expand-icon" aria-hidden="true">▶</span>
-          <span class="value-object"><span class="type-label">Map(${e.size})</span> {${n}${i}}</span>
+          <span class="value-object"><span class="type-label">Map(${e.size})</span> {${n}${c}}</span>
         </span>
-        <div class="expandable-content" id="${r}" style="display: none;" role="region">
-          ${u}
+        <div class="expandable-content" id="${o}" style="display: none;" role="region">
+          ${p}
         </div>
       </div>`;
   }
@@ -711,20 +711,20 @@ const l = class l extends HTMLElement {
    * @param {WeakSet} visited - Set of visited objects for circular detection
    * @param {string} path - Stable path for generating element IDs
    */
-  formatSet(e, t, a, o) {
+  formatSet(e, t, a, r) {
     if (e.size === 0)
       return '<span class="value-array">Set(0) {}</span>';
-    const r = `set_${o}`, s = [...e.values()], n = s.slice(0, l.PREVIEW_ITEMS).map((p, c) => this.formatValue(p, t + 1, !1, a, `${o}_${c}`)).join(", "), i = e.size > l.PREVIEW_ITEMS ? `, ... ${e.size - l.PREVIEW_ITEMS} more` : "", u = s.map((p, c) => `<div class="object-property">
-        <span class="property-value">${this.formatValue(p, t + 1, !1, a, `${o}_${c}`)}</span>
+    const o = `set_${r}`, s = [...e.values()], n = s.slice(0, l.PREVIEW_ITEMS).map((b, i) => this.formatValue(b, t + 1, !1, a, `${r}_${i}`)).join(", "), c = e.size > l.PREVIEW_ITEMS ? `, ... ${e.size - l.PREVIEW_ITEMS} more` : "", p = s.map((b, i) => `<div class="object-property">
+        <span class="property-value">${this.formatValue(b, t + 1, !1, a, `${r}_${i}`)}</span>
       </div>`).join("");
     return `
       <div class="expandable-container">
-        <span class="expandable-header" data-target="${r}" role="button" tabindex="0" aria-expanded="false" aria-controls="${r}">
+        <span class="expandable-header" data-target="${o}" role="button" tabindex="0" aria-expanded="false" aria-controls="${o}">
           <span class="expand-icon" aria-hidden="true">▶</span>
-          <span class="value-array"><span class="type-label">Set(${e.size})</span> {${n}${i}}</span>
+          <span class="value-array"><span class="type-label">Set(${e.size})</span> {${n}${c}}</span>
         </span>
-        <div class="expandable-content" id="${r}" style="display: none;" role="region">
-          ${u}
+        <div class="expandable-content" id="${o}" style="display: none;" role="region">
+          ${p}
         </div>
       </div>`;
   }
@@ -756,8 +756,8 @@ const l = class l extends HTMLElement {
    * @param {HTMLElement} header - The expandable header element
    */
   toggleExpand(e) {
-    const t = e.dataset.target, a = this.shadowRoot.getElementById(t), o = e.querySelector(".expand-icon");
-    a && (a.style.display !== "none" ? (a.style.display = "none", e.setAttribute("aria-expanded", "false"), o && (o.textContent = "▶")) : (a.style.display = "block", e.setAttribute("aria-expanded", "true"), o && (o.textContent = "▼")));
+    const t = e.dataset.target, a = this.shadowRoot.getElementById(t), r = e.querySelector(".expand-icon");
+    a && (a.style.display !== "none" ? (a.style.display = "none", e.setAttribute("aria-expanded", "false"), r && (r.textContent = "▶")) : (a.style.display = "block", e.setAttribute("aria-expanded", "true"), r && (r.textContent = "▼")));
   }
   /**
    * Handle clicks on log entries (delegated)
@@ -786,100 +786,107 @@ const l = class l extends HTMLElement {
         height: 100%;
       }
 
+      /*
+       * Theming contract:
+       *   --bc-*  = public override surface (set on host or ancestor, e.g. via Vanilla Breeze)
+       *   --_bc-* = internal per-theme defaults — NOT a public API
+       * Usage: var(--bc-foo, var(--_bc-foo))
+       */
+
       /* ===== DARK THEME ===== */
       .console-feed[data-theme="dark"] {
-        --bg-primary: #1e1e1e;
-        --bg-secondary: #252526;
-        --bg-tertiary: #2a2a2a;
-        --bg-hover: #2a2a2a;
-        --border-color: #3e3e42;
-        --text-primary: #d4d4d4;
-        --text-secondary: #6a6a6a;
+        --_bc-bg-primary: #1e1e1e;
+        --_bc-bg-secondary: #252526;
+        --_bc-bg-tertiary: #2a2a2a;
+        --_bc-bg-hover: #2a2a2a;
+        --_bc-border-color: #3e3e42;
+        --_bc-text-primary: #d4d4d4;
+        --_bc-text-secondary: #6a6a6a;
 
-        --color-log: #3794ff;
-        --color-info: #75beff;
-        --color-warn: #ffcc00;
-        --color-error: #f48771;
-        --color-debug: #b267e6;
-        --color-table: #4ec9b0;
-        --color-time: #4ec9b0;
+        --_bc-color-log: #3794ff;
+        --_bc-color-info: #75beff;
+        --_bc-color-warn: #ffcc00;
+        --_bc-color-error: #f48771;
+        --_bc-color-debug: #b267e6;
+        --_bc-color-table: #4ec9b0;
+        --_bc-color-time: #4ec9b0;
 
-        --bg-warn: #332b00;
-        --bg-error: #342020;
+        --_bc-bg-warn: #332b00;
+        --_bc-bg-error: #342020;
 
-        --value-string: #ce9178;
-        --value-number: #b5cea8;
-        --value-boolean: #569cd6;
-        --value-null: #6a6a6a;
-        --value-function: #dcdcaa;
-        --value-date: #4fc1ff;
-        --value-regexp: #d16969;
-        --value-element: #4ec9b0;
+        --_bc-value-string: #ce9178;
+        --_bc-value-number: #b5cea8;
+        --_bc-value-boolean: #569cd6;
+        --_bc-value-null: #6a6a6a;
+        --_bc-value-function: #dcdcaa;
+        --_bc-value-date: #4fc1ff;
+        --_bc-value-regexp: #d16969;
+        --_bc-value-element: #4ec9b0;
 
-        --btn-bg: #3e3e42;
-        --btn-border: #555;
-        --btn-hover: #505050;
-        --btn-active: #0e639c;
+        --_bc-btn-bg: #3e3e42;
+        --_bc-btn-border: #555;
+        --_bc-btn-hover: #505050;
+        --_bc-btn-active: #0e639c;
 
-        --table-border: #3e3e42;
-        --table-header-bg: #2d2d30;
-        --table-row-hover: #2a2a2a;
+        --_bc-table-border: #3e3e42;
+        --_bc-table-header-bg: #2d2d30;
+        --_bc-table-row-hover: #2a2a2a;
 
-        --scrollbar-track: #1e1e1e;
-        --scrollbar-thumb: #424242;
-        --scrollbar-thumb-hover: #4e4e4e;
+        --_bc-scrollbar-track: #1e1e1e;
+        --_bc-scrollbar-thumb: #424242;
+        --_bc-scrollbar-thumb-hover: #4e4e4e;
       }
 
       /* ===== LIGHT THEME ===== */
       .console-feed[data-theme="light"] {
-        --bg-primary: #ffffff;
-        --bg-secondary: #f3f3f3;
-        --bg-tertiary: #f8f8f8;
-        --bg-hover: #f0f0f0;
-        --border-color: #e0e0e0;
-        --text-primary: #333333;
-        --text-secondary: #999999;
+        --_bc-bg-primary: #ffffff;
+        --_bc-bg-secondary: #f3f3f3;
+        --_bc-bg-tertiary: #f8f8f8;
+        --_bc-bg-hover: #f0f0f0;
+        --_bc-border-color: #e0e0e0;
+        --_bc-text-primary: #333333;
+        --_bc-text-secondary: #999999;
 
-        --color-log: #0066cc;
-        --color-info: #0078d4;
-        --color-warn: #ff8c00;
-        --color-error: #e81123;
-        --color-debug: #8b5cf6;
-        --color-table: #00a67e;
-        --color-time: #00a67e;
+        --_bc-color-log: #0066cc;
+        --_bc-color-info: #0078d4;
+        --_bc-color-warn: #ff8c00;
+        --_bc-color-error: #e81123;
+        --_bc-color-debug: #8b5cf6;
+        --_bc-color-table: #00a67e;
+        --_bc-color-time: #00a67e;
 
-        --bg-warn: #fff9e6;
-        --bg-error: #ffe6e6;
+        --_bc-bg-warn: #fff9e6;
+        --_bc-bg-error: #ffe6e6;
 
-        --value-string: #a31515;
-        --value-number: #098658;
-        --value-boolean: #0000ff;
-        --value-null: #999999;
-        --value-function: #795e26;
-        --value-date: #0078d4;
-        --value-regexp: #e81123;
-        --value-element: #00a67e;
+        --_bc-value-string: #a31515;
+        --_bc-value-number: #098658;
+        --_bc-value-boolean: #0000ff;
+        --_bc-value-null: #999999;
+        --_bc-value-function: #795e26;
+        --_bc-value-date: #0078d4;
+        --_bc-value-regexp: #e81123;
+        --_bc-value-element: #00a67e;
 
-        --btn-bg: #e8e8e8;
-        --btn-border: #cccccc;
-        --btn-hover: #d8d8d8;
-        --btn-active: #0066cc;
+        --_bc-btn-bg: #e8e8e8;
+        --_bc-btn-border: #cccccc;
+        --_bc-btn-hover: #d8d8d8;
+        --_bc-btn-active: #0066cc;
 
-        --table-border: #e0e0e0;
-        --table-header-bg: #f3f3f3;
-        --table-row-hover: #f8f8f8;
+        --_bc-table-border: #e0e0e0;
+        --_bc-table-header-bg: #f3f3f3;
+        --_bc-table-row-hover: #f8f8f8;
 
-        --scrollbar-track: #f0f0f0;
-        --scrollbar-thumb: #c0c0c0;
-        --scrollbar-thumb-hover: #a0a0a0;
+        --_bc-scrollbar-track: #f0f0f0;
+        --_bc-scrollbar-thumb: #c0c0c0;
+        --_bc-scrollbar-thumb-hover: #a0a0a0;
       }
 
       .console-feed {
         display: flex;
         flex-direction: column;
         height: 100%;
-        background: var(--bg-primary);
-        color: var(--text-primary);
+        background: var(--bc-bg-primary, var(--_bc-bg-primary));
+        color: var(--bc-text-primary, var(--_bc-text-primary));
         transition: background 0.2s, color 0.2s;
       }
 
@@ -889,8 +896,8 @@ const l = class l extends HTMLElement {
         align-items: center;
         padding: 8px;
         gap: 8px;
-        background: var(--bg-secondary);
-        border-bottom: 1px solid var(--border-color);
+        background: var(--bc-bg-secondary, var(--_bc-bg-secondary));
+        border-bottom: 1px solid var(--bc-border-color, var(--_bc-border-color));
       }
 
       .console-search {
@@ -902,20 +909,20 @@ const l = class l extends HTMLElement {
       .search-input {
         width: 100%;
         padding: 4px 8px;
-        background: var(--bg-tertiary);
-        border: 1px solid var(--border-color);
+        background: var(--bc-bg-tertiary, var(--_bc-bg-tertiary));
+        border: 1px solid var(--bc-border-color, var(--_bc-border-color));
         border-radius: 3px;
-        color: var(--text-primary);
+        color: var(--bc-text-primary, var(--_bc-text-primary));
         font-family: inherit;
         font-size: 11px;
       }
 
       .search-input::placeholder {
-        color: var(--text-secondary);
+        color: var(--bc-text-secondary, var(--_bc-text-secondary));
       }
 
       .search-input:focus {
-        outline: 2px solid var(--btn-active);
+        outline: 2px solid var(--bc-btn-active, var(--_bc-btn-active));
         outline-offset: -1px;
       }
 
@@ -932,9 +939,9 @@ const l = class l extends HTMLElement {
 
       .filter-btn, .clear-btn, .theme-btn, .copy-btn {
         padding: 4px 12px;
-        background: var(--btn-bg);
-        color: var(--text-primary);
-        border: 1px solid var(--btn-border);
+        background: var(--bc-btn-bg, var(--_bc-btn-bg));
+        color: var(--bc-text-primary, var(--_bc-text-primary));
+        border: 1px solid var(--bc-btn-border, var(--_bc-btn-border));
         border-radius: 3px;
         cursor: pointer;
         font-size: 11px;
@@ -948,12 +955,12 @@ const l = class l extends HTMLElement {
       }
 
       .filter-btn:hover, .clear-btn:hover, .theme-btn:hover, .copy-btn:hover {
-        background: var(--btn-hover);
+        background: var(--bc-btn-hover, var(--_bc-btn-hover));
       }
 
       .filter-btn.active {
-        background: var(--btn-active);
-        border-color: var(--btn-active);
+        background: var(--bc-btn-active, var(--_bc-btn-active));
+        border-color: var(--bc-btn-active, var(--_bc-btn-active));
         color: white;
       }
 
@@ -973,11 +980,11 @@ const l = class l extends HTMLElement {
       }
 
       .log-entry:hover {
-        background: var(--bg-hover);
+        background: var(--bc-bg-hover, var(--_bc-bg-hover));
       }
 
       .log-timestamp {
-        color: var(--text-secondary);
+        color: var(--bc-text-secondary, var(--_bc-text-secondary));
         font-size: 10px;
         white-space: nowrap;
       }
@@ -994,69 +1001,69 @@ const l = class l extends HTMLElement {
       }
 
       .log-log {
-        border-left-color: var(--color-log);
+        border-left-color: var(--bc-color-log, var(--_bc-color-log));
       }
 
       .log-log .log-method {
-        color: var(--color-log);
+        color: var(--bc-color-log, var(--_bc-color-log));
       }
 
       .log-info {
-        border-left-color: var(--color-info);
+        border-left-color: var(--bc-color-info, var(--_bc-color-info));
       }
 
       .log-info .log-method {
-        color: var(--color-info);
+        color: var(--bc-color-info, var(--_bc-color-info));
       }
 
       .log-warn {
-        border-left-color: var(--color-warn);
-        background: var(--bg-warn);
+        border-left-color: var(--bc-color-warn, var(--_bc-color-warn));
+        background: var(--bc-bg-warn, var(--_bc-bg-warn));
       }
 
       .log-warn .log-method {
-        color: var(--color-warn);
+        color: var(--bc-color-warn, var(--_bc-color-warn));
       }
 
       .log-error {
-        border-left-color: var(--color-error);
-        background: var(--bg-error);
+        border-left-color: var(--bc-color-error, var(--_bc-color-error));
+        background: var(--bc-bg-error, var(--_bc-bg-error));
       }
 
       .log-error .log-method {
-        color: var(--color-error);
+        color: var(--bc-color-error, var(--_bc-color-error));
       }
 
       .log-debug {
-        border-left-color: var(--color-debug);
+        border-left-color: var(--bc-color-debug, var(--_bc-color-debug));
       }
 
       .log-debug .log-method {
-        color: var(--color-debug);
+        color: var(--bc-color-debug, var(--_bc-color-debug));
       }
 
       .log-table {
-        border-left-color: var(--color-table);
+        border-left-color: var(--bc-color-table, var(--_bc-color-table));
       }
 
       .log-table .log-method {
-        color: var(--color-table);
+        color: var(--bc-color-table, var(--_bc-color-table));
       }
 
       .log-time {
-        border-left-color: var(--color-time);
+        border-left-color: var(--bc-color-time, var(--_bc-color-time));
       }
 
       .log-time .log-method {
-        color: var(--color-time);
+        color: var(--bc-color-time, var(--_bc-color-time));
       }
 
       .log-group {
-        border-left-color: var(--color-log);
+        border-left-color: var(--bc-color-log, var(--_bc-color-log));
       }
 
       .log-group .log-method {
-        color: var(--text-secondary);
+        color: var(--bc-text-secondary, var(--_bc-text-secondary));
       }
 
       .group-header {
@@ -1069,85 +1076,85 @@ const l = class l extends HTMLElement {
       }
 
       .log-trace {
-        border-left-color: var(--color-debug);
+        border-left-color: var(--bc-color-debug, var(--_bc-color-debug));
       }
 
       .log-trace .log-method {
-        color: var(--color-debug);
+        color: var(--bc-color-debug, var(--_bc-color-debug));
       }
 
       .stack-trace {
         margin-top: 4px;
         padding: 8px;
-        background: var(--bg-tertiary);
+        background: var(--bc-bg-tertiary, var(--_bc-bg-tertiary));
         border-radius: 4px;
         font-size: 10px;
-        color: var(--text-secondary);
+        color: var(--bc-text-secondary, var(--_bc-text-secondary));
         overflow-x: auto;
         white-space: pre;
         font-family: inherit;
       }
 
       .log-count {
-        border-left-color: var(--color-info);
+        border-left-color: var(--bc-color-info, var(--_bc-color-info));
       }
 
       .log-count .log-method {
-        color: var(--color-info);
+        color: var(--bc-color-info, var(--_bc-color-info));
       }
 
       .log-dir {
-        border-left-color: var(--color-log);
+        border-left-color: var(--bc-color-log, var(--_bc-color-log));
       }
 
       .log-dir .log-method {
-        color: var(--text-secondary);
+        color: var(--bc-text-secondary, var(--_bc-text-secondary));
       }
 
       /* Value type styles */
       .value-string {
-        color: var(--value-string);
+        color: var(--bc-value-string, var(--_bc-value-string));
       }
 
       .value-number {
-        color: var(--value-number);
+        color: var(--bc-value-number, var(--_bc-value-number));
       }
 
       .value-boolean {
-        color: var(--value-boolean);
+        color: var(--bc-value-boolean, var(--_bc-value-boolean));
       }
 
       .value-null, .value-undefined {
-        color: var(--value-null);
+        color: var(--bc-value-null, var(--_bc-value-null));
         font-style: italic;
       }
 
       .value-function {
-        color: var(--value-function);
+        color: var(--bc-value-function, var(--_bc-value-function));
       }
 
       .value-array, .value-object {
-        color: var(--text-primary);
+        color: var(--bc-text-primary, var(--_bc-text-primary));
       }
 
       .value-error {
-        color: var(--color-error);
+        color: var(--bc-color-error, var(--_bc-color-error));
       }
 
       .value-date {
-        color: var(--value-date);
+        color: var(--bc-value-date, var(--_bc-value-date));
       }
 
       .value-regexp {
-        color: var(--value-regexp);
+        color: var(--bc-value-regexp, var(--_bc-value-regexp));
       }
 
       .value-element {
-        color: var(--value-element);
+        color: var(--bc-value-element, var(--_bc-value-element));
       }
 
       .value-symbol {
-        color: var(--value-regexp);
+        color: var(--bc-value-regexp, var(--_bc-value-regexp));
         font-style: italic;
       }
 
@@ -1168,7 +1175,7 @@ const l = class l extends HTMLElement {
 
       /* Focus styles for accessibility */
       .expandable-header:focus {
-        outline: 2px solid var(--btn-active);
+        outline: 2px solid var(--bc-btn-active, var(--_bc-btn-active));
         outline-offset: 1px;
       }
 
@@ -1177,7 +1184,7 @@ const l = class l extends HTMLElement {
       }
 
       .expandable-header:focus-visible {
-        outline: 2px solid var(--btn-active);
+        outline: 2px solid var(--bc-btn-active, var(--_bc-btn-active));
         outline-offset: 1px;
       }
 
@@ -1185,14 +1192,14 @@ const l = class l extends HTMLElement {
       .clear-btn:focus-visible,
       .theme-btn:focus-visible,
       .copy-btn:focus-visible {
-        outline: 2px solid var(--btn-active);
+        outline: 2px solid var(--bc-btn-active, var(--_bc-btn-active));
         outline-offset: 2px;
       }
 
       .expand-icon {
         display: inline-block;
         width: 12px;
-        color: var(--text-secondary);
+        color: var(--bc-text-secondary, var(--_bc-text-secondary));
         font-size: 10px;
         transition: transform 0.1s;
       }
@@ -1208,16 +1215,16 @@ const l = class l extends HTMLElement {
       }
 
       .property-key {
-        color: var(--color-log);
+        color: var(--bc-color-log, var(--_bc-color-log));
         margin-right: 8px;
       }
 
       .property-value {
-        color: var(--text-primary);
+        color: var(--bc-text-primary, var(--_bc-text-primary));
       }
 
       .type-label {
-        color: var(--text-secondary);
+        color: var(--bc-text-secondary, var(--_bc-text-secondary));
         font-style: italic;
         margin-right: 4px;
       }
@@ -1232,30 +1239,30 @@ const l = class l extends HTMLElement {
         border-collapse: collapse;
         font-size: 11px;
         min-width: 200px;
-        background: var(--bg-primary);
+        background: var(--bc-bg-primary, var(--_bc-bg-primary));
       }
 
       .console-table th,
       .console-table td {
-        border: 1px solid var(--table-border);
+        border: 1px solid var(--bc-table-border, var(--_bc-table-border));
         padding: 4px 8px;
         text-align: left;
       }
 
       .console-table th {
-        background: var(--table-header-bg);
+        background: var(--bc-table-header-bg, var(--_bc-table-header-bg));
         font-weight: bold;
-        color: var(--text-primary);
+        color: var(--bc-text-primary, var(--_bc-text-primary));
         position: sticky;
         top: 0;
       }
 
       .console-table tr:hover {
-        background: var(--table-row-hover);
+        background: var(--bc-table-row-hover, var(--_bc-table-row-hover));
       }
 
       .console-table .table-index {
-        color: var(--text-secondary);
+        color: var(--bc-text-secondary, var(--_bc-text-secondary));
         font-weight: bold;
       }
 
@@ -1265,16 +1272,16 @@ const l = class l extends HTMLElement {
       }
 
       .console-logs::-webkit-scrollbar-track {
-        background: var(--scrollbar-track);
+        background: var(--bc-scrollbar-track, var(--_bc-scrollbar-track));
       }
 
       .console-logs::-webkit-scrollbar-thumb {
-        background: var(--scrollbar-thumb);
+        background: var(--bc-scrollbar-thumb, var(--_bc-scrollbar-thumb));
         border-radius: 5px;
       }
 
       .console-logs::-webkit-scrollbar-thumb:hover {
-        background: var(--scrollbar-thumb-hover);
+        background: var(--bc-scrollbar-thumb-hover, var(--_bc-scrollbar-thumb-hover));
       }
 
       /* Reduced motion support */
@@ -1295,9 +1302,9 @@ g(l, "MAX_LOGS_DEFAULT", 1e3), /** @type {number} Maximum depth for nested objec
 g(l, "MAX_DEPTH", 2), /** @type {number} Number of items to show in array/object preview */
 g(l, "PREVIEW_ITEMS", 3), /** @type {number} Maximum length for function preview string */
 g(l, "FUNCTION_PREVIEW_LENGTH", 50);
-let v = l;
-customElements.define("browser-console", v);
+let y = l;
+customElements.define("browser-console", y);
 export {
-  v as BrowserConsole,
-  v as default
+  y as BrowserConsole,
+  y as default
 };

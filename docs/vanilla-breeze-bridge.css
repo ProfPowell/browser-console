@@ -1,0 +1,63 @@
+/**
+ * Vanilla Breeze ←→ browser-console token bridge
+ *
+ * Drop this block into vanilla-breeze's `src/utils/external-components.css`
+ * (alongside the existing `code-block` and `browser-window` entries) so any
+ * VB theme drives browser-console automatically — no per-page CSS needed.
+ *
+ * Pairs with browser-console >= <next-published-version>, which exposes its
+ * theming surface via the `--bc-*` namespace.
+ */
+
+/* browser-console: Map VB tokens to component properties */
+browser-console {
+  /* Surfaces */
+  --bc-bg-primary: var(--color-surface);
+  --bc-bg-secondary: var(--color-surface-raised);
+  --bc-bg-tertiary: var(--color-surface-sunken);
+  --bc-bg-hover: var(--color-hover-bg);
+
+  /* Text & chrome */
+  --bc-text-primary: var(--color-text);
+  --bc-text-secondary: var(--color-text-muted);
+  --bc-border-color: var(--color-border);
+
+  /* Log levels — semantic status colors */
+  --bc-color-log: var(--color-interactive);
+  --bc-color-info: var(--color-info);
+  --bc-color-warn: var(--color-warning);
+  --bc-color-error: var(--color-error);
+  --bc-color-debug: var(--color-accent);
+  --bc-color-table: var(--color-success);
+  --bc-color-time: var(--color-success);
+
+  /* Row backgrounds for warn / error entries */
+  --bc-bg-warn: var(--color-warning-subtle);
+  --bc-bg-error: var(--color-error-subtle);
+
+  /* Value-type accents (syntax-highlight style) */
+  --bc-value-string: var(--color-accent);
+  --bc-value-number: var(--color-success);
+  --bc-value-boolean: var(--color-primary);
+  --bc-value-null: var(--color-text-muted);
+  --bc-value-function: var(--color-warning);
+  --bc-value-date: var(--color-info);
+  --bc-value-regexp: var(--color-error);
+  --bc-value-element: var(--color-success);
+
+  /* Buttons (filter / clear / theme toggle / copy) */
+  --bc-btn-bg: var(--color-surface-raised);
+  --bc-btn-border: var(--color-border);
+  --bc-btn-hover: var(--color-hover-bg);
+  --bc-btn-active: var(--color-interactive);
+
+  /* console.table rendering */
+  --bc-table-border: var(--color-border);
+  --bc-table-header-bg: var(--color-surface-raised);
+  --bc-table-row-hover: var(--color-hover-bg);
+
+  /* Scrollbar */
+  --bc-scrollbar-track: var(--color-surface);
+  --bc-scrollbar-thumb: var(--color-border);
+  --bc-scrollbar-thumb-hover: var(--color-border-strong, var(--color-text-muted));
+}

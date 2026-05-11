@@ -421,74 +421,90 @@ browser-console {
 
 ### CSS Custom Properties
 
-The component supports extensive theming via CSS custom properties. Override these in your stylesheet to customize colors:
+All theming tokens use the `--bc-*` namespace. Set them on the
+`browser-console` element (or any ancestor — they inherit through the Shadow DOM)
+to override the per-theme defaults. This makes the component
+[Vanilla Breeze](https://www.npmjs.com/package/vanilla-breeze)-compatible: VB's
+external-component token bridge maps `--color-surface`, `--color-text`, etc. onto
+these tokens with no extra configuration.
 
 #### Background Colors
 | Property | Description |
 |----------|-------------|
-| `--bg-primary` | Main background color |
-| `--bg-secondary` | Header/toolbar background |
-| `--bg-tertiary` | Search input, code blocks |
-| `--bg-hover` | Hover state background |
-| `--bg-warn` | Warning log background |
-| `--bg-error` | Error log background |
+| `--bc-bg-primary` | Console background |
+| `--bc-bg-secondary` | Header / chrome background |
+| `--bc-bg-tertiary` | Inputs and stack-trace background |
+| `--bc-bg-hover` | Log row hover background |
+| `--bc-bg-warn` | Warn row background tint |
+| `--bc-bg-error` | Error row background tint |
 
 #### Text Colors
 | Property | Description |
 |----------|-------------|
-| `--text-primary` | Main text color |
-| `--text-secondary` | Timestamps, labels |
-| `--border-color` | Borders and dividers |
+| `--bc-text-primary` | Primary text |
+| `--bc-text-secondary` | Muted text (timestamps, type labels) |
+| `--bc-border-color` | Borders and dividers |
 
 #### Log Level Colors
 | Property | Description |
 |----------|-------------|
-| `--color-log` | Log level accent |
-| `--color-info` | Info level accent |
-| `--color-warn` | Warning level accent |
-| `--color-error` | Error level accent |
-| `--color-debug` | Debug level accent |
-| `--color-table` | Table method accent |
-| `--color-time` | Timer method accent |
+| `--bc-color-log` | `console.log` accent |
+| `--bc-color-info` | `console.info` accent |
+| `--bc-color-warn` | `console.warn` accent |
+| `--bc-color-error` | `console.error` accent |
+| `--bc-color-debug` | `console.debug` accent |
+| `--bc-color-table` | `console.table` accent |
+| `--bc-color-time` | `console.time` accent |
 
 #### Value Type Colors
 | Property | Description |
 |----------|-------------|
-| `--value-string` | String values |
-| `--value-number` | Number/BigInt values |
-| `--value-boolean` | Boolean values |
-| `--value-null` | null/undefined values |
-| `--value-function` | Function values |
-| `--value-date` | Date values |
-| `--value-regexp` | RegExp values |
-| `--value-element` | DOM element values |
+| `--bc-value-string` | String values |
+| `--bc-value-number` | Number / BigInt values |
+| `--bc-value-boolean` | Boolean values |
+| `--bc-value-null` | `null` / `undefined` values |
+| `--bc-value-function` | Function values |
+| `--bc-value-date` | Date values |
+| `--bc-value-regexp` | RegExp / Symbol values |
+| `--bc-value-element` | DOM element values |
 
 #### UI Element Colors
 | Property | Description |
 |----------|-------------|
-| `--btn-bg` | Button background |
-| `--btn-border` | Button border |
-| `--btn-hover` | Button hover state |
-| `--btn-active` | Active/pressed button |
-| `--table-border` | Table borders |
-| `--table-header-bg` | Table header background |
-| `--table-row-hover` | Table row hover |
-| `--scrollbar-track` | Scrollbar track |
-| `--scrollbar-thumb` | Scrollbar thumb |
-| `--scrollbar-thumb-hover` | Scrollbar thumb hover |
+| `--bc-btn-bg` | Button background |
+| `--bc-btn-border` | Button border |
+| `--bc-btn-hover` | Button hover state |
+| `--bc-btn-active` | Active / focus outline color |
+| `--bc-table-border` | Table cell border |
+| `--bc-table-header-bg` | Table header background |
+| `--bc-table-row-hover` | Table row hover |
+| `--bc-scrollbar-track` | Scrollbar track |
+| `--bc-scrollbar-thumb` | Scrollbar thumb |
+| `--bc-scrollbar-thumb-hover` | Scrollbar thumb hover |
 
 #### Example: Custom Dark Theme
 
 ```css
 browser-console {
-  --bg-primary: #0d1117;
-  --bg-secondary: #161b22;
-  --text-primary: #c9d1d9;
-  --color-log: #58a6ff;
-  --color-error: #f85149;
-  --value-string: #a5d6ff;
-  --value-number: #79c0ff;
+  --bc-bg-primary: #0d1117;
+  --bc-bg-secondary: #161b22;
+  --bc-text-primary: #c9d1d9;
+  --bc-color-log: #58a6ff;
+  --bc-color-error: #f85149;
+  --bc-value-string: #a5d6ff;
+  --bc-value-number: #79c0ff;
 }
+```
+
+#### Example: Vanilla Breeze integration
+
+When Vanilla Breeze is loaded, no per-component CSS is needed — its
+`external-components.css` bridges its semantic tokens onto `--bc-*`. Just
+include the component and let your VB theme drive it:
+
+```html
+<link rel="stylesheet" href="/vanilla-breeze/main.css">
+<browser-console></browser-console>
 ```
 
 ## Demo

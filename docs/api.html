@@ -259,7 +259,14 @@ import { BrowserConsole } from '@profpowell/browser-console'</code-block>
 
     <section id="css-properties" class="api-section">
       <h2>CSS Custom Properties</h2>
-      <p>Use these to customize the appearance of the component:</p>
+      <p>
+        All theming tokens use the <code>--bc-*</code> namespace. Set them on the
+        <code>browser-console</code> element (or any ancestor — they inherit through the Shadow
+        DOM) to override the per-theme defaults. This makes the component
+        <a href="https://www.npmjs.com/package/vanilla-breeze">Vanilla Breeze</a>-compatible: VB's
+        token bridge can map <code>--color-surface</code>, <code>--color-text</code>, etc. onto
+        these without further configuration.
+      </p>
 
       <table class="api-table">
         <thead>
@@ -272,76 +279,208 @@ import { BrowserConsole } from '@profpowell/browser-console'</code-block>
         </thead>
         <tbody>
           <tr>
-            <td><code>--bg-primary</code></td>
+            <td><code>--bc-bg-primary</code></td>
             <td><span class="api-default">#ffffff</span></td>
             <td><span class="api-default">#1e1e1e</span></td>
-            <td>Primary background color</td>
+            <td>Console background</td>
           </tr>
           <tr>
-            <td><code>--bg-secondary</code></td>
+            <td><code>--bc-bg-secondary</code></td>
             <td><span class="api-default">#f3f3f3</span></td>
             <td><span class="api-default">#252526</span></td>
-            <td>Secondary background (header)</td>
+            <td>Header / chrome background</td>
           </tr>
           <tr>
-            <td><code>--bg-hover</code></td>
-            <td><span class="api-default">#e8e8e8</span></td>
-            <td><span class="api-default">#2a2d2e</span></td>
-            <td>Hover state background</td>
+            <td><code>--bc-bg-tertiary</code></td>
+            <td><span class="api-default">#f8f8f8</span></td>
+            <td><span class="api-default">#2a2a2a</span></td>
+            <td>Inputs and stack-trace background</td>
           </tr>
           <tr>
-            <td><code>--border-color</code></td>
-            <td><span class="api-default">#e1e1e1</span></td>
-            <td><span class="api-default">#3c3c3c</span></td>
-            <td>Border color</td>
+            <td><code>--bc-bg-hover</code></td>
+            <td><span class="api-default">#f0f0f0</span></td>
+            <td><span class="api-default">#2a2a2a</span></td>
+            <td>Log row hover background</td>
           </tr>
           <tr>
-            <td><code>--accent-color</code></td>
-            <td><span class="api-default">#0078d4</span></td>
-            <td><span class="api-default">#0078d4</span></td>
-            <td>Accent color for active states</td>
+            <td><code>--bc-border-color</code></td>
+            <td><span class="api-default">#e0e0e0</span></td>
+            <td><span class="api-default">#3e3e42</span></td>
+            <td>Borders and dividers</td>
           </tr>
           <tr>
-            <td><code>--text-primary</code></td>
-            <td><span class="api-default">#1f1f1f</span></td>
+            <td><code>--bc-text-primary</code></td>
+            <td><span class="api-default">#333333</span></td>
             <td><span class="api-default">#d4d4d4</span></td>
-            <td>Primary text color</td>
+            <td>Primary text</td>
           </tr>
           <tr>
-            <td><code>--text-secondary</code></td>
-            <td><span class="api-default">#616161</span></td>
-            <td><span class="api-default">#808080</span></td>
-            <td>Secondary text (timestamps)</td>
+            <td><code>--bc-text-secondary</code></td>
+            <td><span class="api-default">#999999</span></td>
+            <td><span class="api-default">#6a6a6a</span></td>
+            <td>Muted text (timestamps, type labels)</td>
           </tr>
           <tr>
-            <td><code>--log-color</code></td>
-            <td><span class="api-default">#1f1f1f</span></td>
-            <td><span class="api-default">#d4d4d4</span></td>
-            <td><code>console.log</code> text color</td>
-          </tr>
-          <tr>
-            <td><code>--info-color</code></td>
+            <td><code>--bc-color-log</code></td>
             <td><span class="api-default">#0066cc</span></td>
             <td><span class="api-default">#3794ff</span></td>
-            <td><code>console.info</code> text color</td>
+            <td><code>console.log</code> accent color</td>
           </tr>
           <tr>
-            <td><code>--warn-color</code></td>
-            <td><span class="api-default">#9d5d00</span></td>
-            <td><span class="api-default">#cca700</span></td>
-            <td><code>console.warn</code> text color</td>
+            <td><code>--bc-color-info</code></td>
+            <td><span class="api-default">#0078d4</span></td>
+            <td><span class="api-default">#75beff</span></td>
+            <td><code>console.info</code> accent color</td>
           </tr>
           <tr>
-            <td><code>--error-color</code></td>
-            <td><span class="api-default">#c72222</span></td>
-            <td><span class="api-default">#f14c4c</span></td>
-            <td><code>console.error</code> text color</td>
+            <td><code>--bc-color-warn</code></td>
+            <td><span class="api-default">#ff8c00</span></td>
+            <td><span class="api-default">#ffcc00</span></td>
+            <td><code>console.warn</code> accent color</td>
           </tr>
           <tr>
-            <td><code>--debug-color</code></td>
+            <td><code>--bc-color-error</code></td>
+            <td><span class="api-default">#e81123</span></td>
+            <td><span class="api-default">#f48771</span></td>
+            <td><code>console.error</code> accent color</td>
+          </tr>
+          <tr>
+            <td><code>--bc-color-debug</code></td>
+            <td><span class="api-default">#8b5cf6</span></td>
+            <td><span class="api-default">#b267e6</span></td>
+            <td><code>console.debug</code> accent color</td>
+          </tr>
+          <tr>
+            <td><code>--bc-color-table</code></td>
+            <td><span class="api-default">#00a67e</span></td>
+            <td><span class="api-default">#4ec9b0</span></td>
+            <td><code>console.table</code> accent color</td>
+          </tr>
+          <tr>
+            <td><code>--bc-color-time</code></td>
+            <td><span class="api-default">#00a67e</span></td>
+            <td><span class="api-default">#4ec9b0</span></td>
+            <td><code>console.time</code> accent color</td>
+          </tr>
+          <tr>
+            <td><code>--bc-bg-warn</code></td>
+            <td><span class="api-default">#fff9e6</span></td>
+            <td><span class="api-default">#332b00</span></td>
+            <td>Warn row background tint</td>
+          </tr>
+          <tr>
+            <td><code>--bc-bg-error</code></td>
+            <td><span class="api-default">#ffe6e6</span></td>
+            <td><span class="api-default">#342020</span></td>
+            <td>Error row background tint</td>
+          </tr>
+          <tr>
+            <td><code>--bc-value-string</code></td>
+            <td><span class="api-default">#a31515</span></td>
+            <td><span class="api-default">#ce9178</span></td>
+            <td>String literal color</td>
+          </tr>
+          <tr>
+            <td><code>--bc-value-number</code></td>
             <td><span class="api-default">#098658</span></td>
             <td><span class="api-default">#b5cea8</span></td>
-            <td><code>console.debug</code> text color</td>
+            <td>Number literal color</td>
+          </tr>
+          <tr>
+            <td><code>--bc-value-boolean</code></td>
+            <td><span class="api-default">#0000ff</span></td>
+            <td><span class="api-default">#569cd6</span></td>
+            <td>Boolean literal color</td>
+          </tr>
+          <tr>
+            <td><code>--bc-value-null</code></td>
+            <td><span class="api-default">#999999</span></td>
+            <td><span class="api-default">#6a6a6a</span></td>
+            <td><code>null</code> / <code>undefined</code> color</td>
+          </tr>
+          <tr>
+            <td><code>--bc-value-function</code></td>
+            <td><span class="api-default">#795e26</span></td>
+            <td><span class="api-default">#dcdcaa</span></td>
+            <td>Function value color</td>
+          </tr>
+          <tr>
+            <td><code>--bc-value-date</code></td>
+            <td><span class="api-default">#0078d4</span></td>
+            <td><span class="api-default">#4fc1ff</span></td>
+            <td>Date value color</td>
+          </tr>
+          <tr>
+            <td><code>--bc-value-regexp</code></td>
+            <td><span class="api-default">#e81123</span></td>
+            <td><span class="api-default">#d16969</span></td>
+            <td>RegExp / Symbol value color</td>
+          </tr>
+          <tr>
+            <td><code>--bc-value-element</code></td>
+            <td><span class="api-default">#00a67e</span></td>
+            <td><span class="api-default">#4ec9b0</span></td>
+            <td>DOM element value color</td>
+          </tr>
+          <tr>
+            <td><code>--bc-btn-bg</code></td>
+            <td><span class="api-default">#e8e8e8</span></td>
+            <td><span class="api-default">#3e3e42</span></td>
+            <td>Button background</td>
+          </tr>
+          <tr>
+            <td><code>--bc-btn-border</code></td>
+            <td><span class="api-default">#cccccc</span></td>
+            <td><span class="api-default">#555</span></td>
+            <td>Button border color</td>
+          </tr>
+          <tr>
+            <td><code>--bc-btn-hover</code></td>
+            <td><span class="api-default">#d8d8d8</span></td>
+            <td><span class="api-default">#505050</span></td>
+            <td>Button hover background</td>
+          </tr>
+          <tr>
+            <td><code>--bc-btn-active</code></td>
+            <td><span class="api-default">#0066cc</span></td>
+            <td><span class="api-default">#0e639c</span></td>
+            <td>Active button / focus outline color</td>
+          </tr>
+          <tr>
+            <td><code>--bc-table-border</code></td>
+            <td><span class="api-default">#e0e0e0</span></td>
+            <td><span class="api-default">#3e3e42</span></td>
+            <td>Table cell border color</td>
+          </tr>
+          <tr>
+            <td><code>--bc-table-header-bg</code></td>
+            <td><span class="api-default">#f3f3f3</span></td>
+            <td><span class="api-default">#2d2d30</span></td>
+            <td>Table header background</td>
+          </tr>
+          <tr>
+            <td><code>--bc-table-row-hover</code></td>
+            <td><span class="api-default">#f8f8f8</span></td>
+            <td><span class="api-default">#2a2a2a</span></td>
+            <td>Table row hover background</td>
+          </tr>
+          <tr>
+            <td><code>--bc-scrollbar-track</code></td>
+            <td><span class="api-default">#f0f0f0</span></td>
+            <td><span class="api-default">#1e1e1e</span></td>
+            <td>Scrollbar track color</td>
+          </tr>
+          <tr>
+            <td><code>--bc-scrollbar-thumb</code></td>
+            <td><span class="api-default">#c0c0c0</span></td>
+            <td><span class="api-default">#424242</span></td>
+            <td>Scrollbar thumb color</td>
+          </tr>
+          <tr>
+            <td><code>--bc-scrollbar-thumb-hover</code></td>
+            <td><span class="api-default">#a0a0a0</span></td>
+            <td><span class="api-default">#4e4e4e</span></td>
+            <td>Scrollbar thumb hover color</td>
           </tr>
         </tbody>
       </table>

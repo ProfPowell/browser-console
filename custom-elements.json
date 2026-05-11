@@ -12,64 +12,140 @@
           "name": "BrowserConsole",
           "cssProperties": [
             {
-              "description": "Primary background color",
-              "name": "--bg-primary",
-              "default": "#1e1e1e"
+              "description": "Console background",
+              "name": "--bc-bg-primary"
             },
             {
-              "description": "Secondary background color (header)",
-              "name": "--bg-secondary",
-              "default": "#252526"
+              "description": "Header / chrome background",
+              "name": "--bc-bg-secondary"
             },
             {
-              "description": "Hover state background",
-              "name": "--bg-hover",
-              "default": "#2a2d2e"
+              "description": "Inputs and stack-trace background",
+              "name": "--bc-bg-tertiary"
             },
             {
-              "description": "Primary text color",
-              "name": "--text-primary",
-              "default": "#d4d4d4"
+              "description": "Log row hover background",
+              "name": "--bc-bg-hover"
             },
             {
-              "description": "Secondary text color (timestamps)",
-              "name": "--text-secondary",
-              "default": "#808080"
+              "description": "Borders and dividers",
+              "name": "--bc-border-color"
             },
             {
-              "description": "Border color",
-              "name": "--border-color",
-              "default": "#3c3c3c"
+              "description": "Primary text",
+              "name": "--bc-text-primary"
             },
             {
-              "description": "Accent color for active states",
-              "name": "--accent-color",
-              "default": "#0078d4"
+              "description": "Muted text (timestamps, type labels)",
+              "name": "--bc-text-secondary"
             },
             {
-              "description": "console.log text color",
-              "name": "--log-color",
-              "default": "#d4d4d4"
+              "description": "console.log accent color",
+              "name": "--bc-color-log"
             },
             {
-              "description": "console.info text color",
-              "name": "--info-color",
-              "default": "#3794ff"
+              "description": "console.info accent color",
+              "name": "--bc-color-info"
             },
             {
-              "description": "console.warn text color",
-              "name": "--warn-color",
-              "default": "#cca700"
+              "description": "console.warn accent color",
+              "name": "--bc-color-warn"
             },
             {
-              "description": "console.error text color",
-              "name": "--error-color",
-              "default": "#f14c4c"
+              "description": "console.error accent color",
+              "name": "--bc-color-error"
             },
             {
-              "description": "console.debug text color",
-              "name": "--debug-color",
-              "default": "#b5cea8"
+              "description": "console.debug accent color",
+              "name": "--bc-color-debug"
+            },
+            {
+              "description": "console.table accent color",
+              "name": "--bc-color-table"
+            },
+            {
+              "description": "console.time accent color",
+              "name": "--bc-color-time"
+            },
+            {
+              "description": "Warn row background tint",
+              "name": "--bc-bg-warn"
+            },
+            {
+              "description": "Error row background tint",
+              "name": "--bc-bg-error"
+            },
+            {
+              "description": "String literal color",
+              "name": "--bc-value-string"
+            },
+            {
+              "description": "Number literal color",
+              "name": "--bc-value-number"
+            },
+            {
+              "description": "Boolean literal color",
+              "name": "--bc-value-boolean"
+            },
+            {
+              "description": "null/undefined color",
+              "name": "--bc-value-null"
+            },
+            {
+              "description": "Function value color",
+              "name": "--bc-value-function"
+            },
+            {
+              "description": "Date value color",
+              "name": "--bc-value-date"
+            },
+            {
+              "description": "RegExp / Symbol value color",
+              "name": "--bc-value-regexp"
+            },
+            {
+              "description": "DOM element value color",
+              "name": "--bc-value-element"
+            },
+            {
+              "description": "Button background",
+              "name": "--bc-btn-bg"
+            },
+            {
+              "description": "Button border color",
+              "name": "--bc-btn-border"
+            },
+            {
+              "description": "Button hover background",
+              "name": "--bc-btn-hover"
+            },
+            {
+              "description": "Active button / focus outline color",
+              "name": "--bc-btn-active"
+            },
+            {
+              "description": "Table cell border color",
+              "name": "--bc-table-border"
+            },
+            {
+              "description": "Table header background",
+              "name": "--bc-table-header-bg"
+            },
+            {
+              "description": "Table row hover background",
+              "name": "--bc-table-row-hover"
+            },
+            {
+              "description": "Scrollbar track color",
+              "name": "--bc-scrollbar-track"
+            },
+            {
+              "description": "Scrollbar thumb color",
+              "name": "--bc-scrollbar-thumb"
+            },
+            {
+              "description": "Scrollbar thumb hover color",
+              "name": "--bc-scrollbar-thumb-hover"
             }
           ],
           "cssParts": [
@@ -90,7 +166,7 @@
               "name": "action-button"
             },
             {
-              "description": "Individual log entry row",
+              "description": "Individual log entry row Theming uses the `--bc-*` namespace. Defaults vary by `theme` attribute (\"dark\" | \"light\"); set any token on the host or an ancestor (e.g. via Vanilla Breeze) to override.",
               "name": "log-entry"
             }
           ],

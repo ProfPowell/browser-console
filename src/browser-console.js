@@ -22,18 +22,44 @@
  * @csspart action-button - Action buttons (theme toggle, copy, clear)
  * @csspart log-entry - Individual log entry row
  *
- * @cssprop [--bg-primary=#1e1e1e] - Primary background color
- * @cssprop [--bg-secondary=#252526] - Secondary background color (header)
- * @cssprop [--bg-hover=#2a2d2e] - Hover state background
- * @cssprop [--text-primary=#d4d4d4] - Primary text color
- * @cssprop [--text-secondary=#808080] - Secondary text color (timestamps)
- * @cssprop [--border-color=#3c3c3c] - Border color
- * @cssprop [--accent-color=#0078d4] - Accent color for active states
- * @cssprop [--log-color=#d4d4d4] - console.log text color
- * @cssprop [--info-color=#3794ff] - console.info text color
- * @cssprop [--warn-color=#cca700] - console.warn text color
- * @cssprop [--error-color=#f14c4c] - console.error text color
- * @cssprop [--debug-color=#b5cea8] - console.debug text color
+ * Theming uses the `--bc-*` namespace. Defaults vary by `theme` attribute
+ * ("dark" | "light"); set any token on the host or an ancestor (e.g. via
+ * Vanilla Breeze) to override.
+ *
+ * @cssprop [--bc-bg-primary] - Console background
+ * @cssprop [--bc-bg-secondary] - Header / chrome background
+ * @cssprop [--bc-bg-tertiary] - Inputs and stack-trace background
+ * @cssprop [--bc-bg-hover] - Log row hover background
+ * @cssprop [--bc-border-color] - Borders and dividers
+ * @cssprop [--bc-text-primary] - Primary text
+ * @cssprop [--bc-text-secondary] - Muted text (timestamps, type labels)
+ * @cssprop [--bc-color-log] - console.log accent color
+ * @cssprop [--bc-color-info] - console.info accent color
+ * @cssprop [--bc-color-warn] - console.warn accent color
+ * @cssprop [--bc-color-error] - console.error accent color
+ * @cssprop [--bc-color-debug] - console.debug accent color
+ * @cssprop [--bc-color-table] - console.table accent color
+ * @cssprop [--bc-color-time] - console.time accent color
+ * @cssprop [--bc-bg-warn] - Warn row background tint
+ * @cssprop [--bc-bg-error] - Error row background tint
+ * @cssprop [--bc-value-string] - String literal color
+ * @cssprop [--bc-value-number] - Number literal color
+ * @cssprop [--bc-value-boolean] - Boolean literal color
+ * @cssprop [--bc-value-null] - null/undefined color
+ * @cssprop [--bc-value-function] - Function value color
+ * @cssprop [--bc-value-date] - Date value color
+ * @cssprop [--bc-value-regexp] - RegExp / Symbol value color
+ * @cssprop [--bc-value-element] - DOM element value color
+ * @cssprop [--bc-btn-bg] - Button background
+ * @cssprop [--bc-btn-border] - Button border color
+ * @cssprop [--bc-btn-hover] - Button hover background
+ * @cssprop [--bc-btn-active] - Active button / focus outline color
+ * @cssprop [--bc-table-border] - Table cell border color
+ * @cssprop [--bc-table-header-bg] - Table header background
+ * @cssprop [--bc-table-row-hover] - Table row hover background
+ * @cssprop [--bc-scrollbar-track] - Scrollbar track color
+ * @cssprop [--bc-scrollbar-thumb] - Scrollbar thumb color
+ * @cssprop [--bc-scrollbar-thumb-hover] - Scrollbar thumb hover color
  *
  * @fires log - Dispatched when a new log entry is added
  * @fires clear - Dispatched when console is cleared
@@ -1298,100 +1324,107 @@ class BrowserConsole extends HTMLElement {
         height: 100%;
       }
 
+      /*
+       * Theming contract:
+       *   --bc-*  = public override surface (set on host or ancestor, e.g. via Vanilla Breeze)
+       *   --_bc-* = internal per-theme defaults — NOT a public API
+       * Usage: var(--bc-foo, var(--_bc-foo))
+       */
+
       /* ===== DARK THEME ===== */
       .console-feed[data-theme="dark"] {
-        --bg-primary: #1e1e1e;
-        --bg-secondary: #252526;
-        --bg-tertiary: #2a2a2a;
-        --bg-hover: #2a2a2a;
-        --border-color: #3e3e42;
-        --text-primary: #d4d4d4;
-        --text-secondary: #6a6a6a;
+        --_bc-bg-primary: #1e1e1e;
+        --_bc-bg-secondary: #252526;
+        --_bc-bg-tertiary: #2a2a2a;
+        --_bc-bg-hover: #2a2a2a;
+        --_bc-border-color: #3e3e42;
+        --_bc-text-primary: #d4d4d4;
+        --_bc-text-secondary: #6a6a6a;
 
-        --color-log: #3794ff;
-        --color-info: #75beff;
-        --color-warn: #ffcc00;
-        --color-error: #f48771;
-        --color-debug: #b267e6;
-        --color-table: #4ec9b0;
-        --color-time: #4ec9b0;
+        --_bc-color-log: #3794ff;
+        --_bc-color-info: #75beff;
+        --_bc-color-warn: #ffcc00;
+        --_bc-color-error: #f48771;
+        --_bc-color-debug: #b267e6;
+        --_bc-color-table: #4ec9b0;
+        --_bc-color-time: #4ec9b0;
 
-        --bg-warn: #332b00;
-        --bg-error: #342020;
+        --_bc-bg-warn: #332b00;
+        --_bc-bg-error: #342020;
 
-        --value-string: #ce9178;
-        --value-number: #b5cea8;
-        --value-boolean: #569cd6;
-        --value-null: #6a6a6a;
-        --value-function: #dcdcaa;
-        --value-date: #4fc1ff;
-        --value-regexp: #d16969;
-        --value-element: #4ec9b0;
+        --_bc-value-string: #ce9178;
+        --_bc-value-number: #b5cea8;
+        --_bc-value-boolean: #569cd6;
+        --_bc-value-null: #6a6a6a;
+        --_bc-value-function: #dcdcaa;
+        --_bc-value-date: #4fc1ff;
+        --_bc-value-regexp: #d16969;
+        --_bc-value-element: #4ec9b0;
 
-        --btn-bg: #3e3e42;
-        --btn-border: #555;
-        --btn-hover: #505050;
-        --btn-active: #0e639c;
+        --_bc-btn-bg: #3e3e42;
+        --_bc-btn-border: #555;
+        --_bc-btn-hover: #505050;
+        --_bc-btn-active: #0e639c;
 
-        --table-border: #3e3e42;
-        --table-header-bg: #2d2d30;
-        --table-row-hover: #2a2a2a;
+        --_bc-table-border: #3e3e42;
+        --_bc-table-header-bg: #2d2d30;
+        --_bc-table-row-hover: #2a2a2a;
 
-        --scrollbar-track: #1e1e1e;
-        --scrollbar-thumb: #424242;
-        --scrollbar-thumb-hover: #4e4e4e;
+        --_bc-scrollbar-track: #1e1e1e;
+        --_bc-scrollbar-thumb: #424242;
+        --_bc-scrollbar-thumb-hover: #4e4e4e;
       }
 
       /* ===== LIGHT THEME ===== */
       .console-feed[data-theme="light"] {
-        --bg-primary: #ffffff;
-        --bg-secondary: #f3f3f3;
-        --bg-tertiary: #f8f8f8;
-        --bg-hover: #f0f0f0;
-        --border-color: #e0e0e0;
-        --text-primary: #333333;
-        --text-secondary: #999999;
+        --_bc-bg-primary: #ffffff;
+        --_bc-bg-secondary: #f3f3f3;
+        --_bc-bg-tertiary: #f8f8f8;
+        --_bc-bg-hover: #f0f0f0;
+        --_bc-border-color: #e0e0e0;
+        --_bc-text-primary: #333333;
+        --_bc-text-secondary: #999999;
 
-        --color-log: #0066cc;
-        --color-info: #0078d4;
-        --color-warn: #ff8c00;
-        --color-error: #e81123;
-        --color-debug: #8b5cf6;
-        --color-table: #00a67e;
-        --color-time: #00a67e;
+        --_bc-color-log: #0066cc;
+        --_bc-color-info: #0078d4;
+        --_bc-color-warn: #ff8c00;
+        --_bc-color-error: #e81123;
+        --_bc-color-debug: #8b5cf6;
+        --_bc-color-table: #00a67e;
+        --_bc-color-time: #00a67e;
 
-        --bg-warn: #fff9e6;
-        --bg-error: #ffe6e6;
+        --_bc-bg-warn: #fff9e6;
+        --_bc-bg-error: #ffe6e6;
 
-        --value-string: #a31515;
-        --value-number: #098658;
-        --value-boolean: #0000ff;
-        --value-null: #999999;
-        --value-function: #795e26;
-        --value-date: #0078d4;
-        --value-regexp: #e81123;
-        --value-element: #00a67e;
+        --_bc-value-string: #a31515;
+        --_bc-value-number: #098658;
+        --_bc-value-boolean: #0000ff;
+        --_bc-value-null: #999999;
+        --_bc-value-function: #795e26;
+        --_bc-value-date: #0078d4;
+        --_bc-value-regexp: #e81123;
+        --_bc-value-element: #00a67e;
 
-        --btn-bg: #e8e8e8;
-        --btn-border: #cccccc;
-        --btn-hover: #d8d8d8;
-        --btn-active: #0066cc;
+        --_bc-btn-bg: #e8e8e8;
+        --_bc-btn-border: #cccccc;
+        --_bc-btn-hover: #d8d8d8;
+        --_bc-btn-active: #0066cc;
 
-        --table-border: #e0e0e0;
-        --table-header-bg: #f3f3f3;
-        --table-row-hover: #f8f8f8;
+        --_bc-table-border: #e0e0e0;
+        --_bc-table-header-bg: #f3f3f3;
+        --_bc-table-row-hover: #f8f8f8;
 
-        --scrollbar-track: #f0f0f0;
-        --scrollbar-thumb: #c0c0c0;
-        --scrollbar-thumb-hover: #a0a0a0;
+        --_bc-scrollbar-track: #f0f0f0;
+        --_bc-scrollbar-thumb: #c0c0c0;
+        --_bc-scrollbar-thumb-hover: #a0a0a0;
       }
 
       .console-feed {
         display: flex;
         flex-direction: column;
         height: 100%;
-        background: var(--bg-primary);
-        color: var(--text-primary);
+        background: var(--bc-bg-primary, var(--_bc-bg-primary));
+        color: var(--bc-text-primary, var(--_bc-text-primary));
         transition: background 0.2s, color 0.2s;
       }
 
@@ -1401,8 +1434,8 @@ class BrowserConsole extends HTMLElement {
         align-items: center;
         padding: 8px;
         gap: 8px;
-        background: var(--bg-secondary);
-        border-bottom: 1px solid var(--border-color);
+        background: var(--bc-bg-secondary, var(--_bc-bg-secondary));
+        border-bottom: 1px solid var(--bc-border-color, var(--_bc-border-color));
       }
 
       .console-search {
@@ -1414,20 +1447,20 @@ class BrowserConsole extends HTMLElement {
       .search-input {
         width: 100%;
         padding: 4px 8px;
-        background: var(--bg-tertiary);
-        border: 1px solid var(--border-color);
+        background: var(--bc-bg-tertiary, var(--_bc-bg-tertiary));
+        border: 1px solid var(--bc-border-color, var(--_bc-border-color));
         border-radius: 3px;
-        color: var(--text-primary);
+        color: var(--bc-text-primary, var(--_bc-text-primary));
         font-family: inherit;
         font-size: 11px;
       }
 
       .search-input::placeholder {
-        color: var(--text-secondary);
+        color: var(--bc-text-secondary, var(--_bc-text-secondary));
       }
 
       .search-input:focus {
-        outline: 2px solid var(--btn-active);
+        outline: 2px solid var(--bc-btn-active, var(--_bc-btn-active));
         outline-offset: -1px;
       }
 
@@ -1444,9 +1477,9 @@ class BrowserConsole extends HTMLElement {
 
       .filter-btn, .clear-btn, .theme-btn, .copy-btn {
         padding: 4px 12px;
-        background: var(--btn-bg);
-        color: var(--text-primary);
-        border: 1px solid var(--btn-border);
+        background: var(--bc-btn-bg, var(--_bc-btn-bg));
+        color: var(--bc-text-primary, var(--_bc-text-primary));
+        border: 1px solid var(--bc-btn-border, var(--_bc-btn-border));
         border-radius: 3px;
         cursor: pointer;
         font-size: 11px;
@@ -1460,12 +1493,12 @@ class BrowserConsole extends HTMLElement {
       }
 
       .filter-btn:hover, .clear-btn:hover, .theme-btn:hover, .copy-btn:hover {
-        background: var(--btn-hover);
+        background: var(--bc-btn-hover, var(--_bc-btn-hover));
       }
 
       .filter-btn.active {
-        background: var(--btn-active);
-        border-color: var(--btn-active);
+        background: var(--bc-btn-active, var(--_bc-btn-active));
+        border-color: var(--bc-btn-active, var(--_bc-btn-active));
         color: white;
       }
 
@@ -1485,11 +1518,11 @@ class BrowserConsole extends HTMLElement {
       }
 
       .log-entry:hover {
-        background: var(--bg-hover);
+        background: var(--bc-bg-hover, var(--_bc-bg-hover));
       }
 
       .log-timestamp {
-        color: var(--text-secondary);
+        color: var(--bc-text-secondary, var(--_bc-text-secondary));
         font-size: 10px;
         white-space: nowrap;
       }
@@ -1506,69 +1539,69 @@ class BrowserConsole extends HTMLElement {
       }
 
       .log-log {
-        border-left-color: var(--color-log);
+        border-left-color: var(--bc-color-log, var(--_bc-color-log));
       }
 
       .log-log .log-method {
-        color: var(--color-log);
+        color: var(--bc-color-log, var(--_bc-color-log));
       }
 
       .log-info {
-        border-left-color: var(--color-info);
+        border-left-color: var(--bc-color-info, var(--_bc-color-info));
       }
 
       .log-info .log-method {
-        color: var(--color-info);
+        color: var(--bc-color-info, var(--_bc-color-info));
       }
 
       .log-warn {
-        border-left-color: var(--color-warn);
-        background: var(--bg-warn);
+        border-left-color: var(--bc-color-warn, var(--_bc-color-warn));
+        background: var(--bc-bg-warn, var(--_bc-bg-warn));
       }
 
       .log-warn .log-method {
-        color: var(--color-warn);
+        color: var(--bc-color-warn, var(--_bc-color-warn));
       }
 
       .log-error {
-        border-left-color: var(--color-error);
-        background: var(--bg-error);
+        border-left-color: var(--bc-color-error, var(--_bc-color-error));
+        background: var(--bc-bg-error, var(--_bc-bg-error));
       }
 
       .log-error .log-method {
-        color: var(--color-error);
+        color: var(--bc-color-error, var(--_bc-color-error));
       }
 
       .log-debug {
-        border-left-color: var(--color-debug);
+        border-left-color: var(--bc-color-debug, var(--_bc-color-debug));
       }
 
       .log-debug .log-method {
-        color: var(--color-debug);
+        color: var(--bc-color-debug, var(--_bc-color-debug));
       }
 
       .log-table {
-        border-left-color: var(--color-table);
+        border-left-color: var(--bc-color-table, var(--_bc-color-table));
       }
 
       .log-table .log-method {
-        color: var(--color-table);
+        color: var(--bc-color-table, var(--_bc-color-table));
       }
 
       .log-time {
-        border-left-color: var(--color-time);
+        border-left-color: var(--bc-color-time, var(--_bc-color-time));
       }
 
       .log-time .log-method {
-        color: var(--color-time);
+        color: var(--bc-color-time, var(--_bc-color-time));
       }
 
       .log-group {
-        border-left-color: var(--color-log);
+        border-left-color: var(--bc-color-log, var(--_bc-color-log));
       }
 
       .log-group .log-method {
-        color: var(--text-secondary);
+        color: var(--bc-text-secondary, var(--_bc-text-secondary));
       }
 
       .group-header {
@@ -1581,85 +1614,85 @@ class BrowserConsole extends HTMLElement {
       }
 
       .log-trace {
-        border-left-color: var(--color-debug);
+        border-left-color: var(--bc-color-debug, var(--_bc-color-debug));
       }
 
       .log-trace .log-method {
-        color: var(--color-debug);
+        color: var(--bc-color-debug, var(--_bc-color-debug));
       }
 
       .stack-trace {
         margin-top: 4px;
         padding: 8px;
-        background: var(--bg-tertiary);
+        background: var(--bc-bg-tertiary, var(--_bc-bg-tertiary));
         border-radius: 4px;
         font-size: 10px;
-        color: var(--text-secondary);
+        color: var(--bc-text-secondary, var(--_bc-text-secondary));
         overflow-x: auto;
         white-space: pre;
         font-family: inherit;
       }
 
       .log-count {
-        border-left-color: var(--color-info);
+        border-left-color: var(--bc-color-info, var(--_bc-color-info));
       }
 
       .log-count .log-method {
-        color: var(--color-info);
+        color: var(--bc-color-info, var(--_bc-color-info));
       }
 
       .log-dir {
-        border-left-color: var(--color-log);
+        border-left-color: var(--bc-color-log, var(--_bc-color-log));
       }
 
       .log-dir .log-method {
-        color: var(--text-secondary);
+        color: var(--bc-text-secondary, var(--_bc-text-secondary));
       }
 
       /* Value type styles */
       .value-string {
-        color: var(--value-string);
+        color: var(--bc-value-string, var(--_bc-value-string));
       }
 
       .value-number {
-        color: var(--value-number);
+        color: var(--bc-value-number, var(--_bc-value-number));
       }
 
       .value-boolean {
-        color: var(--value-boolean);
+        color: var(--bc-value-boolean, var(--_bc-value-boolean));
       }
 
       .value-null, .value-undefined {
-        color: var(--value-null);
+        color: var(--bc-value-null, var(--_bc-value-null));
         font-style: italic;
       }
 
       .value-function {
-        color: var(--value-function);
+        color: var(--bc-value-function, var(--_bc-value-function));
       }
 
       .value-array, .value-object {
-        color: var(--text-primary);
+        color: var(--bc-text-primary, var(--_bc-text-primary));
       }
 
       .value-error {
-        color: var(--color-error);
+        color: var(--bc-color-error, var(--_bc-color-error));
       }
 
       .value-date {
-        color: var(--value-date);
+        color: var(--bc-value-date, var(--_bc-value-date));
       }
 
       .value-regexp {
-        color: var(--value-regexp);
+        color: var(--bc-value-regexp, var(--_bc-value-regexp));
       }
 
       .value-element {
-        color: var(--value-element);
+        color: var(--bc-value-element, var(--_bc-value-element));
       }
 
       .value-symbol {
-        color: var(--value-regexp);
+        color: var(--bc-value-regexp, var(--_bc-value-regexp));
         font-style: italic;
       }
 
@@ -1680,7 +1713,7 @@ class BrowserConsole extends HTMLElement {
 
       /* Focus styles for accessibility */
       .expandable-header:focus {
-        outline: 2px solid var(--btn-active);
+        outline: 2px solid var(--bc-btn-active, var(--_bc-btn-active));
         outline-offset: 1px;
       }
 
@@ -1689,7 +1722,7 @@ class BrowserConsole extends HTMLElement {
       }
 
       .expandable-header:focus-visible {
-        outline: 2px solid var(--btn-active);
+        outline: 2px solid var(--bc-btn-active, var(--_bc-btn-active));
         outline-offset: 1px;
       }
 
@@ -1697,14 +1730,14 @@ class BrowserConsole extends HTMLElement {
       .clear-btn:focus-visible,
       .theme-btn:focus-visible,
       .copy-btn:focus-visible {
-        outline: 2px solid var(--btn-active);
+        outline: 2px solid var(--bc-btn-active, var(--_bc-btn-active));
         outline-offset: 2px;
       }
 
       .expand-icon {
         display: inline-block;
         width: 12px;
-        color: var(--text-secondary);
+        color: var(--bc-text-secondary, var(--_bc-text-secondary));
         font-size: 10px;
         transition: transform 0.1s;
       }
@@ -1720,16 +1753,16 @@ class BrowserConsole extends HTMLElement {
       }
 
       .property-key {
-        color: var(--color-log);
+        color: var(--bc-color-log, var(--_bc-color-log));
         margin-right: 8px;
       }
 
       .property-value {
-        color: var(--text-primary);
+        color: var(--bc-text-primary, var(--_bc-text-primary));
       }
 
       .type-label {
-        color: var(--text-secondary);
+        color: var(--bc-text-secondary, var(--_bc-text-secondary));
         font-style: italic;
         margin-right: 4px;
       }
@@ -1744,30 +1777,30 @@ class BrowserConsole extends HTMLElement {
         border-collapse: collapse;
         font-size: 11px;
         min-width: 200px;
-        background: var(--bg-primary);
+        background: var(--bc-bg-primary, var(--_bc-bg-primary));
       }
 
       .console-table th,
       .console-table td {
-        border: 1px solid var(--table-border);
+        border: 1px solid var(--bc-table-border, var(--_bc-table-border));
         padding: 4px 8px;
         text-align: left;
       }
 
       .console-table th {
-        background: var(--table-header-bg);
+        background: var(--bc-table-header-bg, var(--_bc-table-header-bg));
         font-weight: bold;
-        color: var(--text-primary);
+        color: var(--bc-text-primary, var(--_bc-text-primary));
         position: sticky;
         top: 0;
       }
 
       .console-table tr:hover {
-        background: var(--table-row-hover);
+        background: var(--bc-table-row-hover, var(--_bc-table-row-hover));
       }
 
       .console-table .table-index {
-        color: var(--text-secondary);
+        color: var(--bc-text-secondary, var(--_bc-text-secondary));
         font-weight: bold;
       }
 
@@ -1777,16 +1810,16 @@ class BrowserConsole extends HTMLElement {
       }
 
       .console-logs::-webkit-scrollbar-track {
-        background: var(--scrollbar-track);
+        background: var(--bc-scrollbar-track, var(--_bc-scrollbar-track));
       }
 
       .console-logs::-webkit-scrollbar-thumb {
-        background: var(--scrollbar-thumb);
+        background: var(--bc-scrollbar-thumb, var(--_bc-scrollbar-thumb));
         border-radius: 5px;
       }
 
       .console-logs::-webkit-scrollbar-thumb:hover {
-        background: var(--scrollbar-thumb-hover);
+        background: var(--bc-scrollbar-thumb-hover, var(--_bc-scrollbar-thumb-hover));
       }
 
       /* Reduced motion support */
