@@ -498,14 +498,56 @@ browser-console {
 
 #### Example: Vanilla Breeze integration
 
-When Vanilla Breeze is loaded, no per-component CSS is needed — its
-`external-components.css` bridges its semantic tokens onto `--bc-*`. Just
-include the component and let your VB theme drive it:
+`@profpowell/browser-console` only reads `--bc-*` tokens — it has no
+direct knowledge of VB's `--color-*` namespace. The bridge that connects
+the two lives in **Vanilla Breeze**, not here:
+[`src/utils/external-components.css`](https://github.com/ProfPowell/vanilla-breeze/blob/main/src/utils/external-components.css).
+When you load VB's main stylesheet, that file targets `browser-console`
+directly and assigns every `--bc-*` token from a VB semantic equivalent,
+so the component picks up your active theme automatically — light, dark,
+or any of the brand themes:
 
 ```html
 <link rel="stylesheet" href="/vanilla-breeze/main.css">
 <browser-console></browser-console>
 ```
+
+**Bridge mapping** (kept here for reference; the canonical source is
+the VB stylesheet linked above):
+
+| `--bc-*` token | VB semantic source |
+|---|---|
+| `--bc-bg-primary` | `--color-surface` |
+| `--bc-bg-secondary` / `--bc-bg-tertiary` | `--color-surface-raised` |
+| `--bc-bg-hover` | `--color-hover-bg` (falls back to `--color-surface-raised`) |
+| `--bc-bg-warn` | `color-mix(--color-warning 12%, transparent)` |
+| `--bc-bg-error` | `color-mix(--color-danger 12%, transparent)` |
+| `--bc-text-primary` | `--color-text` |
+| `--bc-text-secondary` | `--color-text-muted` |
+| `--bc-border-color` / `--bc-table-border` | `--color-border` |
+| `--bc-color-log` / `--bc-color-table` | `--color-text` |
+| `--bc-color-info` / `--bc-value-number` / `--bc-value-date` | `--color-info` (falls back to `--color-interactive`) |
+| `--bc-color-warn` / `--bc-value-boolean` | `--color-warning` |
+| `--bc-color-error` / `--bc-value-regexp` | `--color-danger` |
+| `--bc-color-debug` / `--bc-color-time` | `--color-text-muted` |
+| `--bc-value-string` | `--color-success` |
+| `--bc-value-null` | `--color-text-muted` |
+| `--bc-value-function` | `--color-accent` |
+| `--bc-value-element` | `--color-primary` |
+| `--bc-btn-bg` / `--bc-btn-hover` / `--bc-table-header-bg` / `--bc-table-row-hover` | `--color-surface-raised` (with `--color-hover-bg` for hover where present) |
+| `--bc-btn-border` | `--color-border` |
+| `--bc-btn-active` | `--color-interactive` |
+| `--bc-scrollbar-track` | `--color-surface` |
+| `--bc-scrollbar-thumb` | `--color-border` |
+| `--bc-scrollbar-thumb-hover` | `--color-text-muted` |
+
+**Overrides still win.** The bridge targets `browser-console { ... }`
+without `!important`, so any per-instance `--bc-*` you set on a specific
+`<browser-console>` (inline `style="--bc-bg-primary: …"`, or a rule with
+higher specificity) takes precedence. Setting `--color-*` at the
+document root affects every VB component, including browser-console
+through the bridge; setting `--bc-*` directly on the element scopes the
+change to that one instance.
 
 ## Demo
 
